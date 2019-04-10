@@ -1,0 +1,61 @@
+
+version: "3"
+
+networks:
+  prism_network:
+    driver: bridge
+
+
+# php services
+
+services:
+  prism.app:
+    image: canals/php:latest
+    environment:
+      - VHOST_HOSTNAME=prism.app.local
+      - VHOST_DOCROOT=/var/www/prism
+      #- http_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+      #- https_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+    ports:
+      - "10080:80"
+      - "10443:443"
+    volumes :
+      - ./prism:/var/www/prism
+    working_dir : /var/www/src
+    networks:
+      - prism_network
+    links :
+      - mysql_prism:db
+
+  # mysql + adminer
+
+  mysql_prism:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=prism
+      - MYSQL_USER=costa41u
+      - MYSQL_PASSWORD=costa41u
+      - MYSQL_DATABASE=prism
+    ports:
+      - "3603:3306"
+    networks:
+      - prism_network
+    volumes :
+      - ./sql:/var/sql
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - prism_network
+    links:
+      - mysql_prism:db_prism_app
+
+
+########################################
+# shared storage : useful for, e.g. sharing
+#   uploaded documents (img, others) between multiple services
+########################################
+volumes:
+  data:
