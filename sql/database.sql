@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS `materiel` (
     `modele` varchar(128) NOT NULL,
     `reference` varchar(20),
     `type` INT NOT NULL,
+    `created_at` date NOT NULL,
+    `deleted_at` date DEFAULT NULL,
     FOREIGN KEY (`type`) REFERENCES `type`(`id`),
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
@@ -58,6 +60,8 @@ CREATE TABLE IF NOT EXISTS `reservation` (
     `matiere` varchar(255) NOT NULL,
     `projet` TEXT DEFAULT NULL,
     `referent` INT DEFAULT NULL,
+    `created_at` date NOT NULL,
+    `deleted_at` date DEFAULT NULL,
     FOREIGN KEY (`departement`) REFERENCES `departement`(`id`),
     FOREIGN KEY (`responsable_projet`) REFERENCES `professeur`(`id`),
     FOREIGN KEY (`referent`) REFERENCES `etudiant`(`id`),
@@ -71,6 +75,8 @@ CREATE TABLE IF NOT EXISTS `resa` (
     `depart` DATETIME NOT NULL,
     `retour` DATETIME NOT NULL,
     `observation` TEXT DEFAULT NULL,
+    `created_at` date NOT NULL,
+    `deleted_at` date DEFAULT NULL,
     FOREIGN KEY (`reservation`) REFERENCES `reservation`(`id`),
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
