@@ -42,6 +42,15 @@ $container['view'] = function ($container) {
 $container['HomeController'] = function ($container) {
     return new \PrismGestion\Controllers\HomeController($container);
 };
+$container['AgendaController'] = function ($container) {
+    return new \PrismGestion\Controllers\AgendaController($container);
+};
+$container['MaterielController'] = function ($container) {
+    return new \PrismGestion\Controllers\MaterielController($container);
+};
+$container['ReservationController'] = function ($container) {
+    return new \PrismGestion\Controllers\ReservationController($container);
+};
 
 
 require __DIR__ . '/../app/routes.php';
