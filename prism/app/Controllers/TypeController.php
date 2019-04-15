@@ -4,7 +4,7 @@ namespace PrismGestion\Controllers;
 
 use PrismGestion\Models\Materiel;
 
-class MaterielController extends Controller
+class TypeController extends Controller
 {
 
     public function getAll($request, $response, $args)

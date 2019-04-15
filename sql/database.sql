@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS `resa`;
 DROP TABLE IF EXISTS `reservation`;
 DROP TABLE IF EXISTS `professeur`;
 DROP TABLE IF EXISTS `etudiant`;
+DROP TABLE IF EXISTS `exemplaire`;
 DROP TABLE IF EXISTS `materiel`;
 DROP TABLE IF EXISTS `type`;
 
@@ -19,12 +20,26 @@ CREATE TABLE IF NOT EXISTS `materiel` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `constructeur` varchar(128) NOT NULL,
     `modele` varchar(128) NOT NULL,
-    `reference` varchar(20),
+    `description` TEXT DEFAULT NULL,
+    `nb_ex` INT NOT NULL,
     `type` INT NOT NULL,
     `created_at` date NOT NULL,
     `deleted_at` date DEFAULT NULL,
     FOREIGN KEY (`type`) REFERENCES `type`(`id`),
     PRIMARY KEY (`id`)
+)Engine=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `exemplaire` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `materiel` INT NOT NULL,
+    `reference` varchar(20) DEFAULT NULL,
+    `etat` INT NOT NULL,
+    `num_ex` INT NOT NULL,
+    `date_achat` date NOT NULL,
+    `date_sortie` date DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`materiel`) REFERENCES `materiel`(`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
 
