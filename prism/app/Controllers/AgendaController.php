@@ -2,7 +2,6 @@
 
 namespace PrismGestion\Controllers;
 
-use Slim\Views\Twig as View;
 use PrismGestion\Models\Materiel;
 
 class AgendaController extends Controller
@@ -10,6 +9,6 @@ class AgendaController extends Controller
 
     public function index($request, $response)
     {
-        return $this->view->render($response,'home.twig');
+        return 'haha';
     }
 }
