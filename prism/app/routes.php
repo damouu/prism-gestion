@@ -19,9 +19,11 @@ $app->get('/materiels/{id}[/]', 'MaterielController:getOne');
 
 $app->post('/materiels[/]', 'MaterielController:post');
 
-$app->delete('/materiels[/]', 'MaterielController:delete');
+$app->delete('/materiels/{id}[/]', 'MaterielController:delete');
 
 $app->put('/materiels/{id}[/]', 'MaterielController:put');
+
+$app->patch('/materiels/{id}[/]','MaterielController:patch');
 
 
 

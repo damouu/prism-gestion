@@ -10,12 +10,20 @@ class Materiel extends Model
 
     use SoftDeletes;
     protected $table = 'materiel';
+    protected $primaryKey = 'id';
+    public $timestamps = false;
+    protected $dates = ['created_at','deleted_at'];
 
 
 
     public function type()
     {
         return $this->hasMany('PrismGestion\Models\Type', 'id');
+    }
+
+    public function exemplaire()
+    {
+        return $this->belongsTo('PrismGestion\Models\Exemplaire', 'id');
     }
 
 }
