@@ -21,10 +21,18 @@ $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
 
+
 $container['db'] = function($container) use ($capsule) {
     return $capsule;
 };
 
+
+$container['MaterielController'] = function ($container) {
+    return new \PrismGestion\Controllers\MaterielController($container);
+};
+$container['ExemplaireController'] = function ($container) {
+    return new \PrismGestion\Controllers\ExemplaireController($container);
+};
 
 
 
@@ -33,9 +41,6 @@ $container['HomeController'] = function ($container) {
 };
 $container['AgendaController'] = function ($container) {
     return new \PrismGestion\Controllers\AgendaController($container);
-};
-$container['MaterielController'] = function ($container) {
-    return new \PrismGestion\Controllers\MaterielController($container);
 };
 $container['ReservationController'] = function ($container) {
     return new \PrismGestion\Controllers\ReservationController($container);

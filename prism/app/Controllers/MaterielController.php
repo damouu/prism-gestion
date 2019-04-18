@@ -2,8 +2,6 @@
 
 namespace PrismGestion\Controllers;
 
-use FastRoute\Dispatcher\MarkBased;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Materiel;
 use \Psr\http\Message\ServerRequestInterface as Request;
@@ -66,7 +64,7 @@ class MaterielController extends Controller
 
     }
 
-    public function getOne($request, $response, $args) 
+    public function getOne(Request $request, Response $response, $args)
     {
 
         $id = intval($args['id']);
@@ -110,7 +108,72 @@ class MaterielController extends Controller
         return $resp;
     }
 
-    public function delete($request, $response, $args) 
+
+    public function getMaterielExemplaires(Request $request, Response $response, $args)
+    {
+        $id = $args['id'];
+        $params = [
+            'nb' => intval($request->getQueryParam('nb',10)),
+            'page' => intval($request->getQueryParam('page',1)),
+        ];
+
+        try
+        {
+
+            $materiel = Materiel::where('deleted_at','=',NULL)->where('materiel.id','=',$id)->with('exemplaire');
+
+            if(empty($materiel))
+            {
+                $data = ApiErrors::NotFound($request->getUri());
+                $resp = $response
+                    ->withStatus($data['code'])
+                    ->withHeader('Content-Type', 'application/json; charset=utf8');
+                $resp->getBody()
+                    ->write(json_encode($data));
+                return $resp;
+            }
+
+            $elementCounter = $materiel->count();
+            if( (($params['nb']*($params['page']))>$elementCounter) || ($params['nb']<=0) || ($params['page']<=0) )
+            {
+                $params['nb'] = 10;
+                $params['page'] = 1;
+            }
+            if($params['nb'])
+                $materiel = $materiel->take($params['nb']);
+            if($params['page'])
+                $materiel = $materiel->skip($params['nb']*($params['page']-1));
+            $pageMax = ceil($elementCounter/$params['nb']);
+            $materiel = $materiel->get();
+
+            $data = [
+                'type' => "success",
+                'code' => 200,
+                'ressource' => [
+                    'total' => $elementCounter,
+                    'nb_per_page' => $params['nb'],
+                    'page' => $params['page'],
+                    'page_max' => $pageMax,
+                ],
+                'materiels' => $materiel
+            ];
+
+        }
+        catch(\Exception $e)
+        {
+            $data = ApiErrors::NotFound($request->getUri());
+        }
+
+        $resp = $response
+            ->withStatus($data['code'])
+            ->withHeader('Content-Type', 'application/json; charset=utf8');
+        $resp->getBody()
+            ->write(json_encode($data));
+
+        return $resp;
+    }
+
+    public function delete(Request $request, Response $response, $args)
     {
         
         $id = intval($args['id']);
@@ -129,12 +192,26 @@ class MaterielController extends Controller
         try
         {
             $materiel = Materiel::find($id);
-            $materiel->delete();
-            $data = [
-                'type' => "success",
-                'code' => 200,
-                'message' => 'le matériel '. $materiel->id . ' a bien été supprimé.'
-            ];
+
+            if($materiel->nb_ex == 0)
+            {
+                $materiel->delete();
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'message' => 'le matériel '. $materiel->id . ' a bien été supprimé.'
+                ];
+            }
+            else
+            {
+                $data = [
+                    'type' => 'error',
+                    'code' => 403,
+                    'message' => 'Le matériel \'a pas été supprimé: Des exemplaires sont encore liés.'
+                ];
+            }
+
+
         }
         catch(\Exception$e)
         {
@@ -152,7 +229,7 @@ class MaterielController extends Controller
 
 
 
-    public function post($request, $response, $args)
+    public function post(Request $request, Response $response, $args)
     {
 
         $content = $request->getParsedBody();
@@ -190,7 +267,7 @@ class MaterielController extends Controller
 
 
 
-    public function put($request, $response, $args)
+    public function put(Request $request, Response $response, $args)
     {
 
         $id = intval($args['id']);
@@ -261,7 +338,7 @@ class MaterielController extends Controller
 
 
 
-    public function patch($request, $response, $args)
+    public function patch(Request $request, Response $response, $args)
     {
 
         $id = intval($args['id']);

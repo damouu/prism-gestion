@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS `exemplaire` (
     `etat` INT NOT NULL,
     `num_ex` INT NOT NULL,
     `date_achat` date NOT NULL,
+    `date_modif` date DEFAULT NULL,
     `date_sortie` date DEFAULT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`materiel`) REFERENCES `materiel`(`id`)

@@ -23,7 +23,7 @@ class Materiel extends Model
 
     public function exemplaire()
     {
-        return $this->belongsTo('PrismGestion\Models\Exemplaire', 'id');
+        return $this->hasMany('PrismGestion\Models\Exemplaire','materiel');
     }
 
 }
