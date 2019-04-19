@@ -8,6 +8,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Exemplaire;
 use PrismGestion\Models\Materiel;
+use PrismGestion\Utils\ResponseWriter;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -58,13 +59,7 @@ class ExemplaireController extends Controller
             $data = ApiErrors::NotFound($request->getUri());
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
 
     }
 
@@ -72,9 +67,6 @@ class ExemplaireController extends Controller
     {
 
         $id = intval($args['id']);
-
-        if($id==0)
-            $id=1;
 
         if(!is_null($id) )
         {
@@ -103,13 +95,7 @@ class ExemplaireController extends Controller
             $data = ApiErrors::BadRequest();
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -134,14 +120,7 @@ class ExemplaireController extends Controller
             $data = ApiErrors::NotFound($request->getUri());
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
-
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -150,49 +129,37 @@ class ExemplaireController extends Controller
 
         $id = intval($args['id']);
 
-        if($id==0)
-        {
-            $data = ApiErrors::BadRequest();
-        }
-        else
-        {
-            $exemplaire = Exemplaire::find($id);
+        $exemplaire = Exemplaire::find($id);
 
-            if(empty($exemplaire))
+        if(empty($exemplaire))
+        {
+            $data = ApiErrors::NotFound($request->getUri());
+        }
+        else {
+            try{
+                $exem = Exemplaire::find($id);
+                $mat = Materiel::find($exem->materiel);
+                $count = Exemplaire::where('materiel','=',$id)->count();
+                DB::transaction( function () use ($exem,$mat,$count) {
+                    $mat->nb_ex = ($count)-1;
+                    $exem->delete();
+                    $mat->save();
+                });
+
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'message' => 'l\'exemplaire ' . $exemplaire->id . ' a bien été supprimé.'
+                ];
+            }
+            catch(\Exception $e)
             {
-                $data = ApiErrors::NotFound($request->getUri());
-            }
-            else {
-                try{
-                    $exem = Exemplaire::find($id);
-                    $mat = Materiel::find($exem->materiel);
-                    $count = Exemplaire::where('materiel','=',$id)->count();
-                    DB::transaction( function () use ($exem,$mat,$count) {
-                        $mat->nb_ex = ($count)-1;
-                        $exem->delete();
-                        $mat->save();
-                    });
-
-                    $data = [
-                        'type' => "success",
-                        'code' => 200,
-                        'message' => 'l\'exemplaire ' . $exemplaire->id . ' a bien été supprimé.'
-                    ];
-                }
-                catch(\Exception $e)
-                {
-                    $data = ApiErrors::InternalError();
-                }
+                $data = ApiErrors::InternalError();
             }
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
 
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -240,13 +207,7 @@ class ExemplaireController extends Controller
             }
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -260,10 +221,7 @@ class ExemplaireController extends Controller
         $exemplaire = Exemplaire::find($id);
 
 
-        if($id==0){
-            $data = ApiErrors::BadRequest();
-        }
-        else if( !isset($content['materiel']) || !isset($content['reference']) || !isset($content['etat']) )
+        if( !isset($content['materiel']) || !isset($content['reference']) || !isset($content['etat']) )
         {
             $data = ApiErrors::BadRequest();
         }
@@ -325,14 +283,7 @@ class ExemplaireController extends Controller
             }
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
-
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
     public function patch(Request $request, Response $response, $args)
@@ -343,7 +294,7 @@ class ExemplaireController extends Controller
 
         $exemplaire = Exemplaire::find($id);
 
-        if($id==0 || !isset($etat['etat'])){
+        if(!isset($etat['etat'])){
             $data = ApiErrors::BadRequest();
         }
         else if(empty($exemplaire))
@@ -368,14 +319,7 @@ class ExemplaireController extends Controller
             }
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
-
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 }

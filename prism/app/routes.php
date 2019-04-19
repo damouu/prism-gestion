@@ -2,28 +2,35 @@
 
 
 $app->get('/types[/]', 'TypeController:getAll');
-$app->get('/types/{id}[/]', 'TypeController:getOne');
 $app->post('/types[/]', 'TypeController:post');
-$app->put('/types/{id}[/]', 'TypeController:put');
-$app->delete('/types/{id}[/]', 'TypeController:delete');
-$app->get('/types/{id}/materiels[/]','TypeController:getTypeMateriels');
-
-
 
 $app->get('/materiels[/]', 'MaterielController:getAll');
-$app->get('/materiels/{id}[/]', 'MaterielController:getOne');
-$app->get('/materiels/{id}/exemplaires[/]', 'MaterielController:getMaterielExemplaires');
 $app->post('/materiels[/]', 'MaterielController:post');
-$app->delete('/materiels/{id}[/]', 'MaterielController:delete');
-$app->put('/materiels/{id}[/]', 'MaterielController:put');
-$app->patch('/materiels/{id}[/]','MaterielController:patch');
-
-
 
 $app->get('/exemplaires[/]', 'ExemplaireController:getAll');
-$app->get('/exemplaires/{id}[/]', 'ExemplaireController:getOne');
 $app->post('/exemplaires[/]', 'ExemplaireController:post');
-$app->put('/exemplaires/{id}[/]', 'ExemplaireController:put');
-$app->delete('/exemplaires/{id}[/]', 'ExemplaireController:delete');
-$app->patch('/exemplaires/{id}[/]', 'ExemplaireController:patch');
-$app->get('/exemplaires/{id}/materiels[/]', 'ExemplaireController:getExemplairesMateriel');
+
+
+$app->group('', function() {
+    $this->get('/types/{id}[/]', 'TypeController:getOne');
+    $this->put('/types/{id}[/]', 'TypeController:put');
+    $this->delete('/types/{id}[/]', 'TypeController:delete');
+    $this->get('/types/{id}/materiels[/]','TypeController:getTypeMateriels');
+
+    $this->get('/materiels/{id}[/]', 'MaterielController:getOne');
+    $this->get('/materiels/{id}/exemplaires[/]', 'MaterielController:getMaterielExemplaires');
+    $this->delete('/materiels/{id}[/]', 'MaterielController:delete');
+    $this->put('/materiels/{id}[/]', 'MaterielController:put');
+    $this->patch('/materiels/{id}[/]','MaterielController:patch');
+
+    $this->get('/exemplaires/{id}[/]', 'ExemplaireController:getOne');
+    $this->put('/exemplaires/{id}[/]', 'ExemplaireController:put');
+    $this->delete('/exemplaires/{id}[/]', 'ExemplaireController:delete');
+    $this->patch('/exemplaires/{id}[/]', 'ExemplaireController:patch');
+    $this->get('/exemplaires/{id}/materiels[/]', 'ExemplaireController:getExemplairesMateriel');
+})
+->add( new \PrismGestion\Middlewares\IdCheckerMiddleware() );
+
+
+
+

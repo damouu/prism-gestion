@@ -4,6 +4,7 @@ namespace PrismGestion\Controllers;
 
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Materiel;
+use PrismGestion\Utils\ResponseWriter;
 use \Psr\http\Message\ServerRequestInterface as Request;
 use \Psr\http\Message\ResponseInterface as Response;
 
@@ -54,23 +55,13 @@ class MaterielController extends Controller
             $data = ApiErrors::NotFound($request->getUri());
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
-
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
     public function getOne(Request $request, Response $response, $args)
     {
 
         $id = intval($args['id']);
-        
-        if($id==0)
-            $id=1;
 
         if(!is_null($id) )
         {
@@ -99,13 +90,7 @@ class MaterielController extends Controller
             $data = ApiErrors::BadRequest();
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -140,13 +125,7 @@ class MaterielController extends Controller
             $data = ApiErrors::NotFound($request->getUri());
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
     public function delete(Request $request, Response $response, $args)
@@ -154,46 +133,35 @@ class MaterielController extends Controller
         
         $id = intval($args['id']);
 
-        if($id==0)
+        try
         {
-            $data = ApiErrors::BadRequest();
-        }
-        else{
-            try
-            {
-                $materiel = Materiel::find($id);
+            $materiel = Materiel::find($id);
 
-                if($materiel->nb_ex == 0)
-                {
-                    $materiel->delete();
-                    $data = [
-                        'type' => "success",
-                        'code' => 200,
-                        'message' => 'le matériel '. $materiel->id . ' a bien été supprimé.'
-                    ];
-                }
-                else
-                {
-                    $data = [
-                        'type' => 'error',
-                        'code' => 403,
-                        'message' => 'Le matériel \'a pas été supprimé: Des exemplaires sont encore liés.'
-                    ];
-                }
-            }
-            catch(\Exception$e)
+            if($materiel->nb_ex == 0)
             {
-                $data = ApiErrors::NotFound($request->getUri());
+                $materiel->delete();
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'message' => 'le matériel '. $materiel->id . ' a bien été supprimé.'
+                ];
+            }
+            else
+            {
+                $data = [
+                    'type' => 'error',
+                    'code' => 403,
+                    'message' => 'Le matériel \'a pas été supprimé: Des exemplaires sont encore liés.'
+                ];
             }
         }
+        catch(\Exception$e)
+        {
+            $data = ApiErrors::NotFound($request->getUri());
+        }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
 
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -231,13 +199,7 @@ class MaterielController extends Controller
             }
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -250,10 +212,7 @@ class MaterielController extends Controller
 
         $materiel = Materiel::find($id);
 
-        if($id==0){
-            $data = ApiErrors::BadRequest();
-        }
-        else if(!isset($content['constructeur']) || !isset($content['modele']) || !isset($content['description']) || !isset($content['nb_ex']) || !isset($content['type']))
+        if(!isset($content['constructeur']) || !isset($content['modele']) || !isset($content['description']) || !isset($content['nb_ex']) || !isset($content['type']))
         {
             $data = ApiErrors::BadRequest();
         }
@@ -299,14 +258,7 @@ class MaterielController extends Controller
             }
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
-
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -319,7 +271,7 @@ class MaterielController extends Controller
 
         $materiel = Materiel::find($id);
 
-        if($id==0 || !isset($nb_ex['nb_ex'])){
+        if(!isset($nb_ex['nb_ex'])){
             $data = ApiErrors::BadRequest();
         }
         else if(empty($materiel))
@@ -344,15 +296,8 @@ class MaterielController extends Controller
             }
 
         }
-        
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
 
-        return $resp;
-
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 

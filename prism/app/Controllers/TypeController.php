@@ -6,6 +6,7 @@ namespace PrismGestion\Controllers;
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Materiel;
 use PrismGestion\Models\Type;
+use PrismGestion\Utils\ResponseWriter;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -57,23 +58,13 @@ class TypeController extends Controller
             $data = ApiErrors::NotFound($request->getUri());
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
-
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
     public function getOne(Request $request, Response $response, $args)
     {
 
         $id = intval($args['id']);
-
-        if($id==0)
-            $id=1;
 
         if(!is_null($id) )
         {
@@ -102,13 +93,7 @@ class TypeController extends Controller
             $data = ApiErrors::BadRequest();
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -144,13 +129,7 @@ class TypeController extends Controller
             $data = ApiErrors::NotFound($request->getUri());
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
     public function delete(Request $request, Response $response, $args)
@@ -158,48 +137,34 @@ class TypeController extends Controller
 
         $id = intval($args['id']);
 
-        if($id==0)
+        try
         {
-            $data = ApiErrors::BadRequest();
+            $type = Type::where('id','=',$id)->with('materiels')->first();
+
+            if($type->materiels->isEmpty())
+            {
+                $type->delete();
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'message' => 'le type '. $type->id . ' a bien été supprimé.'
+                ];
+            }
+            else
+            {
+                $data = [
+                    'type' => 'error',
+                    'code' => 403,
+                    'message' => 'Le type n\'a pas été supprimé: Des matériels sont encore liés.'
+                ];
+            }
         }
-        else
+        catch(\Exception$e)
         {
-            try
-            {
-                $type = Type::where('id','=',$id)->with('materiels')->first();
-
-                if($type->materiels->isEmpty())
-                {
-                    $type->delete();
-                    $data = [
-                        'type' => "success",
-                        'code' => 200,
-                        'message' => 'le type '. $type->id . ' a bien été supprimé.'
-                    ];
-                }
-                else
-                {
-                    $data = [
-                        'type' => 'error',
-                        'code' => 403,
-                        'message' => 'Le type n\'a pas été supprimé: Des matériels sont encore liés.'
-                    ];
-                }
-            }
-            catch(\Exception$e)
-            {
-                $data = ApiErrors::NotFound($request->getUri());
-            }
-
+            $data = ApiErrors::NotFound($request->getUri());
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -233,13 +198,7 @@ class TypeController extends Controller
             }
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
@@ -252,10 +211,7 @@ class TypeController extends Controller
 
         $type = Type::find($id);
 
-        if($id==0){
-            $data = ApiErrors::BadRequest();
-        }
-        else if(!isset($content['nom']))
+        if(!isset($content['nom']))
         {
             $data = ApiErrors::BadRequest();
         }
@@ -297,14 +253,7 @@ class TypeController extends Controller
             }
         }
 
-        $resp = $response
-            ->withStatus($data['code'])
-            ->withHeader('Content-Type', 'application/json; charset=utf8');
-        $resp->getBody()
-            ->write(json_encode($data));
-
-        return $resp;
-
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 }
