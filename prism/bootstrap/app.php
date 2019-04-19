@@ -33,6 +33,9 @@ $container['MaterielController'] = function ($container) {
 $container['ExemplaireController'] = function ($container) {
     return new \PrismGestion\Controllers\ExemplaireController($container);
 };
+$container['TypeController'] = function ($container) {
+    return new \PrismGestion\Controllers\TypeController($container);
+};
 
 
 

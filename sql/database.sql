@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS `type`;
 CREATE TABLE IF NOT EXISTS `type` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `nom` varchar(128) NOT NULL,
+    `date_suppression` DATE DEFAULT NULL,
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=`utf8`;
 
@@ -23,8 +24,9 @@ CREATE TABLE IF NOT EXISTS `materiel` (
     `description` TEXT DEFAULT NULL,
     `nb_ex` INT NOT NULL,
     `type` INT NOT NULL,
-    `created_at` date NOT NULL,
-    `deleted_at` date DEFAULT NULL,
+    `date_creation` date NOT NULL,
+    `date_modification` date DEFAULT NULL,
+    `date_suppression` date DEFAULT NULL,
     FOREIGN KEY (`type`) REFERENCES `type`(`id`),
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;

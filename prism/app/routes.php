@@ -2,14 +2,11 @@
 
 
 $app->get('/types[/]', 'TypeController:getAll');
-
 $app->get('/types/{id}[/]', 'TypeController:getOne');
-
-$app->post('types[/]', 'TypeController:post');
-
-$app->put('types/{id}[/]', 'TypeController:put');
-
-$app->delete('types/{id}[/]', 'TypeController:delete');
+$app->post('/types[/]', 'TypeController:post');
+$app->put('/types/{id}[/]', 'TypeController:put');
+$app->delete('/types/{id}[/]', 'TypeController:delete');
+$app->get('/types/{id}/materiels[/]','TypeController:getTypeMateriels');
 
 
 
@@ -29,16 +26,4 @@ $app->post('/exemplaires[/]', 'ExemplaireController:post');
 $app->put('/exemplaires/{id}[/]', 'ExemplaireController:put');
 $app->delete('/exemplaires/{id}[/]', 'ExemplaireController:delete');
 $app->patch('/exemplaires/{id}[/]', 'ExemplaireController:patch');
-
-
-/** TODO
- *  types/{id}/Materiels
- *      -> recuperation de tous les materiels d'un seul type
- *      -> filtrage : pagination
- *
- * materiels/{id}/exemplaires
- *      -> recupération de tous les exemplaires d'un seul matériel
- *      -> filtrage : pagination
- *
- *
- */
+$app->get('/exemplaires/{id}/materiels[/]', 'ExemplaireController:getExemplairesMateriel');

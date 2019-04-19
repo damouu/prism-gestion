@@ -19,7 +19,7 @@ class Exemplaire extends Model
 
     public function materiel()
     {
-        return $this->belongsTo('PrismGestion\Models\Materiel');
+        return $this->belongsTo('PrismGestion\Models\Materiel', 'materiel');
     }
 
 

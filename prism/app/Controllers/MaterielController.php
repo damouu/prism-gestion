@@ -21,7 +21,7 @@ class MaterielController extends Controller
         try
         {
 
-            $materiel = Materiel::where('deleted_at','=',NULL);
+            $materiel = Materiel::select('id','constructeur','modele','nb_ex','type','date_creation','date_suppression');
 
             $elementCounter = $materiel->count();
             if( (($params['nb']*($params['page']))>$elementCounter) || ($params['nb']<=0) || ($params['page']<=0) )
@@ -76,7 +76,7 @@ class MaterielController extends Controller
         {
             try
             {
-                $materiel = Materiel::find($id);
+                $materiel = Materiel::with('type')->find($id);
                 
                 if(empty($materiel)){
                     $data = ApiErrors::NotFound($request->getUri());
@@ -120,7 +120,7 @@ class MaterielController extends Controller
         try
         {
 
-            $materiel = Materiel::where('deleted_at','=',NULL)->where('materiel.id','=',$id)->with('exemplaire');
+            $materiel = Materiel::where('materiel.id','=',$id)->with('exemplaire')->with('type');
 
             if(empty($materiel))
             {
@@ -144,7 +144,7 @@ class MaterielController extends Controller
             if($params['page'])
                 $materiel = $materiel->skip($params['nb']*($params['page']-1));
             $pageMax = ceil($elementCounter/$params['nb']);
-            $materiel = $materiel->get();
+            $materiel = $materiel->first();
 
             $data = [
                 'type' => "success",
@@ -234,26 +234,32 @@ class MaterielController extends Controller
 
         $content = $request->getParsedBody();
 
-        $materiel = new Materiel();
-        $materiel->constructeur = $content['constructeur'];
-        $materiel->modele = $content['modele'];
-        $materiel->description = $content['description'];
-        $materiel->nb_ex = $content['nb_ex'];
-        $materiel->type = $content['type'];
-        $materiel->created_at = date('Y-m-d');
-
-        try
+        if(!isset($content['constructeur']) || !isset($content['modele']) || !isset($content['description']) || !isset($content['nb_ex']) || !isset($content['type']))
         {
-            $materiel->save();
-            $data = [
-                'type' => "success",
-                'code' => 201,
-                'materiel' => $materiel
-            ];
+            $data = ApiErrors::BadRequest();
         }
-        catch(\Exception $e)
+        else
         {
-            $data = ApiErrors::InternalError();
+            $materiel = new Materiel();
+            $materiel->constructeur = $content['constructeur'];
+            $materiel->modele = $content['modele'];
+            $materiel->description = $content['description'];
+            $materiel->nb_ex = $content['nb_ex'];
+            $materiel->type = $content['type'];
+
+            try
+            {
+                $materiel->save();
+                $data = [
+                    'type' => "success",
+                    'code' => 201,
+                    'materiel' => $materiel
+                ];
+            }
+            catch(\Exception $e)
+            {
+                $data = ApiErrors::InternalError();
+            }
         }
 
         $resp = $response
@@ -278,6 +284,10 @@ class MaterielController extends Controller
         if($id==0){
             $data = ApiErrors::BadRequest();
         }
+        else if(!isset($content['constructeur']) || !isset($content['modele']) || !isset($content['description']) || !isset($content['nb_ex']) || !isset($content['type']))
+        {
+            $data = ApiErrors::BadRequest();
+        }
         else if(empty($materiel))
         {
             $materiel = new Materiel();
@@ -287,25 +297,21 @@ class MaterielController extends Controller
             $materiel->description = $content['description'];
             $materiel->nb_ex = $content['nb_ex'];
             $materiel->type = $content['type'];
-            $materiel->created_at = date('Y-m-d');
 
-            try
-            {
+            try {
                 $materiel->save();
                 $data = [
                     'type' => "success",
                     'code' => 201,
                     'materiel' => $materiel
                 ];
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::InternalError();
             }
         }
         else
         {
-            try{
+            try {
 
                 $materiel->constructeur = $content['constructeur'];
                 $materiel->modele = $content['modele'];
@@ -319,9 +325,7 @@ class MaterielController extends Controller
                     'code' => 200,
                     'materiel' => $materiel
                 ];
-            }
-            catch(\Exception$e)
-            {
+            } catch (\Exception$e) {
                 $data = ApiErrors::InternalError();
             }
         }
