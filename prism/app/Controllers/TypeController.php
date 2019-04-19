@@ -115,52 +115,29 @@ class TypeController extends Controller
     public function getTypeMateriels(Request $request, Response $response, $args)
     {
         $id = $args['id'];
-        $params = [
-            'nb' => intval($request->getQueryParam('nb',10)),
-            'page' => intval($request->getQueryParam('page',1)),
-        ];
 
         try
         {
-
             $type = Type::where('type.id','=',$id)->with('materiels');
 
             if(empty($type))
             {
                 $data = ApiErrors::NotFound($request->getUri());
-                $resp = $response
-                    ->withStatus($data['code'])
-                    ->withHeader('Content-Type', 'application/json; charset=utf8');
-                $resp->getBody()
-                    ->write(json_encode($data));
-                return $resp;
             }
-
-            $elementCounter = $type->count();
-            if( (($params['nb']*($params['page']))>$elementCounter) || ($params['nb']<=0) || ($params['page']<=0) )
+            else
             {
-                $params['nb'] = 10;
-                $params['page'] = 1;
+                $type = $type->first();
+                $elementCounter = $type->materiels->count();
+
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'ressource' => [
+                        'total' => $elementCounter,
+                    ],
+                    'types' => $type
+                ];
             }
-            if($params['nb'])
-                $type = $type->take($params['nb']);
-            if($params['page'])
-                $type = $type->skip($params['nb']*($params['page']-1));
-            $pageMax = ceil($elementCounter/$params['nb']);
-            $type = $type->first();
-
-            $data = [
-                'type' => "success",
-                'code' => 200,
-                'ressource' => [
-                    'total' => $elementCounter,
-                    'nb_per_page' => $params['nb'],
-                    'page' => $params['page'],
-                    'page_max' => $pageMax,
-                ],
-                'types' => $type
-            ];
-
         }
         catch(\Exception $e)
         {
@@ -184,39 +161,36 @@ class TypeController extends Controller
         if($id==0)
         {
             $data = ApiErrors::BadRequest();
-            $resp = $response
-                ->withStatus($data['code'])
-                ->withHeader('Content-Type', 'application/json; charset=utf8');
-            $resp->getBody()
-                ->write(json_encode($data));
-            return $resp;
         }
-
-        try
+        else
         {
-            $type = Type::where('id','=',$id)->with('materiels')->first();
+            try
+            {
+                $type = Type::where('id','=',$id)->with('materiels')->first();
 
-            if($type->materiels->isEmpty())
-            {
-                $type->delete();
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'message' => 'le type '. $type->id . ' a bien été supprimé.'
-                ];
+                if($type->materiels->isEmpty())
+                {
+                    $type->delete();
+                    $data = [
+                        'type' => "success",
+                        'code' => 200,
+                        'message' => 'le type '. $type->id . ' a bien été supprimé.'
+                    ];
+                }
+                else
+                {
+                    $data = [
+                        'type' => 'error',
+                        'code' => 403,
+                        'message' => 'Le type n\'a pas été supprimé: Des matériels sont encore liés.'
+                    ];
+                }
             }
-            else
+            catch(\Exception$e)
             {
-                $data = [
-                    'type' => 'error',
-                    'code' => 403,
-                    'message' => 'Le type n\'a pas été supprimé: Des matériels sont encore liés.'
-                ];
+                $data = ApiErrors::NotFound($request->getUri());
             }
-        }
-        catch(\Exception$e)
-        {
-            $data = ApiErrors::NotFound($request->getUri());
+
         }
 
         $resp = $response

@@ -112,52 +112,28 @@ class MaterielController extends Controller
     public function getMaterielExemplaires(Request $request, Response $response, $args)
     {
         $id = $args['id'];
-        $params = [
-            'nb' => intval($request->getQueryParam('nb',10)),
-            'page' => intval($request->getQueryParam('page',1)),
-        ];
 
         try
         {
-
             $materiel = Materiel::where('materiel.id','=',$id)->with('exemplaire')->with('type');
 
             if(empty($materiel))
             {
                 $data = ApiErrors::NotFound($request->getUri());
-                $resp = $response
-                    ->withStatus($data['code'])
-                    ->withHeader('Content-Type', 'application/json; charset=utf8');
-                $resp->getBody()
-                    ->write(json_encode($data));
-                return $resp;
             }
+            else{
 
-            $elementCounter = $materiel->count();
-            if( (($params['nb']*($params['page']))>$elementCounter) || ($params['nb']<=0) || ($params['page']<=0) )
-            {
-                $params['nb'] = 10;
-                $params['page'] = 1;
+                $materiel = $materiel->first();
+                $elementCounter = $materiel->exemplaire->count();
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'ressource' => [
+                        'total' => $elementCounter,
+                    ],
+                    'materiels' => $materiel
+                ];
             }
-            if($params['nb'])
-                $materiel = $materiel->take($params['nb']);
-            if($params['page'])
-                $materiel = $materiel->skip($params['nb']*($params['page']-1));
-            $pageMax = ceil($elementCounter/$params['nb']);
-            $materiel = $materiel->first();
-
-            $data = [
-                'type' => "success",
-                'code' => 200,
-                'ressource' => [
-                    'total' => $elementCounter,
-                    'nb_per_page' => $params['nb'],
-                    'page' => $params['page'],
-                    'page_max' => $pageMax,
-                ],
-                'materiels' => $materiel
-            ];
-
         }
         catch(\Exception $e)
         {
@@ -181,41 +157,34 @@ class MaterielController extends Controller
         if($id==0)
         {
             $data = ApiErrors::BadRequest();
-            $resp = $response
-                ->withStatus($data['code'])
-                ->withHeader('Content-Type', 'application/json; charset=utf8');
-            $resp->getBody()
-                ->write(json_encode($data));
-            return $resp;
         }
-
-        try
-        {
-            $materiel = Materiel::find($id);
-
-            if($materiel->nb_ex == 0)
+        else{
+            try
             {
-                $materiel->delete();
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'message' => 'le matériel '. $materiel->id . ' a bien été supprimé.'
-                ];
+                $materiel = Materiel::find($id);
+
+                if($materiel->nb_ex == 0)
+                {
+                    $materiel->delete();
+                    $data = [
+                        'type' => "success",
+                        'code' => 200,
+                        'message' => 'le matériel '. $materiel->id . ' a bien été supprimé.'
+                    ];
+                }
+                else
+                {
+                    $data = [
+                        'type' => 'error',
+                        'code' => 403,
+                        'message' => 'Le matériel \'a pas été supprimé: Des exemplaires sont encore liés.'
+                    ];
+                }
             }
-            else
+            catch(\Exception$e)
             {
-                $data = [
-                    'type' => 'error',
-                    'code' => 403,
-                    'message' => 'Le matériel \'a pas été supprimé: Des exemplaires sont encore liés.'
-                ];
+                $data = ApiErrors::NotFound($request->getUri());
             }
-
-
-        }
-        catch(\Exception$e)
-        {
-            $data = ApiErrors::NotFound($request->getUri());
         }
 
         $resp = $response

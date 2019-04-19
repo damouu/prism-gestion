@@ -117,41 +117,17 @@ class ExemplaireController extends Controller
     {
         $id = $args['id'];
 
-        $params = [
-            'nb' => intval($request->getQueryParam('nb',10)),
-            'page' => intval($request->getQueryParam('page',1)),
-        ];
-
         try
         {
-
             $exemplaire = Exemplaire::select('id','materiel','reference','etat','num_ex','date_achat','date_modif')->where('id','=',$id)->with('materiel');
 
-            $elementCounter = $exemplaire->count();
-            if( (($params['nb']*($params['page']))>$elementCounter) || ($params['nb']<=0) || ($params['page']<=0) )
-            {
-                $params['nb'] = 10;
-                $params['page'] = 1;
-            }
-            if($params['nb'])
-                $exemplaire = $exemplaire->take($params['nb']);
-            if($params['page'])
-                $exemplaire = $exemplaire->skip($params['nb']*($params['page']-1));
-            $pageMax = ceil($elementCounter/$params['nb']);
             $exemplaire = $exemplaire->first();
 
             $data = [
                 'type' => "success",
                 'code' => 200,
-                'ressource' => [
-                    'total' => $elementCounter,
-                    'nb_per_page' => $params['nb'],
-                    'page' => $params['page'],
-                    'page_max' => $pageMax,
-                ],
                 'exemplaires' => $exemplaire
             ];
-
         }
         catch(\Exception $e)
         {
@@ -177,40 +153,36 @@ class ExemplaireController extends Controller
         if($id==0)
         {
             $data = ApiErrors::BadRequest();
-            $resp = $response
-                ->withStatus($data['code'])
-                ->withHeader('Content-Type', 'application/json; charset=utf8');
-            $resp->getBody()
-                ->write(json_encode($data));
-            return $resp;
         }
-
-        $exemplaire = Exemplaire::find($id);
-
-        if(empty($exemplaire))
+        else
         {
-            $data = ApiErrors::NotFound($request->getUri());
-        }
-        else {
-            try{
-                $exem = Exemplaire::find($id);
-                $mat = Materiel::find($exem->materiel);
-                $count = Exemplaire::where('materiel','=',$id)->count();
-                DB::transaction( function () use ($exem,$mat,$count) {
-                    $mat->nb_ex = ($count)-1;
-                    $exem->delete();
-                    $mat->save();
-                });
+            $exemplaire = Exemplaire::find($id);
 
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'message' => 'l\'exemplaire ' . $exemplaire->id . ' a bien été supprimé.'
-                ];
-            }
-            catch(\Exception $e)
+            if(empty($exemplaire))
             {
-                $data = ApiErrors::InternalError();
+                $data = ApiErrors::NotFound($request->getUri());
+            }
+            else {
+                try{
+                    $exem = Exemplaire::find($id);
+                    $mat = Materiel::find($exem->materiel);
+                    $count = Exemplaire::where('materiel','=',$id)->count();
+                    DB::transaction( function () use ($exem,$mat,$count) {
+                        $mat->nb_ex = ($count)-1;
+                        $exem->delete();
+                        $mat->save();
+                    });
+
+                    $data = [
+                        'type' => "success",
+                        'code' => 200,
+                        'message' => 'l\'exemplaire ' . $exemplaire->id . ' a bien été supprimé.'
+                    ];
+                }
+                catch(\Exception $e)
+                {
+                    $data = ApiErrors::InternalError();
+                }
             }
         }
 
