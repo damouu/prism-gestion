@@ -4,8 +4,6 @@ version: "3"
 networks:
   prism_network:
     driver: bridge
-  charlylab_network:
-    driver: bridge
 
 
 # php services
@@ -21,31 +19,15 @@ services:
     ports:
       - "10080:80"
       - "10443:443"
-    volumes :
-      - ./prism:/var/www/prism
-    working_dir : /var/www/src
+    volumes:
+      - ./prism/src:/var/www/src
+      - ./prism/public:/var/www/prism
+    working_dir: /var/www/prism/src
     networks:
       - prism_network
-    links :
+    links:
       - mysql_prism:db
 
-
-
-  charlylab.app:
-    image: canals/php:latest
-    environment:
-      - VHOST_HOSTNAME=charlylab.app.local
-      - VHOST_DOCROOT=/var/www/charlylab
-    ports:
-      - "11080:80"
-      - "11443:443"
-    volumes :
-      - ./charlylab:/var/www/charlylab
-    working_dir : /var/www/src
-    networks:
-      - charlylab_network
-    links :
-      - mysql_prism:db
   # mysql + adminer
 
   mysql_prism:
@@ -59,7 +41,6 @@ services:
       - "3603:3306"
     networks:
       - prism_network
-      - charlylab_network
     volumes :
       - ./sql:/var/sql
 
@@ -69,7 +50,6 @@ services:
       - "8080:8080"
     networks:
       - prism_network
-      - charlylab_network
     links:
       - mysql_prism:db_prism_app
 
