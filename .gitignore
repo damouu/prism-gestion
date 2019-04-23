@@ -118,3 +118,15 @@ composer.lock
 
 !app_mobile/app/vue-rx/dist/*
 !app_mobile/app/vuex/dist/*
+
+node_modules
+/dist
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
