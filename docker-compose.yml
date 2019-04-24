@@ -22,7 +22,7 @@ services:
     volumes:
       - ./prism/src:/var/www/src
       - ./prism/public:/var/www/prism
-    working_dir: /var/www/prism/src
+    working_dir: /var/www/src
     networks:
       - prism_network
     links:
