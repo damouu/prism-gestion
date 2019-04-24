@@ -1,33 +1,25 @@
 <template>
     <div id="inventaire">
-
         <div>
-
             <b-container class="mt-5">
-
                 <h1 class="ml-5">Inventaire</h1>
                 <b-tabs pills align="center">
-                    <b-tab title="Tous" active>
-                        <b-table hover :items="all" class="mt-5"></b-table>
+                    <b-tab v-if='currentType == "Tous"' title="Tous" active>
                     </b-tab>
-                    <template v-for="typesTitle in typesAll" >
-                        <b-tab :title="typesTitle">
-                            <b-table hover :items="types" class="mt-5"></b-table>
+                    <b-tab @click="setCurrentType('Tous')" v-else title="Tous">
+                    </b-tab>
+                    <template v-for="type in types" >
+                        <b-tab v-if='currentType == type.id'  :title="type.nom" active>
+                        </b-tab>
+                        <b-tab v-else @click="setCurrentType(type.id)"  :title="type.nom">
                         </b-tab>
                     </template>
                 </b-tabs>
-
-
+                <br/>
+                <b-table v-if="fillMateriels.length > 0" striped hover :items="fillMateriels"></b-table>
             </b-container>
         </div>
-
-
-
-
     </div>
-
-
-
 </template>
 
 
@@ -35,74 +27,60 @@
 <script>
 
     export default {
-        name: 'Home',
-        data : function () {
+        name: 'InventaireVue',
+        data() {
             return {
-
                 materiels: [],
-                all: [],
                 types: [],
-                typesAll: []
+                fillMateriels: [],
+                currentType : 'Tous'
             }
         },
         mounted() {
-            let tempThis = this;
-
             // API -  GET ALL MATERIELS
-            this.getAll(this);
+            this.getAll();
 
             // API - GET TYPES
-            this.getTypes(this);
-
-            // API - Remplissage des types par les materiels
-            this.fillDynamic(this);
-
-
+            this.getTypes();
 
         },
         methods : {
-            getAll(tempThis) {
+            getAll() {
                 axios.get('/materiels')
-                    .then(function (response) {
-                        for (let data of response.data.materiels) {
-                            data.type = data.type.nom;
-                            tempThis.all.push(data);
-                        }
+                    .then(response => {
+                        this.materiels = response.data.materiels;
+                        this.fillTable();
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
-            getTypes(tempThis) {
+
+            getTypes() {
                 axios.get('/types')
-                    .then(function (response) {
-                        for (let data of response.data.types) {
-                            tempThis.typesAll.push(data.nom);
-
-                            axios.get('/materiels?types='+data.nom)
-                                .then(function (resp) {
-                                    tempThis.types.push(new Array(data.nom, resp.data.materiels));
-                                })
-                                .catch(function (error){
-                                    tempThis.types.push(new Array(data.nom, 'empty'));
-                                });
-                        }
+                    .then(response => {
+                        this.types = response.data.types;
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
-
-                console.log(tempThis.types);
             },
-            fillDynamic(tempThis) {
 
+            setCurrentType(type){
+                this.currentType = type;
+                this.fillTable();
+            },
 
-
-                tempThis.typesAll.forEach(function(element) {
-                    console.log('ARG');
+            fillTable(){
+                this.fillMateriels = [];
+                let listeMateriels = JSON.parse(JSON.stringify(this.materiels));
+                listeMateriels.forEach(materiel => {
+                    if(this.currentType == materiel.type.id || this.currentType == 'Tous'){
+                        materiel.type = materiel.type.nom;
+                        this.fillMateriels.push(materiel);
+                    }
                 });
-
-            },
+            }
         }
     }
 
