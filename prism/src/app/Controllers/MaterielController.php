@@ -4,6 +4,7 @@ namespace PrismGestion\Controllers;
 
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Materiel;
+use PrismGestion\Models\Type;
 use PrismGestion\Utils\ResponseWriter;
 use \Psr\http\Message\ServerRequestInterface as Request;
 use \Psr\http\Message\ResponseInterface as Response;
@@ -17,14 +18,32 @@ class MaterielController extends Controller
         $params = [
             'nb' => intval($request->getQueryParam('nb',10)),
             'page' => intval($request->getQueryParam('page',1)),
+            'types' => $request->getQueryParam('types',null),
         ];
 
         try
         {
 
-            $materiel = Materiel::select('id','constructeur','modele','nb_ex','type','date_creation','date_suppression');
+            if(is_null($params['types']))
+            {
+                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','materiel.nb_ex','type','materiel.date_creation')
+                    ->join('type', 'materiel.type','=','type.id')
+                    ->with(['type' => function ($q) {
+                        $q->select('type.id','type.nom');
+                    }]);
+            }
+            else
+            {
+                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','materiel.nb_ex','type','materiel.date_creation')
+                    ->join('type', 'materiel.type','=','type.id')
+                    ->where('type.nom','=',$params['types'])
+                    ->with(['type' => function ($q) {
+                        $q->select('type.id','type.nom');
+                    }]);
+            }
 
-            $elementCounter = $materiel->count();
+
+            $elementCounter = $materiel->get()->count();
             if( (($params['nb']*($params['page']))>$elementCounter) || ($params['nb']<=0) || ($params['page']<=0) )
             {
                 $params['nb'] = 10;
@@ -35,23 +54,33 @@ class MaterielController extends Controller
             if($params['page'])
                 $materiel = $materiel->skip($params['nb']*($params['page']-1));
             $pageMax = ceil($elementCounter/$params['nb']);
+
             $materiel = $materiel->get();
 
-            $data = [
-                'type' => "success",
-                'code' => 200,
-                'ressource' => [
-                    'total' => $elementCounter,
-                    'nb_per_page' => $params['nb'],
-                    'page' => $params['page'],
-                    'page_max' => $pageMax,
-                ],
-                'materiels' => $materiel
-            ];
+            if($materiel->isEmpty())
+            {
+                $data = ApiErrors::NotFound($request->getUri());
+            }
+            else
+            {
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'ressource' => [
+                        'total' => $elementCounter,
+                        'nb_per_page' => $params['nb'],
+                        'page' => $params['page'],
+                        'page_max' => $pageMax,
+                    ],
+                    'materiels' => $materiel
+                ];
+            }
+
 
         }
         catch(\Exception $e)
         {
+            var_dump($e);die;
             $data = ApiErrors::NotFound($request->getUri());
         }
 

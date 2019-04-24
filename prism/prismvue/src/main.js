@@ -11,7 +11,7 @@ Vue.use(BootstrapVue);
 
 
 window.axios = axios.create({
-  baseURL : 'http://prism.app.local:10080/',
+  baseURL : 'http://prism.app.local:10080/api/',
   params : {
 
   },
