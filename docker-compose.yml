@@ -19,12 +19,13 @@ services:
     ports:
       - "10080:80"
       - "10443:443"
-    volumes :
-      - ./prism:/var/www/prism
-    working_dir : /var/www/src
+    volumes:
+      - ./prism/src:/var/www/src
+      - ./prism/public:/var/www/prism
+    working_dir: /var/www/prism/src
     networks:
       - prism_network
-    links :
+    links:
       - mysql_prism:db
 
   # mysql + adminer

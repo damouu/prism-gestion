@@ -1,0 +1,11 @@
+{
+    "require": {
+        "slim/slim": "^3.12",
+        "illuminate/database": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "PrismGestion\\": "app"
+        }
+    }
+}

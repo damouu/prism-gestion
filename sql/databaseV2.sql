@@ -1,11 +1,10 @@
--- DROPS
+                             -- DROPS
 DROP TABLE IF EXISTS `resa_materiel`;
 DROP TABLE IF EXISTS `groupe`;
 DROP TABLE IF EXISTS `resa`;
 DROP TABLE IF EXISTS `reservation`;
 DROP TABLE IF EXISTS `professeur`;
 DROP TABLE IF EXISTS `etudiant`;
-DROP TABLE IF EXISTS `exemplaire`;
 DROP TABLE IF EXISTS `materiel`;
 DROP TABLE IF EXISTS `type`;
 
@@ -13,7 +12,6 @@ DROP TABLE IF EXISTS `type`;
 CREATE TABLE IF NOT EXISTS `type` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `nom` varchar(128) NOT NULL,
-    `date_suppression` DATE DEFAULT NULL,
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=`utf8`;
 
@@ -21,48 +19,24 @@ CREATE TABLE IF NOT EXISTS `materiel` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `constructeur` varchar(128) NOT NULL,
     `modele` varchar(128) NOT NULL,
-    `description` TEXT DEFAULT NULL,
-    `nb_ex` INT NOT NULL,
+`reference` varchar(20),
     `type` INT NOT NULL,
-    `date_creation` date NOT NULL,
-    `date_modification` date DEFAULT NULL,
-    `date_suppression` date DEFAULT NULL,
+    `created_at` date NOT NULL,
+    `deleted_at` date DEFAULT NULL,
     FOREIGN KEY (`type`) REFERENCES `type`(`id`),
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `exemplaire` (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `materiel` INT NOT NULL,
-    `reference` varchar(20) DEFAULT NULL,
-    `etat` INT NOT NULL,
-    `num_ex` INT NOT NULL,
-    `date_achat` date NOT NULL,
-    `date_modif` date DEFAULT NULL,
-    `date_sortie` date DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`materiel`) REFERENCES `materiel`(`id`)
-)Engine=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE IF NOT EXISTS `etudiant` (
+CREATE TABLE IF NOT EXISTS `personnel` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `nom` varchar(128) NOT NULL,
     `prenom` varchar(128) NOT NULL,
     `mail` varchar(255) NOT NULL,
     `telephone` varchar(20) NOT NULL,
+    `status` enum('etudiant','professeur') NOT NULL,
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT Charset=utf8;
-
-CREATE TABLE IF NOT EXISTS `professeur` (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `nom` varchar(128) NOT NULL,
-    `prenom` varchar(128) NOT NULL,
-    `mail` varchar(255) NOT NULL,
-    `telephone` varchar(20) NOT NULL,
-    PRIMARY KEY (`id`)
-)Engine=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `departement` (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -81,8 +55,8 @@ CREATE TABLE IF NOT EXISTS `reservation` (
     `created_at` date NOT NULL,
     `deleted_at` date DEFAULT NULL,
     FOREIGN KEY (`departement`) REFERENCES `departement`(`id`),
-    FOREIGN KEY (`responsable_projet`) REFERENCES `professeur`(`id`),
-    FOREIGN KEY (`referent`) REFERENCES `etudiant`(`id`),
+    FOREIGN KEY (`responsable_projet`) REFERENCES `personnel`(`id`),
+    FOREIGN KEY (`referent`) REFERENCES `personnel`(`id`),
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
@@ -103,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `groupe` (
     `reservation` INT NOT NULL,
     `etudiant` INT NOT NULL,
     FOREIGN KEY (`reservation`) REFERENCES `reservation`(`id`),
-    FOREIGN KEY (`etudiant`) REFERENCES `etudiant`(`id`),
+    FOREIGN KEY (`etudiant`) REFERENCES `personnel`(`id`),
     PRIMARY KEY (`reservation`, `etudiant`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
