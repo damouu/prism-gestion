@@ -28,9 +28,8 @@
                      selectable
                      :select-mode="mode"
                      selectedVariant="success"
-                     @row-selected="rowSelected"
-
-                ></b-table>
+                     @row-selected="rowSelected">
+                </b-table>
                 <b-pagination
                     @click="pagination"
                     v-model="currentPage"

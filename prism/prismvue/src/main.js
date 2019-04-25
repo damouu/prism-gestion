@@ -22,7 +22,7 @@ store.subscribe((mutation,state) => {
 });
 
 
-var vm = new Vue({
+new Vue({
   router,
   store,
   render: h => h(App),
