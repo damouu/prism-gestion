@@ -2,7 +2,7 @@
     <div id="inventaire">
         <div>
             <b-container class="mt-5">
-                <h1 class="ml-5">Inventaire</h1>
+                <h1 class="ml-5">Inventaire - En service</h1>
                 <b-tabs pills align="center">
                     <b-tab v-if='currentType == "Tous"' title="Tous" active>
                     </b-tab>
@@ -16,8 +16,28 @@
                     </template>
                 </b-tabs>
                 <br/>
-                <b-table v-if="fillMateriels.length > 0" striped hover :items="fillMateriels"></b-table>
+                <b-table v-if="fillMateriels.length > 0"
+                     striped hover
+                     :items="fillMateriels"
+                     :fixed="true"
+
+                     :fields="fields"
+                     :sort-by.sync="sortBy"
+                     :sort-desc.sync="sortDesc"
+
+                     selectable
+                     :select-mode="mode"
+                     selectedVariant="success"
+                     @row-selected="rowSelected"
+
+                ></b-table>
+                <b-pagination
+                    @click="pagination"
+                    v-model="currentPage"
+                    :total-rows="rows"
+                ></b-pagination>
             </b-container>
+
         </div>
     </div>
 </template>
@@ -33,7 +53,21 @@
                 materiels: [],
                 types: [],
                 fillMateriels: [],
-                currentType : 'Tous'
+                currentType : 'Tous',
+                mode: 'single',
+                selected: [],
+                sortBy : 'id',
+                sortDesc: false,
+                fields: [
+                    { key: 'id', sortable:true },
+                    { key: 'constructeur', sortable:true },
+                    { key: 'modele', sortable:true },
+                    { key: 'nb_ex', sortable:true },
+                    { key: 'type', sortable:false },
+                    { key: 'date_creation', sortable:true }
+                ],
+                currentPage: 3,
+                rows: 100
             }
         },
         mounted() {
@@ -80,6 +114,16 @@
                         this.fillMateriels.push(materiel);
                     }
                 });
+            },
+
+            rowSelected(items) {
+                this.selected = items;
+                let idSelected = items[0];
+                this.$router.push({name: 'materiel', params: { id: idSelected.id }});
+            },
+
+            pagination(event) {
+                console.log(change);
             }
         }
     }

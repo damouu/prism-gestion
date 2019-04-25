@@ -17,10 +17,16 @@ window.axios = axios.create({
   },
 });
 
+store.subscribe((mutation,state) => {
+  localStorage.setItem('store', JSON.stringify(state));
+});
 
 
-new Vue({
+var vm = new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  beforeCreate() {
+    this.$store.commit('initializeStore');
+  }
 }).$mount('#app');
