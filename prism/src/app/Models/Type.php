@@ -10,6 +10,7 @@ class Type extends Model
     use softDeletes;
     protected $table = 'type';
     public $timestamps = false;
+    protected $dateFormat = 'Y-m-d';
     const DELETED_AT = 'date_suppression';
     protected $dates = ['date_suppression'];
 

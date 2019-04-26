@@ -10,6 +10,7 @@ class Exemplaire extends Model
     use SoftDeletes;
     protected $table = 'exemplaire';
     public $timestamps = true;
+    protected $dateFormat = 'Y-m-d';
     protected $primaryKey = 'id';
     const CREATED_AT = 'date_achat';
     const UPDATED_AT = 'date_modif';

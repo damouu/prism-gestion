@@ -12,6 +12,7 @@ class Materiel extends Model
     protected $table = 'materiel';
     protected $primaryKey = 'id';
     public $timestamps = true;
+    protected $dateFormat = 'Y-m-d';
     const CREATED_AT = 'date_creation';
     const UPDATED_AT = 'date_modification';
     const DELETED_AT = 'date_suppression';
