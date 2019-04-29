@@ -80,7 +80,6 @@ class MaterielController extends Controller
         }
         catch(\Exception $e)
         {
-            var_dump($e);die;
             $data = ApiErrors::NotFound($request->getUri());
         }
 
@@ -129,7 +128,10 @@ class MaterielController extends Controller
 
         try
         {
-            $materiel = Materiel::where('materiel.id','=',$id)->with('exemplaire')->with('type');
+            $materiel = Materiel::where('materiel.id','=',$id)
+                ->with('exemplaire')
+                ->with('type')
+            ;
 
             if(empty($materiel))
             {

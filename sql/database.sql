@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS `reservation`;
 DROP TABLE IF EXISTS `professeur`;
 DROP TABLE IF EXISTS `etudiant`;
 DROP TABLE IF EXISTS `exemplaire`;
+DROP TABLE IF EXISTS `fournisseur`;
 DROP TABLE IF EXISTS `materiel`;
 DROP TABLE IF EXISTS `type`;
 
@@ -31,18 +32,42 @@ CREATE TABLE IF NOT EXISTS `materiel` (
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `fournisseur` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `nom` varchar(255) NOT NULL,
+    `adresse` varchar(255) NOT NULL,
+    `ville` varchar(128) NOT NULL,
+    `code_postal` varchar(10) NOT NULL,
+    `site_web` varchar(255) DEFAULT NULL,
+    `mail` varchar(128) NOT NULL,
+    `tel` varchar(13) NOT NULL,
+    `commercial_nom` varchar(128) DEFAULT NULL,
+    `commercial_prenom` varchar(128) DEFAULT NULL,
+    `commercial_mail` varchar(255) DEFAULT NULL,
+    `commercial_tel` varchar(13) DEFAULT NULL,
+    `date_creation` date NOT NULL,
+    `date_modification` date DEFAULT NULL,
+    `date_suppression` date DEFAULT NULL,
+    PRIMARY KEY(`id`)
+)Engine=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE IF NOT EXISTS `exemplaire` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `materiel` INT NOT NULL,
     `reference` varchar(20) DEFAULT NULL,
+    `fournisseur` INT NOT NULL,
+    `prix_achat` INT NOT NULL,
+    `num_serie` varchar(128) NOT NULL,
+    `url` TEXT DEFAULT NULL,
     `etat` INT NOT NULL,
     `num_ex` INT NOT NULL,
     `date_achat` date NOT NULL,
     `date_modif` date DEFAULT NULL,
     `date_sortie` date DEFAULT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`materiel`) REFERENCES `materiel`(`id`)
+    FOREIGN KEY (`materiel`) REFERENCES `materiel`(`id`),
+    FOREIGN KEY (`fournisseur`) REFERENCES `fournisseur`(`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
 

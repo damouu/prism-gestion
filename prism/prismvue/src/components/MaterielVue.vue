@@ -4,7 +4,7 @@
             <b-container class="mt-5">
 
                 <b-row>
-                    <b-button variant="outline-primary" @click="backInventaire">‹ retour</b-button>
+                    <b-button variant="outline-secondary" @click="backInventaire">‹ retour</b-button>
                     <h1 class="ml-5">Materiel</h1>
                 </b-row>
 
@@ -62,7 +62,7 @@
                         <div  v-if="!showEx">
                             <b-row align-h="between">
                                 <h3>Exemplaires : {{ exemplaires.length }}</h3>
-                                <b-button variant="primary">Ajouter un exemplaire</b-button>
+                                <b-button variant="success" v-b-modal.modal-AddExemplaire>Ajouter un exemplaire</b-button>
                             </b-row>
 
 
@@ -85,36 +85,126 @@
                         </div>
                         <div v-else>
                             <b-row align-h="around">
-                                <b-button variant="outline-primary" @click="backExemplaires">‹ retour</b-button>
+                                <b-button variant="outline-secondary" @click="backExemplaires">‹ retour</b-button>
                                 <b-button variant="primary">Modifier</b-button>
+                                <b-button variant="outline-danger">Supprimer</b-button>
                             </b-row>
-                            <b-row align-h="between" class="mt-4">
+
+                            <b-row class="mt-4">
+                                <h4>Exemplaire</h4>
+                            </b-row>
+
+                            <b-row align-h="between" class="mt-2">
                                 <b-col sm="4">
                                     <label for="idExemplaire">Id</label>
                                 </b-col>
                                 <b-col sm="7">
-                                    <p id="idExemplaire">{{ selected[0].id }}</p>
+                                    <p id="idExemplaire">{{ selected.id }}</p>
                                 </b-col>
                                 <b-col sm="4">
                                     <label for="refExemplaire">Référence</label>
                                 </b-col>
                                 <b-col sm="7">
-                                    <p id="refExemplaire">{{ selected[0].reference }}</p>
+                                    <p id="refExemplaire">{{ selected.reference }}</p>
                                 </b-col>
                                 <b-col sm="4">
-                                    <label for="etatExemplaire">Etat</label>
+                                    <label for="prixExemplaire">Prix d'achat</label>
                                 </b-col>
                                 <b-col sm="7">
-                                    <p id="etatExemplaire">{{ selected[0].etat }}</p>
+                                    <p id="prixExemplaire">{{ selected.prix_achat }}</p>
                                 </b-col>
                                 <b-col sm="4">
-                                    <label for="dateAchatExemplaire">date Achat</label>
+                                    <label for="numSerieExemplaire">numéro de série</label>
                                 </b-col>
                                 <b-col sm="7">
-                                    <p id="dateAchatExemplaire">{{ selected[0].date_achat }}</p>
+                                    <p id="numSerieExemplaire">{{ selected.num_serie }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="urlExemplaire">URL</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="urlExemplaire"><a v-bind:href="selected.url" target="_blank">{{ selected.url }}</a></p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="dateAchatExemplaire">Date d'achat</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="dateAchatExemplaire">{{ selected.date_achat }}</p>
+                                </b-col>
+                            </b-row>
+
+                            <b-row class="mt-2">
+                                <h4>Fournisseur</h4>
+                            </b-row>
+
+                            <b-row align-h="between" class="mt-2">
+                                <b-col sm="4">
+                                    <label for="nomFournisseur">Nom</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="nomFournisseur">{{ selectedFournisseur.nom }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="adresseFournisseur">adresse</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="adresseFournisseur">{{ selectedFournisseur.adresse }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="villeFournisseur">Ville</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="villeFournisseur">{{ selectedFournisseur.ville }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="codePostalFournisseur">Code Postal</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="codePostalFournisseur">{{ selectedFournisseur.code_postal }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="siteWebFournisseur">Site Web</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="siteWebFournisseur">{{ selectedFournisseur.site_web }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="mailFournisseur">Mail</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="mailFournisseur">{{ selectedFournisseur.mail }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="telFournisseur">Téléphone</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="telFournisseur">{{ selectedFournisseur.tel }}</p>
                                 </b-col>
 
                             </b-row>
+
+
+                            <b-row align-h="between" class="mt-2" v-if="selectedFournisseur.commercial_nom || selectedFournisseur.commercial_prenom || selectedFournisseur.commercial_tel || selectedFournisseur.commercialmail">
+                                <b-col sm="4">
+                                    <label for="comNomFournisseur">Commercial</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="comNomFournisseur">{{ selectedFournisseur.commercial_nom }} {{ selectedFournisseur.commercial_prenom }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="comTelFournisseur">Tel Commercial</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="comTelFournisseur">{{ selectedFournisseur.commercial_tel }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="comMailFournisseur">Mail Commercial</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="comMailFournisseur">{{ selectedFournisseur.commercial_mail }}</p>
+                                </b-col>
+                            </b-row>
+
 
                         </div>
 
@@ -174,8 +264,65 @@
                             </b-col>
                         </b-row>
                     </form>
+                </b-modal>
+
+                <b-modal
+                id="modal-AddExemplaire"
+                title="Ajout d'exemplaire"
+                ref="modal"
+                scrollable
+                centered
+                @ok="handleOkAddEx">
+                <form ref="addExemplaire" @submit.stop.prevent="addExemplaire">
+                    <b-form-group
+                    label="Référence"
+                    label-cols-sm="4"
+                    label-align-sm="left"
+                    label-for="addExemplaireRef">
+                        <b-form-input id="addExemplaireRef" type="text" v-model="postExemplaire.reference" placeholder="Utilisez la douchette ou écrivez" required></b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                            label="Prix Achat"
+                            label-cols-sm="4"
+                            label-align-sm="left"
+                            label-for="addExemplairePrix">
+                        <b-form-input id="addExemplairePrix" type="number" step="any" v-model="postExemplaire.prix_achat" placeholder="Prix d'achat de l'exemplaire (en euros)" required></b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                            label="Numéro de Série"
+                            label-cols-sm="4"
+                            label-align-sm="left"
+                            label-for="addExemplaireNumSerie">
+                        <b-form-input id="addExemplaireNumSerie" type="text" v-model="postExemplaire.num_serie" placeholder="Numéro de série de l'exemplaire" required></b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                            label="URL Source"
+                            label-cols-sm="4"
+                            label-align-sm="left"
+                            label-for="addExemplaireUrl">
+                        <b-form-input id="addExemplaireUrl" type="text" v-model="postExemplaire.reference" placeholder="url source"></b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                            label="Date d'achat"
+                            label-cols-sm="4"
+                            label-align-sm="left"
+                            label-for="addExemplaireDateAchat">
+                        <b-form-input id="addExemplaireDateAchat" type="date" v-model="postExemplaire.date_achat" required></b-form-input>
+                    </b-form-group>
+
+                    <!-- METTRE ICI LISTE DEROULANTE FOURNISSEUR -->
+
+                </form>
 
                 </b-modal>
+
+                <!-- PENSER FAIRE VERIFICATIONS REQUIRED INPUT -->
+
+                <!-- FAIRE MODALE MODIF EXEMPLAIRE -->
+
+                <!-- FAIRE MODALE SUPPRESSION EXEMPLAIRE -->
+
+                <!-- FAIRE SUPPRESSION MATERIEL -->
 
             </b-container>
 
@@ -198,6 +345,7 @@
                 materielTypeModif: false,
                 selectedValue: false,
                 selected: false,
+                selectedFournisseur: false,
                 showEx: false,
                 types: [],
                 type: { 'text' : 'text','date' : 'date'},
@@ -218,7 +366,9 @@
                     { key: 'id', sortable:true },
                     { key: 'reference', sortable:true },
                     { key: 'num_ex', sortable:true },
-                ]
+                ],
+                postExemplaire: false,
+                items: false,
             }
         },
         mounted() {
@@ -230,6 +380,14 @@
         },
         methods : {
 
+            /*
+             *
+             *
+             * RECUPERATION MATERIEL
+             *
+             *
+             */
+
             getMateriel() {
                 axios.get('/materiels/'+ this.materielId )
                     .then( response => {
@@ -237,13 +395,19 @@
                         this.materielType = { 'value': response.data.materiel.type.id, 'text': response.data.materiel.type.nom };
                         this.materielTypeModif = JSON.parse(JSON.stringify(this.materielType.value));
                         this.materielModif = JSON.parse(JSON.stringify(this.materiel));
-                        console.log(this.materielType);
                     })
                     .catch( error => {
                         console.log(error)
                     });
             },
 
+            /*
+             *
+             *
+             * RECUPERATION TYPES
+             *
+             *
+             */
 
             getTypes() {
                 axios.get('/types/' )
@@ -257,6 +421,14 @@
                     });
             },
 
+            /*
+             *
+             *
+             * RECUPERATION EXEMPLAIRES
+             *
+             *
+             */
+
             getExemplaires() {
                 axios.get('/materiels/'+this.materielId+'/exemplaires')
                     .then( response => {
@@ -269,10 +441,41 @@
                     })
             },
 
+
+            /*
+             *
+             *
+             * RECUPERATION LIGNE CLIQUEE TABLEAU
+             *
+             *
+             */
+
+
             rowSelected(items) {
-                this.selected = items;
+                this.items = items;
+                this.getExemplaireId();
+            },
+
+            getExemplaireId() {
+                axios.get('/exemplaires/'+this.items[0].id)
+                    .then( response => {
+                        this.selected = response.data.exemplaire;
+                        this.selectedFournisseur = response.data.exemplaire.fournisseur;
+                        })
+                    .catch( error => {
+                            console.log(error);
+                        });
+
                 this.showEx=true;
             },
+
+            /*
+             *
+             *
+             * BOUTONS RETOUR
+             *
+             *
+             */
 
             backExemplaires() {
                 this.selected = false;
@@ -282,6 +485,16 @@
             backInventaire() {
                 this.$router.push({path: '/inventaire'});
             },
+
+
+            /*
+             *
+             *
+             * MODAL MODIFICATION MATERIEL
+             *
+             *
+             */
+
 
             handleOkModif(bvModalEvt) {
                 bvModalEvt.preventDefault();
@@ -306,9 +519,39 @@
                     .catch( error => {
                         console.log(error.response);
                     })
+            },
 
 
+            /*
+             *
+             *
+             * MODAL AJOUT EXEMPLAIRE
+             *
+             *
+             */
 
+            handleOkAddEx(bvModalEvt) {
+                bvModalEvt.preventDefault();
+                this.addExemplaire();
+            },
+
+            addExemplaire() {
+                axios.post('/exemplaires',
+                    {
+                        "materiel": this.materielId,
+                        "reference": this.postExemplaire.reference,
+                        "fournisseur": this.postExemplaire.fournisseur,
+                        "prix_achat": this.postExemplaire.num_serie,
+                        "url": this.postExemplaire.url,
+                        "etat": this.postExemplaire.etat,
+                        "date_achat": this.postExemplaire.date_achat,
+                    })
+                    .then( response => {
+                        this.getExemplaireId();
+                    })
+                    .catch( error => {
+                        console.log(error);
+                    })
             }
 
         }

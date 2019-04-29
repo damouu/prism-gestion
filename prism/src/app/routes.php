@@ -22,6 +22,9 @@ $app->post('/materiels[/]', 'MaterielController:post');
 $app->get('/exemplaires[/]', 'ExemplaireController:getAll');
 $app->post('/exemplaires[/]', 'ExemplaireController:post');
 
+$app->get('/fournisseurs[/]', 'FournisseurController:getAll');
+$app->post('/fournisseurs[/]', 'FournisseurController:post');
+
 
 $app->group('', function() {
     $this->get('/types/{id}[/]', 'TypeController:getOne');

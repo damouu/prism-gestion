@@ -23,5 +23,10 @@ class Exemplaire extends Model
         return $this->belongsTo('PrismGestion\Models\Materiel', 'materiel');
     }
 
+    public function fournisseur()
+    {
+        return $this->belongsTo('PrismGestion\Models\Fournisseur', 'fournisseur');
+    }
+
 
 }
