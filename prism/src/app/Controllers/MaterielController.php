@@ -257,6 +257,13 @@ class MaterielController extends Controller
 
             try {
                 $materiel->save();
+                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','materiel.nb_ex','type','materiel.date_creation')
+                    ->join('type', 'materiel.type','=','type.id')
+                    ->with(['type' => function ($q) {
+                        $q->select('type.id','type.nom');
+                    }])
+                ->find($id);
+
                 $data = [
                     'type' => "success",
                     'code' => 201,
@@ -276,6 +283,13 @@ class MaterielController extends Controller
                 $materiel->nb_ex = $content['nb_ex'];
                 $materiel->type = $content['type'];
                 $materiel->save();
+
+                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','materiel.nb_ex','type','materiel.date_creation','materiel.description')
+                    ->join('type', 'materiel.type','=','type.id')
+                    ->with(['type' => function ($q) {
+                        $q->select('type.id','type.nom');
+                    }])
+                ->find($id);
 
                 $data = [
                     'type' => "success",

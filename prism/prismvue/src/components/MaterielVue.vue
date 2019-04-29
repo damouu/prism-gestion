@@ -2,7 +2,12 @@
     <div id="materiel">
         <div>
             <b-container class="mt-5">
-                <h1 class="ml-5">Materiel</h1>
+
+                <b-row>
+                    <b-button variant="outline-primary" @click="backInventaire">‹ retour</b-button>
+                    <h1 class="ml-5">Materiel</h1>
+                </b-row>
+
 
                 <b-row align-h="around" class="mt-3">
                     <b-col cols="5">
@@ -55,7 +60,11 @@
 
                     <b-col cols="5">
                         <div  v-if="!showEx">
-                            <h3>Exemplaires : {{ exemplaires.length }}</h3>
+                            <b-row align-h="between">
+                                <h3>Exemplaires : {{ exemplaires.length }}</h3>
+                                <b-button variant="primary">Ajouter un exemplaire</b-button>
+                            </b-row>
+
 
                             <b-table v-if="exemplaires.length > 0"
                                 striped hover
@@ -69,11 +78,44 @@
                                 selectable
                                 :select-mode="mode"
                                 selectedVariant="success"
-                                @row-selected="rowSelected">
+                                @row-selected="rowSelected"
+
+                                class="mt-4">
                             </b-table>
                         </div>
                         <div v-else>
-                            <b-button variant="outline-primary" @click="backExemplaires">‹ retour</b-button>
+                            <b-row align-h="around">
+                                <b-button variant="outline-primary" @click="backExemplaires">‹ retour</b-button>
+                                <b-button variant="primary">Modifier</b-button>
+                            </b-row>
+                            <b-row align-h="between" class="mt-4">
+                                <b-col sm="4">
+                                    <label for="idExemplaire">Id</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="idExemplaire">{{ selected[0].id }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="refExemplaire">Référence</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="refExemplaire">{{ selected[0].reference }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="etatExemplaire">Etat</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="etatExemplaire">{{ selected[0].etat }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="dateAchatExemplaire">date Achat</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="dateAchatExemplaire">{{ selected[0].date_achat }}</p>
+                                </b-col>
+
+                            </b-row>
+
                         </div>
 
 
@@ -113,10 +155,10 @@
                                 <label for="typeMatMod">Type</label>
                             </b-col>
                             <b-col sm="8" class="mt-1">
-                                <b-form-select
-                                        v-model="materielTypeModif.text"
-                                        :options="types"
-                                        id="typeMatMod">
+                                <b-form-select id="typeMatMod" v-model="materielTypeModif">
+                                    <option v-for="option in types" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
                                 </b-form-select>
                             </b-col>
                             <b-col sm="4" class="mt-1">
@@ -192,9 +234,10 @@
                 axios.get('/materiels/'+ this.materielId )
                     .then( response => {
                         this.materiel = response.data.materiel;
-                        this.materielType = { 'value': response.data.materiel.id, 'text': response.data.materiel.type.nom };
-                        this.materielTypeModif = JSON.parse(JSON.stringify(this.materielType));
+                        this.materielType = { 'value': response.data.materiel.type.id, 'text': response.data.materiel.type.nom };
+                        this.materielTypeModif = JSON.parse(JSON.stringify(this.materielType.value));
                         this.materielModif = JSON.parse(JSON.stringify(this.materiel));
+                        console.log(this.materielType);
                     })
                     .catch( error => {
                         console.log(error)
@@ -208,7 +251,6 @@
                         for(let data of response.data.types) {
                             this.types.push({'value':data.id, 'text':data.nom});
                         }
-
                     })
                     .catch( error => {
                         console.log(error)
@@ -237,25 +279,26 @@
                 this.showEx=false;
             },
 
+            backInventaire() {
+                this.$router.push({path: '/inventaire'});
+            },
+
             handleOkModif(bvModalEvt) {
                 bvModalEvt.preventDefault();
                 this.modifMateriel();
             },
 
             modifMateriel() {
-                console.log(this.materielModif.type);
-
                 axios.put('/materiels/'+this.materielId,{
                         "constructeur": this.materielModif.constructeur,
                         "modele": this.materielModif.modele,
-                        "type": this.materielTypeModif.value,
+                        "type": this.materielTypeModif,
                         "nb_ex": this.materielModif.nb_ex,
                         "description": this.materielModif.description
                 })
                     .then( response => {
                         this.materiel = response.data.materiel;
-                        this.materielType = response.data.materiel.type.nom;
-
+                        this.materielType = { 'value': this.materiel.type.id, 'text': this.materiel.type.nom };
                         this.$nextTick( () =>  {
                             this.$refs.modal.hide();
                         });
