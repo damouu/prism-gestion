@@ -4,10 +4,17 @@ import store from './store'
 import router from './router'
 import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
+import VeeValidate from 'vee-validate'
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
+
+Vue.use(VeeValidate, {
+  inject: true,
+  fieldsBagName: 'veeFields'
+});
+
 
 
 window.axios = axios.create({

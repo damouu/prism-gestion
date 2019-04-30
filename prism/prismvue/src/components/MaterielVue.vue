@@ -19,12 +19,6 @@
 
                         <b-row align-h="between" class="my-1 mt-4">
                             <b-col sm="4" class="mt-1">
-                                <label for="idMat">Id</label>
-                            </b-col>
-                            <b-col sm="7" class="mt-1">
-                                <p id="idMat">{{materiel.id}}</p>
-                            </b-col>
-                            <b-col sm="4" class="mt-1">
                                 <label for="consMat">Constructeur</label>
                             </b-col>
                             <b-col sm="7" class="mt-1">
@@ -69,9 +63,8 @@
                             <b-table v-if="exemplaires.length > 0"
                                 striped hover
                                 :items="exemplaires"
-                                :fixed="true"
 
-                                :fields="fields"
+                                :fields="fieldsRow"
                                 :sort-by.sync="sortBy"
                                 :sort-desc.sync="sortDesc"
 
@@ -91,21 +84,21 @@
                             </b-row>
 
                             <b-row class="mt-4">
-                                <h4>Exemplaire</h4>
+                                <h4>Exemplaire    <b-badge v-if="selected.etat === 'disponible'" variant="success">{{selected.etat}}</b-badge><b-badge v-else variant="danger">{{selected.etat}}</b-badge></h4>
                             </b-row>
 
                             <b-row align-h="between" class="mt-2">
-                                <b-col sm="4">
-                                    <label for="idExemplaire">Id</label>
-                                </b-col>
-                                <b-col sm="7">
-                                    <p id="idExemplaire">{{ selected.id }}</p>
-                                </b-col>
                                 <b-col sm="4">
                                     <label for="refExemplaire">Référence</label>
                                 </b-col>
                                 <b-col sm="7">
                                     <p id="refExemplaire">{{ selected.reference }}</p>
+                                </b-col>
+                                <b-col sm="4">
+                                    <label for="stockageExemplaire">Lieu de stockage</label>
+                                </b-col>
+                                <b-col sm="7">
+                                    <p id="stockageExemplaire">{{ selected.stockage }}</p>
                                 </b-col>
                                 <b-col sm="4">
                                     <label for="prixExemplaire">Prix d'achat</label>
@@ -166,7 +159,7 @@
                                     <label for="siteWebFournisseur">Site Web</label>
                                 </b-col>
                                 <b-col sm="7">
-                                    <p id="siteWebFournisseur">{{ selectedFournisseur.site_web }}</p>
+                                    <p id="siteWebFournisseur"><a v-bind:href="selectedFournisseur.site_web" target="_blank">{{ selectedFournisseur.site_web }}</a></p>
                                 </b-col>
                                 <b-col sm="4">
                                     <label for="mailFournisseur">Mail</label>
@@ -204,119 +197,195 @@
                                     <p id="comMailFournisseur">{{ selectedFournisseur.commercial_mail }}</p>
                                 </b-col>
                             </b-row>
-
-
                         </div>
-
-
                     </b-col>
                 </b-row>
 
                 <b-modal
                     id="modal-Materiel"
                     title="Modification de matériel"
-                    ref="modal"
+                    ref="modal1"
                     scrollable
                     centered
+                    size="lg"
                     @ok="handleOkModif">
                     <form ref="modifMateriel" @submit.stop.prevent="modifMateriel">
-                        <b-row class="my-1 mt-4">
-                            <b-col sm="4" class="mt-1">
-                                <label for="consMatMod">Constructeur</label>
-                            </b-col>
-                            <b-col sm="8" class="mt-1">
-                                <b-form-input
-                                        :type="type.text"
-                                        v-model="materielModif.constructeur"
-                                        id="consMatMod">
-                                </b-form-input>
-                            </b-col>
-                            <b-col sm="4" class="mt-1">
-                                <label for="modeleMatMod">Modele</label>
-                            </b-col>
-                            <b-col sm="8" class="mt-1">
-                                <b-form-input
-                                        :type="type.text"
-                                        v-model="materielModif.modele"
-                                        id="modeleMatMod">
-                                </b-form-input>
-                            </b-col>
-                            <b-col sm="4" class="mt-1">
-                                <label for="typeMatMod">Type</label>
-                            </b-col>
-                            <b-col sm="8" class="mt-1">
-                                <b-form-select id="typeMatMod" v-model="materielTypeModif">
-                                    <option v-for="option in types" v-bind:value="option.value">
-                                        {{ option.text }}
-                                    </option>
-                                </b-form-select>
-                            </b-col>
-                            <b-col sm="4" class="mt-1">
-                                <label for="descriptionMatMod">Description</label>
-                            </b-col>
-                            <b-col sm="8" class="mt-1">
-                                <b-form-textarea
-                                        :type="type.text"
-                                        rows="2"
-                                        v-model="materielModif.description"
-                                        id="descriptionMatMod">
-                                </b-form-textarea>
-                            </b-col>
-                        </b-row>
+                        <b-form-group label="Constructeur *" label-for="consMatMod" label-cols-sm="4" label-align-sm="left">
+                            <b-form-input
+                                    id="consMatMod"
+                                    name="materielModif.constructeur"
+                                    v-model="materielModif.constructeur"
+                                    v-validate="{required:true}"
+                                    :state="validateState('materielModif.constructeur')"
+                                    aria-describedby="invalidConstructeur"
+                                    placeholder="Entrez le nom du constructeur"
+                                    type="text" required>
+                            </b-form-input>
+                            <b-form-invalid-feedback id="invalidConstructeur">Veuillez entrer un nom de constructeur</b-form-invalid-feedback>
+                        </b-form-group>
+                        <b-form-group label="Modele *" label-for="modMatMod" label-cols-sm="4" label-align-sm="left">
+                            <b-form-input
+                                    id="modMatMod"
+                                    name="materielModif.modele"
+                                    v-model="materielModif.modele"
+                                    v-validate="{required:true}"
+                                    :state="validateState('materielModif.modele')"
+                                    aria-describedby="invalidModele"
+                                    placeholder="Entrez le nom du modèle"
+                                    type="text" required>
+                            </b-form-input>
+                            <b-form-invalid-feedback id="invalidModele">Veuillez écrire un modèle</b-form-invalid-feedback>
+                        </b-form-group>
+                        <b-form-group label="Type *" label-for="typeMatMod" label-cols-sm="4" label-align-sm="left">
+                            <b-form-select
+                                    id="typeMatMod"
+                                    name="materielTypeModif"
+                                    v-model="materielTypeModif"
+                                    v-validate="{required:true}"
+                                    :state="validateState('materielTypeModif')" required>
+                                <option v-for="option in types" v-bind:value="option.value">
+                                    {{ option.text }}
+                                </option>
+                            </b-form-select>
+                        </b-form-group>
+
+                        <b-form-group label="Description" label-for="modMatMod" label-cols-sm="4" label-align-sm="left">
+                            <b-form-textarea
+                                    id="descriptionMatMod"
+                                    name="materielModif.description"
+                                    v-model="materielModif.description"
+                                    placeholder="Ecrivez une description du matériel"
+                                    rows="2">
+                            </b-form-textarea>
+                        </b-form-group>
+                        <span class="text-danger">* champs obligatoires</span>
+
                     </form>
                 </b-modal>
 
                 <b-modal
                 id="modal-AddExemplaire"
                 title="Ajout d'exemplaire"
-                ref="modal"
+                ref="modal2"
                 scrollable
+                size="lg"
                 centered
                 @ok="handleOkAddEx">
                 <form ref="addExemplaire" @submit.stop.prevent="addExemplaire">
-                    <b-form-group
-                    label="Référence"
-                    label-cols-sm="4"
-                    label-align-sm="left"
-                    label-for="addExemplaireRef">
-                        <b-form-input id="addExemplaireRef" type="text" v-model="postExemplaire.reference" placeholder="Utilisez la douchette ou écrivez" required></b-form-input>
-                    </b-form-group>
-                    <b-form-group
-                            label="Prix Achat"
-                            label-cols-sm="4"
-                            label-align-sm="left"
-                            label-for="addExemplairePrix">
-                        <b-form-input id="addExemplairePrix" type="number" step="any" v-model="postExemplaire.prix_achat" placeholder="Prix d'achat de l'exemplaire (en euros)" required></b-form-input>
-                    </b-form-group>
-                    <b-form-group
-                            label="Numéro de Série"
-                            label-cols-sm="4"
-                            label-align-sm="left"
-                            label-for="addExemplaireNumSerie">
-                        <b-form-input id="addExemplaireNumSerie" type="text" v-model="postExemplaire.num_serie" placeholder="Numéro de série de l'exemplaire" required></b-form-input>
-                    </b-form-group>
-                    <b-form-group
-                            label="URL Source"
-                            label-cols-sm="4"
-                            label-align-sm="left"
-                            label-for="addExemplaireUrl">
-                        <b-form-input id="addExemplaireUrl" type="text" v-model="postExemplaire.reference" placeholder="url source"></b-form-input>
-                    </b-form-group>
-                    <b-form-group
-                            label="Date d'achat"
-                            label-cols-sm="4"
-                            label-align-sm="left"
-                            label-for="addExemplaireDateAchat">
-                        <b-form-input id="addExemplaireDateAchat" type="date" v-model="postExemplaire.date_achat" required></b-form-input>
+                    <b-form-group label="Référence *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireRef">
+                        <b-form-input
+                                id="addExemplaireRef"
+                                name="postExemplaire.reference"
+                                v-model="postExemplaire.reference"
+                                v-validate="{required:true}"
+                                :state="validateState('postExemplaire.reference')"
+                                aria-describedby="invalidReference"
+                                placeholder="Utilisez la douchette ou écrivez"
+                                type="text" required>
+                        </b-form-input>
+                        <b-form-invalid-feedback id="invalidReference">Veuillez écrire une référence ou scannez-la</b-form-invalid-feedback>
                     </b-form-group>
 
-                    <!-- METTRE ICI LISTE DEROULANTE FOURNISSEUR -->
+                    <b-form-group label="Prix Achat *" label-cols-sm="4" label-align-sm="left" label-for="addExemplairePrix">
+                        <b-form-input
+                                id="addExemplairePrix"
+                                name="postExemplaire.prix_achat"
+                                v-model="postExemplaire.prix_achat"
+                                v-validate="{required:true, decimal:2}"
+                                :state="validateState('postExemplaire.prix_achat')"
+                                aria-describedby="invalidPrixAchat"
+                                placeholder="Prix d'achat de l'exemplaire (en euros)"
+                                type="text" required>
+                        </b-form-input>
+                        <b-form-invalid-feedback id="invalidPrixAchat">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
+                    </b-form-group>
+                    <b-form-group label="Numéro de Série *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireNumSerie">
+                        <b-form-input
+                                id="addExemplaireNumSerie"
+                                name="postExemplaire.num_serie"
+                                v-model="postExemplaire.num_serie"
+                                v-validate="{required:true}"
+                                :state="validateState('postExemplaire.num_serie')"
+                                aria-describedby="invalidNumSerie"
+                                placeholder="Numéro de série de l'exemplaire"
+                                type="text" required>
+                        </b-form-input>
+                        <b-form-invalid-feedback id="invalidNumSerie">Vous devez entrer un numéro de série</b-form-invalid-feedback>
+                    </b-form-group>
+                    <b-form-group label="Lieu de stockage *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireStockage">
+                        <b-form-input
+                                id="addExemplaireStockage"
+                                name="postExemplaire.stockage"
+                                v-model="postExemplaire.stockage"
+                                v-validate="{required:true}"
+                                :state="validateState('postExemplaire.stockage')"
+                                aria-describedby="invalidStockage"
+                                placeholder="Lieu de stockage de l'exemplaire"
+                                type="text" required>
+                        </b-form-input>
+                        <b-form-invalid-feedback id="invalidStockage">Vous devez entrer un lieu de stockage</b-form-invalid-feedback>
+                    </b-form-group>
+                    <b-form-group label="URL Source" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireUrl">
+                        <b-form-input
+                                id="addExemplaireUrl"
+                                name="postExemplaire.url"
+                                v-model="postExemplaire.url"
+                                v-validate="{required:false, url:{require_protocol: true}}"
+                                :state="validateState('postExemplaire.url')"
+                                aria-describedby="invalidUrl"
+                                placeholder="url source"
+                                type="text">
+                        </b-form-input>
+                        <b-form-invalid-feedback id="invalidUrl">Vous devez entrer un URL valide</b-form-invalid-feedback>
+                    </b-form-group>
+                    <b-form-group label="Date d'achat *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireDateAchat">
+                        <b-form-input
+                                id="addExemplaireDateAchat"
+                                name="postExemplaire.date_achat"
+                                v-model="postExemplaire.date_achat"
+                                v-validate="'required:true|date_format:yyyy-MM-dd'"
+                                :state="validateState('postExemplaire.date_achat')"
+                                aria-describedby="invalidDateAchat"
+                                type="date" required>
+                        </b-form-input>
+                        <b-form-invalid-feedback id="invalidDateAchat">Vous devez entrer une date au format DD/MM/AAAA valide.</b-form-invalid-feedback>
+                    </b-form-group>
+
+                    <b-form-group label="Etat" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireEtat">
+                        <b-form-select
+                                id="addExemplaireEtat"
+                                name="postExemplaire.etat"
+                                v-model="postExemplaire.etat"
+                                v-validate="{required:true}"
+                                :state="validateState('postExemplaire.etat')"
+                                aria-describedby="invalidEtat"
+                                required>
+                            <option>disponible</option>
+                            <option>réparation</option>
+                            <option>emprunté</option>
+                            <option>non empruntable</option>
+                        </b-form-select>
+                        <b-form-invalid-feedback id="invalidEtat">Vous devez choisir une option d'état.</b-form-invalid-feedback>
+                    </b-form-group>
+                    <b-form-group label="Fournisseur" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireFournisseur">
+                        <b-form-select
+                                id="addExemplaireFournisseur"
+                                name="postExemplaire.fournisseur"
+                                v-model="postExemplaire.fournisseur"
+                                v-validate="{required:true}"
+                                :state="validateState('postExemplaire.fournisseur')"
+                                aria-describedby="invalidFournisseur"
+                                required>
+                            <option v-for="option in fournisseurs" v-bind:value="option.value">
+                                {{ option.text }}
+                            </option>
+                        </b-form-select>
+                        <b-form-invalid-feedback id="invalidFournisseur">Vous devez choisir un fournisseur.</b-form-invalid-feedback>
+                    </b-form-group>
 
                 </form>
 
                 </b-modal>
-
-                <!-- PENSER FAIRE VERIFICATIONS REQUIRED INPUT -->
 
                 <!-- FAIRE MODALE MODIF EXEMPLAIRE -->
 
@@ -340,9 +409,9 @@
             return {
                 materielId: this.$route.params.id,
                 materiel: [],
-                materielModif: false,
-                materielType: false,
-                materielTypeModif: false,
+                materielModif: [],
+                materielType: [],
+                materielTypeModif: [],
                 selectedValue: false,
                 selected: false,
                 selectedFournisseur: false,
@@ -362,13 +431,14 @@
                 mode: 'single',
                 sortBy : 'id',
                 sortDesc: false,
-                fields: [
+                fieldsRow: [
                     { key: 'id', sortable:true },
                     { key: 'reference', sortable:true },
                     { key: 'num_ex', sortable:true },
                 ],
-                postExemplaire: false,
+                postExemplaire: [],
                 items: false,
+                fournisseurs: [],
             }
         },
         mounted() {
@@ -376,6 +446,7 @@
             this.getMateriel();
             this.getTypes();
             this.getExemplaires();
+            this.getFournisseurs();
 
         },
         methods : {
@@ -445,6 +516,27 @@
             /*
              *
              *
+             * RECUPERATION Fournisseurs
+             *
+             *
+             */
+
+            getFournisseurs() {
+                axios.get('/fournisseurs')
+                    .then( response => {
+                        for(let data of response.data.fournisseurs) {
+                            this.fournisseurs.push({'value':data.id, 'text': data.nom});
+                        }
+                    })
+                    .catch( error => {
+                        console.log(error);
+                    });
+            },
+
+
+            /*
+             *
+             *
              * RECUPERATION LIGNE CLIQUEE TABLEAU
              *
              *
@@ -487,6 +579,17 @@
             },
 
 
+
+
+
+            validateState(ref) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                    return !this.errors.has(ref);
+                }
+                return null;
+            },
+
+
             /*
              *
              *
@@ -502,23 +605,37 @@
             },
 
             modifMateriel() {
-                axios.put('/materiels/'+this.materielId,{
-                        "constructeur": this.materielModif.constructeur,
-                        "modele": this.materielModif.modele,
-                        "type": this.materielTypeModif,
-                        "nb_ex": this.materielModif.nb_ex,
-                        "description": this.materielModif.description
-                })
-                    .then( response => {
-                        this.materiel = response.data.materiel;
-                        this.materielType = { 'value': this.materiel.type.id, 'text': this.materiel.type.nom };
-                        this.$nextTick( () =>  {
-                            this.$refs.modal.hide();
+                this.$validator.validateAll().then( (result) => {
+                    if(!result)
+                        return;
+                    else {
+                        axios.put('/materiels/'+this.materielId,{
+                            "constructeur": this.materielModif.constructeur,
+                            "modele": this.materielModif.modele,
+                            "type": this.materielTypeModif,
+                            "nb_ex": this.materielModif.nb_ex,
+                            "description": this.materielModif.description
+                        })
+                        .then( response => {
+                            this.materiel = response.data.materiel;
+                            this.materielType = { 'value': this.materiel.type.id, 'text': this.materiel.type.nom };
+                            this.$nextTick( () =>  {
+                                this.$refs.modal1.hide();
+                            });
+                            this.$bvToast.toast(`Matériel modifié avec succès !`, {
+                                title: `Modification réussie`,
+                                toaster: 'b-toaster-top-center',
+                                solid:true,
+                                variant:'success',
+                                appendToast: false
+                            });
+                        })
+                        .catch( error => {
+                            console.log(error.response);
                         });
-                    })
-                    .catch( error => {
-                        console.log(error.response);
-                    })
+                    }
+                });
+
             },
 
 
@@ -536,23 +653,44 @@
             },
 
             addExemplaire() {
-                axios.post('/exemplaires',
-                    {
-                        "materiel": this.materielId,
-                        "reference": this.postExemplaire.reference,
-                        "fournisseur": this.postExemplaire.fournisseur,
-                        "prix_achat": this.postExemplaire.num_serie,
-                        "url": this.postExemplaire.url,
-                        "etat": this.postExemplaire.etat,
-                        "date_achat": this.postExemplaire.date_achat,
-                    })
-                    .then( response => {
-                        this.getExemplaireId();
-                    })
-                    .catch( error => {
-                        console.log(error);
-                    })
+                this.$validator.validateAll().then( (result) => {
+                    if (!result)
+                        return;
+                    else {
+                        axios.post('/exemplaires',
+                            {
+                                "materiel": this.materielId,
+                                "reference": this.postExemplaire.reference,
+                                "fournisseur": this.postExemplaire.fournisseur,
+                                "prix_achat": this.postExemplaire.prix_achat,
+                                "num_serie": this.postExemplaire.num_serie,
+                                "stockage": this.postExemplaire.stockage,
+                                "url": this.postExemplaire.url,
+                                "etat": this.postExemplaire.etat,
+                                "date_achat": this.postExemplaire.date_achat,
+                            })
+                            .then(response => {
+                                this.exemplaires = [];
+                                this.getExemplaires();
+                                this.$nextTick(() => {
+                                    this.$refs.modal2.hide();
+                                });
+                                this.$bvToast.toast(`Exemplaire ajouté avec succès !`, {
+                                    title: `Ajout réussi`,
+                                    toaster: 'b-toaster-top-center',
+                                    variant:'success',
+                                    solid:true,
+                                    appendToast: false
+                                });
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            })
+                    }
+                });
             }
+
+
 
         }
     }

@@ -14,7 +14,32 @@ class FournisseurController extends Controller
 {
     public function getAll(Request $request, Response $response, $args)
     {
-        $fournisseur = Fournisseur::get();
+
+        try
+        {
+
+            $fournisseurs = Fournisseur::select('id','nom','adresse','ville','code_postal','site_web','mail','tel','commercial_nom','commercial_prenom','commercial_prenom','commercial_mail','commercial_tel','date_creation');
+
+            $elementCounter = $fournisseurs->count();
+
+            $fournisseurs = $fournisseurs->get();
+
+            $data = [
+                'type' => "success",
+                'code' => 200,
+                'ressource' => [
+                    'total' => $elementCounter,
+                ],
+                'fournisseurs' => $fournisseurs
+            ];
+
+        }
+        catch(\Exception $e)
+        {
+            $data = ApiErrors::NotFound($request->getUri());
+        }
+
+        return ResponseWriter::ResponseWriter($response, $data);
 
 
 
@@ -61,6 +86,7 @@ class FournisseurController extends Controller
 
     public function post(Request $request, Response $response, $args)
     {
+
 
     }
 

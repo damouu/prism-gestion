@@ -21,7 +21,7 @@
                      :items="fillMateriels"
                      :fixed="true"
 
-                     :fields="fields"
+                     :fields="fieldsRow"
                      :sort-by.sync="sortBy"
                      :sort-desc.sync="sortDesc"
 
@@ -57,7 +57,7 @@
                 selected: [],
                 sortBy : 'id',
                 sortDesc: false,
-                fields: [
+                fieldsRow: [
                     { key: 'id', sortable:true },
                     { key: 'constructeur', sortable:true },
                     { key: 'modele', sortable:true },
