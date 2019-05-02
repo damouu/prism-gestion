@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './components/HomeVue'
-import Inventaire from './components/InventaireVue'
-import Materiel from './components/MaterielVue'
+import Home from './views/HomeVue'
+import Inventaire from './views/InventaireVue'
+import Materiel from './views/MaterielVue'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [

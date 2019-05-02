@@ -16,6 +16,7 @@ Vue.use(VeeValidate, {
 });
 
 
+export const eventBus = new Vue();
 
 window.axios = axios.create({
   baseURL : 'http://prism.app.local:10080/api/',
