@@ -136,7 +136,7 @@
     import { eventBus } from '../main';
 
     export default {
-        name: 'Modal',
+        name: 'ModalEditExemplaire',
         data() {
             return {
 
@@ -151,8 +151,8 @@
         mounted() {
             eventBus.$on('editExemplaire', data => {
                 this.fournisseurs = data.fournisseurs;
-                this.modExemplaire = JSON.parse(JSON.stringify(data.exemplaire));
-                this.modExemplaireFournisseur = JSON.parse(JSON.stringify(data.fournisseurExemplaire.value));
+                this.modExemplaire = data.exemplaire;
+                this.modExemplaireFournisseur = data.fournisseurExemplaire.value;
             });
 
         },
