@@ -1,5 +1,17 @@
 <?php
 
+/*-------------CORS------------------*/
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
+
+$app->add(function ($req, $res, $next) {
+    $response = $next($req, $res);
+    return $response
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
 
 $app->get('/types[/]', 'TypeController:getAll');
 $app->post('/types[/]', 'TypeController:post');
@@ -9,6 +21,9 @@ $app->post('/materiels[/]', 'MaterielController:post');
 
 $app->get('/exemplaires[/]', 'ExemplaireController:getAll');
 $app->post('/exemplaires[/]', 'ExemplaireController:post');
+
+$app->get('/fournisseurs[/]', 'FournisseurController:getAll');
+$app->post('/fournisseurs[/]', 'FournisseurController:post');
 
 
 $app->group('', function() {
@@ -29,6 +44,7 @@ $app->group('', function() {
     $this->patch('/exemplaires/{id}[/]', 'ExemplaireController:patch');
     $this->get('/exemplaires/{id}/materiels[/]', 'ExemplaireController:getExemplairesMateriel');
 })
+
 ->add( new \PrismGestion\Middlewares\IdCheckerMiddleware() );
 
 

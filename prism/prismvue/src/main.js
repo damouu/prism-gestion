@@ -4,11 +4,19 @@ import store from './store'
 import router from './router'
 import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
+import VeeValidate from 'vee-validate'
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
 
+Vue.use(VeeValidate, {
+  inject: true,
+  fieldsBagName: 'veeFields'
+});
+
+
+export const eventBus = new Vue();
 
 window.axios = axios.create({
   baseURL : 'http://prism.app.local:10080/api/',
@@ -17,10 +25,16 @@ window.axios = axios.create({
   },
 });
 
+store.subscribe((mutation,state) => {
+  localStorage.setItem('store', JSON.stringify(state));
+});
 
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  beforeCreate() {
+    this.$store.commit('initializeStore');
+  }
 }).$mount('#app');

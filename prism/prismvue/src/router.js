@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './components/HomeVue'
-import Inventaire from './components/InventaireVue'
+import Home from './views/HomeVue'
+import Inventaire from './views/InventaireVue'
+import Materiel from './views/MaterielVue'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -16,6 +17,11 @@ export default new Router({
       path: '/inventaire',
       name: 'Inventaire',
       component: Inventaire,
+    },
+    {
+      path: '/materiel/:id',
+      name: 'materiel',
+      component: Materiel,
     }
   ]
 })

@@ -5,11 +5,11 @@ namespace PrismGestion\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Materiel extends Model
+class Fournisseur extends Model
 {
 
     use SoftDeletes;
-    protected $table = 'materiel';
+    protected $table = 'fournisseur';
     protected $primaryKey = 'id';
     public $timestamps = true;
     protected $dateFormat = 'Y-m-d';
@@ -19,15 +19,9 @@ class Materiel extends Model
     protected $dates = ['date_modification','date_creation','date_suppression'];
 
 
-
-    public function type()
-    {
-        return $this->belongsTo('PrismGestion\Models\Type', 'type');
-    }
-
     public function exemplaire()
     {
-        return $this->hasMany('PrismGestion\Models\Exemplaire','materiel');
+        return $this->hasMany('PrismGestion\Models\Exemplaire','fournisseur');
     }
 
 }
