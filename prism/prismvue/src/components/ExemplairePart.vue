@@ -195,7 +195,9 @@
             });
             eventBus.$on('editedExemplaire', data => {
                 this.selected = data.exemplaire;
-                this.getExemplaireId(data.exemplaire)
+                this.getExemplaireId(data.exemplaire);
+                this.exemplaires= [];
+                this.getExemplaires();
             });
             eventBus.$on('deleteSuccessExemplaire', data => {
                 this.backExemplaires();
