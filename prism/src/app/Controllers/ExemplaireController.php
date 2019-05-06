@@ -140,10 +140,9 @@ class ExemplaireController extends Controller
             try{
                 $exem = Exemplaire::find($id);
                 $mat = Materiel::find($exem->materiel);
-                $count = Exemplaire::where('materiel','=',$id)->count();
-                DB::transaction( function () use ($exem,$mat,$count) {
-                    $mat->nb_ex = ($count)-1;
+                DB::transaction( function () use ($exem,$mat,$id) {
                     $exem->delete();
+                    $mat->nb_ex = Exemplaire::where('materiel','=',$id)->count();
                     $mat->save();
                 });
 
