@@ -30,7 +30,7 @@
                                     <b-row align-h="around">
                                         <h3>Informations</h3>
                                         <b-button variant="primary" v-b-modal.modal-Materiel @click="modalEditMateriel">Modifier</b-button>
-                                        <b-button variant="outline-danger" v-b-modal.modal-DeleteMateriel>Supprimer matériel</b-button>
+                                        <b-button variant="outline-danger" v-b-modal.modal-DeleteMateriel @click="modalDeleteMateriel">Supprimer matériel</b-button>
                                     </b-row>
 
                                     <b-row align-h="between" class="my-1 mt-4">
@@ -140,7 +140,6 @@
             this.getMateriel();
             this.getTypes();
 
-
             eventBus.$on('editedMateriel', data => {
                 this.materiel = [];
                 this.MaterielType = [];
@@ -149,6 +148,10 @@
 
             eventBus.$on('deleteError', data => {
                 this.showAlert(data.object, data.id);
+            });
+
+            eventBus.$on('deletedMateriel', data => {
+                this.backInventaire();
             });
 
         },
@@ -177,12 +180,9 @@
                     });
             },
 
-
-
             backInventaire() {
                 this.$router.push({path: '/inventaire'});
             },
-
 
 
             modalEditMateriel() {
@@ -199,6 +199,10 @@
                 this.alert.object = object;
                 this.alert.id = id;
                 this.alert.show = true;
+            },
+
+            modalDeleteMateriel() {
+                eventBus.$emit('deleteMateriel', {'id':this.materielId});
             }
 
 
