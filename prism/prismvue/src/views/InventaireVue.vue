@@ -16,7 +16,7 @@
                             </b-col>
                             <b-col cols="5">
                                 <b-button variant="success" class="mr-2" v-b-modal.modal-AddCategorie>Ajouter une catégorie</b-button>
-                                <b-button variant="success" class="ml-2" v-b-modal.modal-AddMateriel>Ajouter un matériel</b-button>
+                                <b-button variant="success" class="ml-2" v-b-modal.modal-AddMateriel @click="ModalAddMateriel">Ajouter un matériel</b-button>
                             </b-col>
                         </b-row>
 
@@ -107,10 +107,14 @@
             // API - GET TYPES
             this.getTypes();
 
-            eventBus.$on('addCategorie', data => {
+            eventBus.$on('addedCategorie', data => {
                 this.types = [];
                 this.getTypes();
-            })
+            });
+            eventBus.$on('addedMateriel', data => {
+                this.materiels = [];
+                this.getAll();
+            });
 
         },
         methods : {
@@ -159,6 +163,10 @@
 
             pagination(event) {
                 console.log(change);
+            },
+
+            ModalAddMateriel() {
+                eventBus.$emit('addMateriel', {'types': this.types});
             }
         }
     }

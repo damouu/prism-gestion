@@ -202,7 +202,7 @@ class MaterielController extends Controller
 
         $content = $request->getParsedBody();
 
-        if(!isset($content['constructeur']) || !isset($content['modele']) || !isset($content['description']) || !isset($content['nb_ex']) || !isset($content['type']))
+        if(!isset($content['constructeur']) || !isset($content['modele']) || !isset($content['description']) || !isset($content['type']))
         {
             $data = ApiErrors::BadRequest();
         }
@@ -212,7 +212,7 @@ class MaterielController extends Controller
             $materiel->constructeur = $content['constructeur'];
             $materiel->modele = $content['modele'];
             $materiel->description = $content['description'];
-            $materiel->nb_ex = $content['nb_ex'];
+            $materiel->nb_ex = 0;
             $materiel->type = $content['type'];
 
             try

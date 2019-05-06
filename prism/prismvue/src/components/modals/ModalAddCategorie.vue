@@ -79,7 +79,7 @@
                                     appendToast: false
                                 });
                                 this.categorie = [];
-                                eventBus.$emit('addCategorie');
+                                eventBus.$emit('addedCategorie');
                             })
                             .catch(error => {
                                 console.log(error.response);
