@@ -12,7 +12,7 @@
                 @ok="handleOkDel">
             <b-form ref="delExemplaire">
                 <div>
-                    <h4>Etes vous sûrs de vouloir supprimer l'exemplaire n° {{  }} ?</h4>
+                    <h3>Etes vous sûrs de vouloir supprimer l'exemplaire avec la référence " {{ exemplaire.reference }} " ?</h3>
                     <p class="text-dark">Vous n'aurez plus aucun accès à cet exemplaire par la suite.</p>
                 </div>
             </b-form>
