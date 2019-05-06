@@ -14,46 +14,14 @@ class MaterielController extends Controller
 
     public function getAll(Request $request, Response $response, $args)
     {
-
-        $params = [
-            'nb' => intval($request->getQueryParam('nb',10)),
-            'page' => intval($request->getQueryParam('page',1)),
-            'types' => $request->getQueryParam('types',null),
-        ];
-
         try
         {
 
-            if(is_null($params['types']))
-            {
-                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','materiel.nb_ex','type','materiel.date_creation')
-                    ->join('type', 'materiel.type','=','type.id')
-                    ->with(['type' => function ($q) {
-                        $q->select('type.id','type.nom');
-                    }]);
-            }
-            else
-            {
-                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','materiel.nb_ex','type','materiel.date_creation')
-                    ->join('type', 'materiel.type','=','type.id')
-                    ->where('type.nom','=',$params['types'])
-                    ->with(['type' => function ($q) {
-                        $q->select('type.id','type.nom');
-                    }]);
-            }
-
-
-            $elementCounter = $materiel->get()->count();
-            if( (($params['nb']*($params['page']))>$elementCounter) || ($params['nb']<=0) || ($params['page']<=0) )
-            {
-                $params['nb'] = 10;
-                $params['page'] = 1;
-            }
-            if($params['nb'])
-                $materiel = $materiel->take($params['nb']);
-            if($params['page'])
-                $materiel = $materiel->skip($params['nb']*($params['page']-1));
-            $pageMax = ceil($elementCounter/$params['nb']);
+            $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','materiel.nb_ex','type','materiel.date_creation')
+                ->join('type', 'materiel.type','=','type.id')
+                ->with(['type' => function ($q) {
+                    $q->select('type.id','type.nom');
+                }]);
 
             $materiel = $materiel->get();
 
@@ -66,16 +34,9 @@ class MaterielController extends Controller
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'ressource' => [
-                        'total' => $elementCounter,
-                        'nb_per_page' => $params['nb'],
-                        'page' => $params['page'],
-                        'page_max' => $pageMax,
-                    ],
                     'materiels' => $materiel
                 ];
             }
-
 
         }
         catch(\Exception $e)
