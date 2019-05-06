@@ -29,7 +29,7 @@
         <b-row align-h="around">
             <b-button variant="outline-secondary" @click="backExemplaires">‹ retour</b-button>
             <b-button variant="primary" v-b-modal.modal-EditExemplaire @click="modalEditExemplaire">Modifier</b-button>
-            <b-button variant="outline-danger" v-b-modal.modal-DelExemplaire >Supprimer</b-button>
+            <b-button variant="outline-danger" v-b-modal.modal-DelExemplaire @click="modalDeleteExemplaire">Supprimer</b-button>
         </b-row>
 
         <b-row class="mt-4">
@@ -176,6 +176,7 @@
                 exemplaires: [],
                 fournisseurs: [],
 
+
                 selected: [],
                 items: [],
                 selectedFournisseur: [],
@@ -195,7 +196,13 @@
             eventBus.$on('editedExemplaire', data => {
                 this.selected = data.exemplaire;
                 this.getExemplaireId(data.exemplaire)
-            })
+            });
+            eventBus.$on('deleteSuccessExemplaire', data => {
+                this.backExemplaires();
+                this.exemplaires = [];
+                this.getExemplaires();
+            });
+
 
         },
         methods: {
@@ -264,6 +271,12 @@
                        'fournisseurExemplaire': {'text':this.selectedFournisseur.nom, 'value': this.selectedFournisseur.id},
                     });
             },
+
+            modalDeleteExemplaire() {
+                eventBus.$emit('delExemplaire', {'exemplaire':this.selected});
+            }
+
+
 
 
 
