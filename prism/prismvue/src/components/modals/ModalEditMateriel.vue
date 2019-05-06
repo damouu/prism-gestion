@@ -136,7 +136,7 @@
                                     this.$refs.modal1.hide();
                                 });
 
-                                eventBus.$emit('editedMateriel', {'materiel':this.materiel,'materielType':this.materielType});
+                                eventBus.$emit('editedMateriel');
 
                                 this.$bvToast.toast(`Matériel modifié avec succès !`, {
                                     title: `Modification réussie`,

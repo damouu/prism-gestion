@@ -142,8 +142,9 @@
 
 
             eventBus.$on('editedMateriel', data => {
-                this.materiel = data.materiel;
-                this.MaterielType = data.materielType;
+                this.materiel = [];
+                this.MaterielType = [];
+                this.getMateriel();
             });
 
             eventBus.$on('deleteError', data => {
