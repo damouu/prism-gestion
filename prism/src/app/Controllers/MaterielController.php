@@ -143,7 +143,7 @@ class MaterielController extends Controller
                 $data = [
                     'type' => 'error',
                     'code' => 403,
-                    'message' => 'Le matériel \'a pas été supprimé: Des exemplaires sont encore liés.'
+                    'message' => 'Le matériel n\'a pas été supprimé: Des exemplaires sont encore liés.'
                 ];
             }
         }

@@ -197,7 +197,7 @@
 
                                 this.$bvToast.toast(`Exemplaire ajouté avec succès !`, {
                                     title: `Ajout réussi`,
-                                    toaster: 'b-toaster-top-center',
+                                    toaster: 'b-toaster-bottom-right',
                                     variant:'success',
                                     solid:true,
                                     appendToast: false

@@ -52,10 +52,20 @@
                         this.$nextTick(() => {
                             this.$refs.modal4.hide();
                         });
+                        this.$bvToast.toast(`Exemplaire supprimé avec succès !`, {
+                            title: `Suppression réussie`,
+                            toaster: 'b-toaster-bottom-right',
+                            variant:'success',
+                            solid:true,
+                            appendToast: false
+                        });
                         eventBus.$emit('deleteSuccessExemplaire');
                     })
                     .catch( error => {
-                        eventBus.$emit('deleteError', {'object':'exemplaire' , 'id':this.exemplaire.reference});
+                        this.$nextTick(() => {
+                            this.$refs.modal4.hide();
+                        });
+                        eventBus.$emit('deleteError', {'error':error.response.statusText, 'status': error.response.status, 'message': error.response.data.message});
                     });
             }
 

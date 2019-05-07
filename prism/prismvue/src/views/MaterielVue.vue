@@ -1,15 +1,22 @@
 <template>
     <div id="materiel">
         <div>
-            <b-container fluid class="mt-5 ">
 
+            <b-container>
                 <b-alert
-                        v-model="alert.show"
+                        :show="dismissCountDown"
                         variant="danger"
                         dismissible
-                class="text-center">
-                    <p>Impossible de supprimer {{alert.object}} {{ alert.id }}</p>
+                        @dismissed="dismissCountDown=0"
+                        @dismiss-count-down="countDownChanged"
+                        >
+
+                        <p class="text-center">{{ alert.status }} {{ alert.error }}: {{ alert.message }}</p>
+                        <p class="text-right">Cette alerte se fermera dans {{ dismissCountDown }}</p>
                 </b-alert>
+            </b-container>
+
+            <b-container fluid class="mt-5 ">
 
                     <b-row class="mr-5 ml-5">
 
@@ -130,7 +137,9 @@
                     'type',
                     'date Creation'
                 ],
-                alert: {'show':false},
+                dismissCountDown:0,
+                dismissSecs:10,
+                alert: {'show':false,'showMateriel':false},
                 selected: [],
                 selectedFournisseur: [],
             }
@@ -152,6 +161,9 @@
 
             eventBus.$on('deletedMateriel', data => {
                 this.backInventaire();
+            });
+            eventBus.$on('deleteErrorMateriel', data => {
+                this.showAlert(data.error, data.status, data.message);
             });
 
         },
@@ -195,13 +207,18 @@
                 eventBus.$emit('editMateriel', data);
             },
 
-            showAlert(object, id) {
-                this.alert.object = object;
-                this.alert.id = id;
-                this.alert.show = true;
+            showAlert(error, status, message) {
+                this.alert.error = error;
+                this.alert.status = status;
+                this.alert.message = message;
+                this.dismissCountDown = this.dismissSecs;
             },
 
-            modalDeleteMateriel() {
+            countDownChanged(dismissCountDown) {
+                this.dismissCountDown = dismissCountDown;
+            },
+
+            modalDeleteMateriel(){
                 eventBus.$emit('deleteMateriel', {'id':this.materielId});
             }
 

@@ -46,10 +46,20 @@
                         this.$nextTick(() => {
                             this.$refs.modal7.hide();
                         });
+                        this.$bvToast.toast(`Materiel supprimé avec succès !`, {
+                            title: `Suppression réussie`,
+                            toaster: 'b-toaster-bottom-right',
+                            variant:'success',
+                            solid:true,
+                            appendToast: false
+                        });
                         eventBus.$emit('deletedMateriel');
                     })
                     .catch(error => {
-                        console.log(error);
+                            this.$nextTick(() => {
+                                this.$refs.modal7.hide();
+                            });
+                            eventBus.$emit('deleteErrorMateriel', {'error':error.response.statusText, 'status': error.response.status, 'message': error.response.data.message});
                     })
             }
         }

@@ -195,7 +195,7 @@
                             });
                             this.$bvToast.toast(`Exemplaire modifié avec succès !`, {
                                 title: `Modification réussie`,
-                                toaster: 'b-toaster-top-center',
+                                toaster: 'b-toaster-bottom-right',
                                 solid:true,
                                 variant:'success',
                                 appendToast: false

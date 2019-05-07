@@ -142,6 +142,14 @@
                                 this.$nextTick(() => {
                                     this.$refs.modal5.hide();
                                 });
+
+                                this.$bvToast.toast(`Matériel ajouté avec succès !`, {
+                                    title: `Ajout réussi`,
+                                    toaster: 'b-toaster-bottom-right',
+                                    variant:'success',
+                                    solid:true,
+                                    appendToast: false
+                                });
                                 this.materiel = [];
                                 eventBus.$emit('addedMateriel');
 

@@ -140,7 +140,7 @@
 
                                 this.$bvToast.toast(`Matériel modifié avec succès !`, {
                                     title: `Modification réussie`,
-                                    toaster: 'b-toaster-top-center',
+                                    toaster: 'b-toaster-bottom-right',
                                     solid:true,
                                     variant:'success',
                                     appendToast: false
