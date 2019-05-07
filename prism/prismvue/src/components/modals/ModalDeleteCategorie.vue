@@ -48,6 +48,7 @@
         mounted() {
 
             eventBus.$on('deleteCategorie', data => {
+                this.types = [];
                 this.getTypes();
             });
 
