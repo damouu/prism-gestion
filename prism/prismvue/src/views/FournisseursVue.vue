@@ -30,7 +30,7 @@
                                 <h1 class="ml-5">Fournisseurs</h1>
                             </b-col>
                             <b-col cols="3">
-                                <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddCategorie>Ajouter un Fournisseur</b-button>
+                                <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddFournisseur>Ajouter un Fournisseur</b-button>
                             </b-col>
                         </b-row>
 
@@ -58,17 +58,24 @@
                     </b-col>
                 </b-row>
             </b-container>
+
+            <ModalAddFournisseur />
+
         </div>
     </div>
 </template>
 
 <script>
 
+    import { eventBus } from "../main";
+
     import NavigationInventaire from '../components/navigation/NavigationInventaire'
+    import ModalAddFournisseur from "../components/modals/ModalAddFournisseur";
 
     export default {
         name: 'fournisseurs',
         components: {
+            ModalAddFournisseur,
             NavigationInventaire,
         },
         data () {
@@ -106,6 +113,10 @@
         },
         mounted () {
             this.getFournisseurs();
+
+            eventBus.$on('adddedFournisseur', data => {
+
+            });
         },
         methods : {
             countDownChanged(dismissCountDown) {

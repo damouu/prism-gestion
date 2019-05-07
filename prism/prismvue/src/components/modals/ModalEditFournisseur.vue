@@ -1,23 +1,23 @@
 <template>
-    <div id="modalAddFournisseur">
+    <div id="modalEditFournisseur">
 
         <b-modal
-                id="modal-AddFournisseur"
-                title="Ajout de Fournisseur"
-                ref="modal9"
+                id="modal-EditFournisseur"
+                title="Modification de Fournisseur"
+                ref="modal10"
                 scrollable
                 size="lg"
                 centered
-                @ok="handleOkAddFour">
-            <form ref="addFournisseur" @submit.stop.prevent="addFournisseur">
+                @ok="handleOkEditFour">
+            <form ref="EditFournisseur" @submit.stop.prevent="editFournisseur">
 
-                <b-form-group label="Nom *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurNom">
+                <b-form-group label="Nom *" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurNom">
                     <b-form-input
-                            id="addFournisseurNom"
-                            data-vv-name="addFourNom"
+                            id="editFournisseurNom"
+                            data-vv-name="editFourNom"
                             v-model="fournisseur.nom"
                             v-validate="{required:true}"
-                            :state="validateState('addFourNom')"
+                            :state="validateState('editFourNom')"
                             aria-describedby="invalidNom"
                             placeholder="Nom du fournisseur"
                             type="text">
@@ -28,10 +28,10 @@
                 <b-form-group label="Adresse *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurAdresse">
                     <b-form-input
                             id="addFournisseurAdresse"
-                            data-vv-name="addFourAdresse"
+                            data-vv-name="editFourAdresse"
                             v-model="fournisseur.adresse"
                             v-validate="{required:true}"
-                            :state="validateState('addFourAdresse')"
+                            :state="validateState('editFourAdresse')"
                             aria-describedby="invalidAdresse"
                             placeholder="Adresse Fournisseur"
                             type="text">
@@ -39,13 +39,13 @@
                     <b-form-invalid-feedback id="invalidAdresse">Veuillez écrire une adresse</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Ville *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurVille">
+                <b-form-group label="Ville *" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurVille">
                     <b-form-input
-                            id="addFournisseurVille"
-                            data-vv-name="addFourVille"
+                            id="editFournisseurVille"
+                            data-vv-name="editFourVille"
                             v-model="fournisseur.ville"
                             v-validate="{required:true}"
-                            :state="validateState('addFourVille')"
+                            :state="validateState('editFourVille')"
                             aria-describedby="invalidVille"
                             placeholder="Ville Fournisseur"
                             type="text">
@@ -53,13 +53,13 @@
                     <b-form-invalid-feedback id="invalidVille">Veuillez écrire une ville</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Code postal *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurCodePostal">
+                <b-form-group label="Code postal *" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurCodePostal">
                     <b-form-input
-                            id="addFournisseurCodePostal"
-                            data-vv-name="addFourCodePostal"
+                            id="editFournisseurCodePostal"
+                            data-vv-name="editFourCodePostal"
                             v-model="fournisseur.code_postal"
                             v-validate="{required:true}"
-                            :state="validateState('addFourCodePostal')"
+                            :state="validateState('editFourCodePostal')"
                             aria-describedby="invalidCodePostal"
                             placeholder="Code postal Fournisseur"
                             type="text">
@@ -67,13 +67,13 @@
                     <b-form-invalid-feedback id="invalidCodePostal">Veuillez écrire un code postal</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Mail *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurMail">
+                <b-form-group label="Mail *" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurMail">
                     <b-form-input
-                            id="addFournisseurMail"
-                            data-vv-name="addFourMail"
+                            id="editFournisseurMail"
+                            data-vv-name="editFourMail"
                             v-model="fournisseur.mail"
                             v-validate="{required:true, email:true}"
-                            :state="validateState('addFourMail')"
+                            :state="validateState('editFourMail')"
                             aria-describedby="invalidMail"
                             placeholder="adresse mail du fournisseur"
                             type="text">
@@ -81,13 +81,13 @@
                     <b-form-invalid-feedback id="invalidMail">Veuillez écrire une adresse mail correct</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Telephone *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurTel">
+                <b-form-group label="Telephone *" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurTel">
                     <b-form-input
-                            id="addFournisseurTel"
-                            data-vv-name="addFourTel"
+                            id="editFournisseurTel"
+                            data-vv-name="editFourTel"
                             v-model="fournisseur.tel"
                             v-validate="{required:true}"
-                            :state="validateState('addFourTel')"
+                            :state="validateState('editFourTel')"
                             aria-describedby="invalidTel"
                             placeholder="Numéro de téléphone du fournisseur"
                             type="text">
@@ -95,13 +95,13 @@
                     <b-form-invalid-feedback id="invalidTel">Veuillez écrire un numéro de téléphone correct</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Site Web" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurSiteWeb">
+                <b-form-group label="Site Web" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurSiteWeb">
                     <b-form-input
-                            id="addFournisseurSiteWeb"
-                            data-vv-name="addFourSiteWeb"
+                            id="editFournisseurSiteWeb"
+                            data-vv-name="editFourSiteWeb"
                             v-model="fournisseur.site_web"
                             v-validate="{required:false, url:{require_protocol: true}}"
-                            :state="validateState('addFourSiteWeb')"
+                            :state="validateState('editFourSiteWeb')"
                             aria-describedby="invalidSiteWeb"
                             placeholder="site web du fournisseur"
                             type="text">
@@ -110,13 +110,13 @@
                 </b-form-group>
 
 
-                <b-form-group label="Nom Commercial" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurNomCom">
+                <b-form-group label="Nom Commercial" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurNomCom">
                     <b-form-input
-                            id="addFournisseurNomCom"
-                            data-vv-name="addFourNomCom"
+                            id="editFournisseurNomCom"
+                            data-vv-name="editFourNomCom"
                             v-model="fournisseur.commercial_nom"
                             v-validate="{required:false}"
-                            :state="validateState('addFourNomCom')"
+                            :state="validateState('editFourNomCom')"
                             aria-describedby="invalidNomCom"
                             placeholder="Nom du commercial"
                             type="text">
@@ -124,13 +124,13 @@
                     <b-form-invalid-feedback id="invalidNomCom">Veuillez écrire un nom correct</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Prénom Commercial" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurPrenomCom">
+                <b-form-group label="Prénom Commercial" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurPrenomCom">
                     <b-form-input
-                            id="addFournisseurPrenomCom"
-                            data-vv-name="addFourPrenomCom"
+                            id="editFournisseurPrenomCom"
+                            data-vv-name="editFourPrenomCom"
                             v-model="fournisseur.commercial_prenom"
                             v-validate="{required:false}"
-                            :state="validateState('addFourPrenomCom')"
+                            :state="validateState('editFourPrenomCom')"
                             aria-describedby="invalidPrenomCom"
                             placeholder="Prénom du commercial"
                             type="text">
@@ -138,13 +138,13 @@
                     <b-form-invalid-feedback id="invalidPrenomCom">Veuillez écrire un prénom correct</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Mail Commercial" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurMailCom">
+                <b-form-group label="Mail Commercial" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurMailCom">
                     <b-form-input
-                            id="addFournisseurMailCom"
-                            data-vv-name="addFourMailCom"
+                            id="editFournisseurMailCom"
+                            data-vv-name="editFourMailCom"
                             v-model="fournisseur.commercial_mail"
                             v-validate="{required:false, email:true}"
-                            :state="validateState('addFourMailCom')"
+                            :state="validateState('editFourMailCom')"
                             aria-describedby="invalidMailCom"
                             placeholder="adresse mail du Commercial"
                             type="text">
@@ -152,13 +152,13 @@
                     <b-form-invalid-feedback id="invalidMailCom">Veuillez écrire une adresse mail correct</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Telephone Commercial" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurTelCom">
+                <b-form-group label="Telephone Commercial" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurTelCom">
                     <b-form-input
-                            id="addFournisseurTelCom"
-                            data-vv-name="addFourTelCom"
+                            id="editFournisseurTelCom"
+                            data-vv-name="editFourTelCom"
                             v-model="fournisseur.commercial_tel"
                             v-validate="{required:false}"
-                            :state="validateState('addFourTelCom')"
+                            :state="validateState('editFourTelCom')"
                             aria-describedby="invalidTelCom"
                             placeholder="Numéro de téléphone du Commercial"
                             type="text">
@@ -178,13 +178,18 @@
 
     export default {
 
-        name: 'ModalAddFournisseur',
+        name: 'ModalEditFournisseur',
         data() {
             return {
                 fournisseur: [],
             }
         },
         mounted() {
+
+            eventBus.$on('editFournisseur', data => {
+               this.fournisseur = JSON.parse(JSON.stringify(data.fournisseur));
+            });
+
         },
         methods: {
             validateState(ref) {
@@ -193,24 +198,34 @@
                 }
                 return null;
             },
-            handleOkAddFour(bvModalEvt) {
+            handleOkEditFour(bvModalEvt) {
                 bvModalEvt.preventDefault();
-                this.addFournisseur();
+                this.editFournisseur();
             },
-            addFournisseur() {
+            editFournisseur() {
                 this.$validator.validateAll().then( result => {
                     if (!result)
                     {
                         return;
                     }
                     else {
-                        axios.post('/fournisseurs', {
-
+                        axios.put('/fournisseurs/'+this.fournisseur.id, {
+                            'nom': this.fournisseur.nom,
+                            'adresse': this.fournisseur.adresse,
+                            'ville': this.fournisseur.ville,
+                            'code_postal': this.fournisseur.code_postal,
+                            'mail': this.fournisseur.mail,
+                            'tel': this.fournisseur.tel,
+                            'site_web': this.fournisseur.site_web,
+                            'commercial_nom': this.fournisseur.commercial_nom,
+                            'commercial_prenom': this.fournisseur.commercial_prenom,
+                            'commercial_tel': this.fournisseur.commercial_tel,
+                            'commercial_mail': this.fournisseur.commercial_mail,
                         })
                             .then(response => {
 
                                 this.$nextTick(() => {
-                                    this.$refs.modal9.hide();
+                                    this.$refs.modal10.hide();
                                 });
 
                                 this.$bvToast.toast(`Fournisseur ajouté avec succès !`, {
@@ -220,8 +235,7 @@
                                     solid: true,
                                     appendToast: false
                                 });
-                                this.categorie = [];
-                                eventBus.$emit('addedFournisseur');
+                                eventBus.$emit('editedFournisseur');
                             })
                             .catch(error => {
                                 console.log(error.response);
