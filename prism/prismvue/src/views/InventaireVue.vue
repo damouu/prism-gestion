@@ -1,7 +1,21 @@
 <template>
     <div id="inventaire">
         <div>
-            <b-container fluid class="mt-5">
+            <b-container>
+                <b-alert
+                        :show="dismissCountDown"
+                        variant="danger"
+                        dismissible
+                        @dismissed="dismissCountDown=0"
+                        @dismiss-count-down="countDownChanged"
+                >
+
+                    <p class="text-center">{{ alert.status }} {{ alert.error }}: {{ alert.message }}</p>
+                    <p class="text-right">Cette alerte se fermera dans {{ dismissCountDown }} secondes.</p>
+                </b-alert>
+            </b-container>
+
+            <b-container fluid class="mt-5 ">
 
                 <b-row class="mr-5 ml-5">
 
@@ -14,8 +28,9 @@
                             <b-col>
                                 <h1 class="ml-5">Inventaire - En service</h1>
                             </b-col>
-                            <b-col cols="5">
-                                <b-button variant="success" class="mr-2" v-b-modal.modal-AddCategorie>Ajouter une catégorie</b-button>
+                            <b-col cols="7">
+                                <b-button variant="outline-danger" class="mr-2" v-b-modal.modal-DelCategorie @click="ModalDeleteCategorie">Supprimer une catégorie</b-button>
+                                <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddCategorie>Ajouter une catégorie</b-button>
                                 <b-button variant="success" class="ml-2" v-b-modal.modal-AddMateriel @click="ModalAddMateriel">Ajouter un matériel</b-button>
                             </b-col>
                         </b-row>
@@ -60,6 +75,7 @@
 
             <ModalAddMateriel />
             <ModalAddCategorie />
+            <ModalDeleteCategorie />
 
         </div>
     </div>
@@ -73,10 +89,12 @@
     import NavigationInventaire from "../components/navigation/NavigationInventaire";
     import ModalAddMateriel from '../components/modals/ModalAddMateriel';
     import ModalAddCategorie from '../components/modals/ModalAddCategorie';
+    import ModalDeleteCategorie from "../components/modals/ModalDeleteCategorie";
 
     export default {
         name: 'InventaireVue',
         components: {
+            ModalDeleteCategorie,
             NavigationInventaire,
             ModalAddMateriel,
             ModalAddCategorie,
@@ -101,6 +119,10 @@
                 ],
                 currentPage: 1,
                 perPage: 10,
+
+                alert: {'show':false,'showMateriel':false},
+                dismissCountDown:0,
+                dismissSecs:10,
             }
         },
         computed: {
@@ -123,7 +145,13 @@
                 this.materiels = [];
                 this.getAll();
             });
-
+            eventBus.$on('deleteError', data => {
+                this.showAlert(data.error, data.status, data.message);
+            });
+            eventBus.$on('deleteSuccessCategorie', data => {
+                this.getAll();
+                this.getTypes();
+            });
         },
         methods : {
             getAll() {
@@ -175,7 +203,21 @@
 
             ModalAddMateriel() {
                 eventBus.$emit('addMateriel', {'types': this.types});
+            },
+
+            countDownChanged(dismissCountDown) {
+                this.dismissCountDown = dismissCountDown;
+            },
+            showAlert(error, status, message) {
+                this.alert.error = error;
+                this.alert.status = status;
+                this.alert.message = message;
+                this.dismissCountDown = this.dismissSecs;
+            },
+            ModalDeleteCategorie() {
+                eventBus.$emit('deleteCategorie');
             }
+
         }
     }
 

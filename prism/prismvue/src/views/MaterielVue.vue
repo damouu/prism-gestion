@@ -154,15 +154,10 @@
                 this.MaterielType = [];
                 this.getMateriel();
             });
-
-            eventBus.$on('deleteError', data => {
-                this.showAlert(data.object, data.id);
-            });
-
             eventBus.$on('deletedMateriel', data => {
                 this.backInventaire();
             });
-            eventBus.$on('deleteErrorMateriel', data => {
+            eventBus.$on('deleteError', data => {
                 this.showAlert(data.error, data.status, data.message);
             });
 
