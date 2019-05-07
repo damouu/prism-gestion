@@ -64,7 +64,6 @@
                                  @row-selected="rowSelected">
                         </b-table>
                         <b-pagination
-                                @click="pagination"
                                 v-model="currentPage"
                                 :total-rows="rows"
                                 :per-page="perPage"
@@ -197,9 +196,7 @@
                 this.$router.push({name: 'materiel', params: { id: idSelected.id }});
             },
 
-            pagination(event) {
-                console.log(change);
-            },
+
 
             ModalAddMateriel() {
                 eventBus.$emit('addMateriel', {'types': this.types});
