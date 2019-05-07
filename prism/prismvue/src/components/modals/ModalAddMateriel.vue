@@ -90,7 +90,8 @@
         mounted() {
 
             eventBus.$on('addMateriel', data => {
-               this.getTypes();
+                this.types = [];
+                this.getTypes();
             });
 
         },
