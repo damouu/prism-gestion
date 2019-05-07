@@ -89,7 +89,7 @@
                     <b-form-invalid-feedback id="invalidModDateAchat">Vous devez entrer une date au format DD/MM/AAAA valide.</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Etat" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireEtat">
+                <b-form-group label="Etat *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireEtat">
                     <b-form-select
                             id="modExemplaireEtat"
                             name="modExemplaire.etat"
@@ -105,7 +105,7 @@
                     </b-form-select>
                     <b-form-invalid-feedback id="invalidModEtat">Vous devez choisir une option d'état.</b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Fournisseur" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireFournisseur">
+                <b-form-group label="Fournisseur *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireFournisseur">
                     <b-form-select
                             id="modExemplaireFournisseur"
                             name="modExemplaire.fournisseur"
@@ -120,6 +120,7 @@
                     </b-form-select>
                     <b-form-invalid-feedback id="invalidModFournisseur">Vous devez choisir un fournisseur.</b-form-invalid-feedback>
                 </b-form-group>
+                <span class="text-danger">* champs obligatoires</span>
 
             </form>
 

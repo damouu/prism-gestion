@@ -23,7 +23,7 @@
                     </b-form-input>
                     <b-form-invalid-feedback id="invalidNom">Veuillez écrire un nom de catégorie.</b-form-invalid-feedback>
                 </b-form-group>
-                <span class="text-danger">* champs obligatoires</span>
+
             </form>
 
         </b-modal>

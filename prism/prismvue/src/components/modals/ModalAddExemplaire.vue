@@ -89,7 +89,7 @@
                     <b-form-invalid-feedback id="invalidDateAchat">Vous devez entrer une date au format DD/MM/AAAA valide.</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Etat" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireEtat">
+                <b-form-group label="Etat *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireEtat">
                     <b-form-select
                             id="addExemplaireEtat"
                             data-vv-name="addExEtat"
@@ -105,7 +105,7 @@
                     </b-form-select>
                     <b-form-invalid-feedback id="invalidEtat">Vous devez choisir une option d'état.</b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Fournisseur" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireFournisseur">
+                <b-form-group label="Fournisseur *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireFournisseur">
                     <b-form-select
                             id="addExemplaireFournisseur"
                             data-vv-name="addExFournisseur"
@@ -121,6 +121,7 @@
                     <b-form-invalid-feedback id="invalidFournisseur">Vous devez choisir un fournisseur.</b-form-invalid-feedback>
                 </b-form-group>
 
+                <span class="text-danger">* champs obligatoires</span>
             </form>
 
         </b-modal>
