@@ -21,6 +21,12 @@
                  @row-selected="rowSelected"
 
                  class="mt-4">
+            <template slot="etat" slot-scope="row">
+                <b-badge variant="success" v-if="row.value == 'disponible'" >{{row.value}}</b-badge>
+                <b-badge variant="warning" v-if="row.value == 'réparation'">{{row.value}}</b-badge>
+                <b-badge variant="danger" v-if="row.value == 'emprunté'">{{row.value}}</b-badge>
+                <b-badge variant="secondary" v-if="row.value == 'non empruntable'">{{row.value}}</b-badge>
+            </template>
         </b-table>
 
 
@@ -33,7 +39,7 @@
         </b-row>
 
         <b-row class="mt-4">
-            <h4>Exemplaire    <b-badge v-if="selected.etat === 'disponible'" variant="success">{{selected.etat}}</b-badge><b-badge v-else variant="danger">{{selected.etat}}</b-badge></h4>
+            <h4>Exemplaire    <b-badge v-if="selected.etat === 'disponible'" variant="success">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'emprunté'" variant="danger">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'réparation'" variant="warning">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'non empruntable'" variant="secondary">{{selected.etat}}</b-badge></h4>
         </b-row>
 
         <b-row align-h="between" class="mt-2">
