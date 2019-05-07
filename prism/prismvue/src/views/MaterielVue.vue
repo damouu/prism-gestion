@@ -12,7 +12,7 @@
                         >
 
                         <p class="text-center">{{ alert.status }} {{ alert.error }}: {{ alert.message }}</p>
-                        <p class="text-right">Cette alerte se fermera dans {{ dismissCountDown }}</p>
+                        <p class="text-right">Cette alerte se fermera dans {{ dismissCountDown }} secondes.</p>
                 </b-alert>
             </b-container>
 

@@ -3,15 +3,18 @@
 
         <b-modal
                 id="modal-DeleteMateriel"
-                title="Ajout de matériel"
+                title="Suppression de matériel"
                 ref="modal7"
                 scrollable
+                class="text-danger"
                 size="lg"
                 centered
                 @ok="handleOkDeleteMat">
             <form ref="deleteMateriel" @submit.stop.prevent="deleteMateriel">
-
-
+                <div>
+                    <h3>Etes vous sûrs de vouloir supprimer le matériel ?</h3>
+                    <p class="text-dark">Vous n'aurez plus aucun accès à ce Materiel par la suite.</p>
+                </div>
             </form>
         </b-modal>
     </div>
