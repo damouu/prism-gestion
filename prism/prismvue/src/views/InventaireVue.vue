@@ -43,6 +43,8 @@
 
                                  selectable
                                  :select-mode="mode"
+                                 :per-page="perPage"
+                                 :current-page="currentPage"
                                  selectedVariant="success"
                                  @row-selected="rowSelected">
                         </b-table>
@@ -50,6 +52,7 @@
                                 @click="pagination"
                                 v-model="currentPage"
                                 :total-rows="rows"
+                                :per-page="perPage"
                         ></b-pagination>
                     </b-col>
                 </b-row>
@@ -96,8 +99,13 @@
                     { key: 'type', sortable:false },
                     { key: 'date_creation', sortable:true }
                 ],
-                currentPage: 3,
-                rows: 100
+                currentPage: 1,
+                perPage: 10,
+            }
+        },
+        computed: {
+            rows() {
+                return this.fillMateriels.length
             }
         },
         mounted() {
