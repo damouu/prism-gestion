@@ -19,39 +19,41 @@ class ExemplaireController extends Controller
     {
 
         $params = [
-            'nb' => intval($request->getQueryParam('nb',10)),
-            'page' => intval($request->getQueryParam('page',1)),
+            'select' => $request->getQueryParam('select','service')
         ];
 
         try
         {
-
-            $exemplaire = Exemplaire::select('id','materiel','reference','prix_achat','fournisseur','num_serie','stockage','url','etat','num_ex','date_achat','date_modif');
-
-            $elementCounter = $exemplaire->count();
-            if( (($params['nb']*($params['page']))>$elementCounter) || ($params['nb']<=0) || ($params['page']<=0) )
+            if($params['select'] === 'service')
             {
-                $params['nb'] = 10;
-                $params['page'] = 1;
-            }
-            if($params['nb'])
-                $exemplaire = $exemplaire->take($params['nb']);
-            if($params['page'])
-                $exemplaire = $exemplaire->skip($params['nb']*($params['page']-1));
-            $pageMax = ceil($elementCounter/$params['nb']);
-            $exemplaire = $exemplaire->get();
+                $exemplaire = Exemplaire::select('id','materiel','reference','prix_achat','fournisseur','num_serie','stockage','url','etat','num_ex','date_achat','date_modif');
+                $exemplaire = $exemplaire->get();
 
-            $data = [
-                'type' => "success",
-                'code' => 200,
-                'ressource' => [
-                    'total' => $elementCounter,
-                    'nb_per_page' => $params['nb'],
-                    'page' => $params['page'],
-                    'page_max' => $pageMax,
-                ],
-                'exemplaires' => $exemplaire
-            ];
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'exemplaires' => $exemplaire
+                ];
+            }
+            else if ($params['select'] === 'reforme')
+            {
+                $exemplaire = Exemplaire::onlyTrashed()->select('exemplaire.id','materiel','exemplaire.reference','exemplaire.prix_achat','exemplaire.fournisseur','exemplaire.num_serie','exemplaire.stockage','exemplaire.url','exemplaire.etat','exemplaire.num_ex','exemplaire.date_achat','exemplaire.date_modif','exemplaire.date_sortie')
+                    ->join('materiel','exemplaire.materiel','=','materiel.id')
+                    ->join('type','materiel.type','=','type.id')
+                    ->with(['materiel.type' => function ($q) {
+                        $q->select('type.id','type.nom');
+                    }])
+                    ->get();
+
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'reformes' => $exemplaire
+                ];
+            }
+            else {
+                $data = ApiErrors::BadRequest();
+            }
 
         }
         catch(\Exception $e)
