@@ -118,7 +118,6 @@
                     reforme.type = reforme.materiel.type.nom;
                     this.fillReformes.push(reforme);
                 });
-                console.log(this.fillReformes);
             }
 
 
