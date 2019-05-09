@@ -205,7 +205,17 @@
                     }
                     else {
                         axios.post('/fournisseurs', {
-
+                            'nom': this.fournisseur.nom,
+                            'adresse': this.fournisseur.adresse,
+                            'ville': this.fournisseur.ville,
+                            'code_postal': this.fournisseur.code_postal,
+                            'mail': this.fournisseur.mail,
+                            'tel': this.fournisseur.tel,
+                            'site_web': this.fournisseur.site_web,
+                            'commercial_nom': this.fournisseur.commercial_nom,
+                            'commercial_prenom': this.fournisseur.commercial_prenom,
+                            'commercial_tel': this.fournisseur.commercial_tel,
+                            'commercial_mail': this.fournisseur.commercial_mail,
                         })
                             .then(response => {
 
@@ -220,7 +230,7 @@
                                     solid: true,
                                     appendToast: false
                                 });
-                                this.categorie = [];
+                                this.fournisseur = [];
                                 eventBus.$emit('addedFournisseur');
                             })
                             .catch(error => {

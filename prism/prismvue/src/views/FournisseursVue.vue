@@ -114,8 +114,9 @@
         mounted () {
             this.getFournisseurs();
 
-            eventBus.$on('adddedFournisseur', data => {
-
+            eventBus.$on('addedFournisseur', data => {
+                this.fournisseurs = [];
+                this.getFournisseurs();
             });
         },
         methods : {
