@@ -97,7 +97,7 @@
                                             <label for="dateModifFournisseur">Date Modification</label>
                                         </b-col>
                                         <b-col sm="7" class="mt-1">
-                                            <p id="dateModifFournisseur">{{fournisseur.date_modif}}</p>
+                                            <p id="dateModifFournisseur">{{fournisseur.date_modification}}</p>
                                         </b-col>
                                     </b-row>
                                 </b-card>
