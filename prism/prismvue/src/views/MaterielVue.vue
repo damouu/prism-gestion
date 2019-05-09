@@ -32,47 +32,57 @@
                                 <h1 class="ml-5">Materiel</h1>
                             </b-row>
 
-                            <b-row class="mt-4">
+
+
+                            <b-row align-h="around" class="mt-4">
+
+
                                 <b-col cols="6">
-                                    <b-row align-h="around">
+
+                                    <b-row align-h="between">
                                         <h3>Informations</h3>
-                                        <b-button variant="primary" v-b-modal.modal-Materiel @click="modalEditMateriel">Modifier</b-button>
-                                        <b-button variant="outline-danger" v-b-modal.modal-DeleteMateriel @click="modalDeleteMateriel">Supprimer matériel</b-button>
-                                    </b-row>
-
-                                    <b-row align-h="between" class="my-1 mt-4">
-                                        <b-col sm="4" class="mt-1">
-                                            <label for="consMat">Constructeur</label>
-                                        </b-col>
-                                        <b-col sm="7" class="mt-1">
-                                            <p id="consMat">{{materiel.constructeur}}</p>
-                                        </b-col>
-                                        <b-col sm="4" class="mt-1">
-                                            <label for="modeleMat">Modele</label>
-                                        </b-col>
-                                        <b-col sm="7" class="mt-1">
-                                            <p id="ModeleMat">{{materiel.modele}}</p>
-                                        </b-col>
-                                        <b-col sm="4" class="mt-1">
-                                            <label for="typeMat">Type</label>
-                                        </b-col>
-                                        <b-col sm="7" class="mt-1">
-                                            <p id="typeMat">{{materielType.text}}</p>
-                                        </b-col>
-                                        <b-col sm="4" class="mt-1">
-                                            <label for="dateCreaMat">Date Creation</label>
-                                        </b-col>
-                                        <b-col sm="7" class="mt-1">
-                                            <p id="dateCreaMat">{{materiel.date_creation}}</p>
-                                        </b-col>
-
-                                        <b-col sm="4" class="mt-1">
-                                            <label for="descriptionMat">Description</label>
-                                        </b-col>
-                                        <b-col sm="7" class="mt-1">
-                                            <p id="descriptionMat">{{materiel.description}}</p>
+                                        <b-col cols="8">
+                                            <b-button variant="primary" class="mr-2" v-b-modal.modal-Materiel @click="modalEditMateriel">Modifier</b-button>
+                                            <b-button variant="outline-danger" class=" ml-2" v-b-modal.modal-DeleteMateriel @click="modalDeleteMateriel">Supprimer matériel</b-button>
                                         </b-col>
                                     </b-row>
+
+                                    <b-card class="mt-4">
+                                        <b-row align-h="between" class="my-1">
+                                            <b-col sm="4" class="mt-1">
+                                                <label for="consMat">Constructeur</label>
+                                            </b-col>
+                                            <b-col sm="7" class="mt-1">
+                                                <p id="consMat">{{materiel.constructeur}}</p>
+                                            </b-col>
+                                            <b-col sm="4" class="mt-1">
+                                                <label for="modeleMat">Modele</label>
+                                            </b-col>
+                                            <b-col sm="7" class="mt-1">
+                                                <p id="ModeleMat">{{materiel.modele}}</p>
+                                            </b-col>
+                                            <b-col sm="4" class="mt-1">
+                                                <label for="typeMat">Type</label>
+                                            </b-col>
+                                            <b-col sm="7" class="mt-1">
+                                                <p id="typeMat">{{materielType.text}}</p>
+                                            </b-col>
+                                            <b-col sm="4" class="mt-1">
+                                                <label for="dateCreaMat">Date Creation</label>
+                                            </b-col>
+                                            <b-col sm="7" class="mt-1">
+                                                <p id="dateCreaMat">{{materiel.date_creation}}</p>
+                                            </b-col>
+
+                                            <b-col sm="4" class="mt-1">
+                                                <label for="descriptionMat">Description</label>
+                                            </b-col>
+                                            <b-col sm="7" class="mt-1">
+                                                <p id="descriptionMat">{{materiel.description}}</p>
+                                            </b-col>
+                                        </b-row>
+                                    </b-card>
+
                                 </b-col>
 
                                 <b-col cols="6">

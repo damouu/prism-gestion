@@ -38,120 +38,126 @@
             <b-button variant="outline-danger" v-b-modal.modal-DelExemplaire @click="modalDeleteExemplaire">Supprimer</b-button>
         </b-row>
 
-        <b-row class="mt-4">
-            <h4>Exemplaire    <b-badge v-if="selected.etat === 'disponible'" variant="success">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'emprunté'" variant="danger">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'réparation'" variant="warning">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'non empruntable'" variant="secondary">{{selected.etat}}</b-badge></h4>
-        </b-row>
+            <b-card  class="mt-4">
+                <b-card-title>Exemplaire    <b-badge v-if="selected.etat === 'disponible'" variant="success">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'emprunté'" variant="danger">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'réparation'" variant="warning">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'non empruntable'" variant="secondary">{{selected.etat}}</b-badge></b-card-title>
+                    <b-row align-h="between">
+                        <b-col sm="4">
+                            <label for="refExemplaire">Référence</label>
+                        </b-col>
+                        <b-col sm="7">
+                            <p id="refExemplaire">{{ selected.reference }}</p>
+                        </b-col>
+                        <b-col sm="4">
+                            <label for="stockageExemplaire">Lieu de stockage</label>
+                        </b-col>
+                        <b-col sm="7">
+                            <p id="stockageExemplaire">{{ selected.stockage }}</p>
+                        </b-col>
+                        <b-col sm="4">
+                            <label for="prixExemplaire">Prix d'achat</label>
+                        </b-col>
+                        <b-col sm="7">
+                            <p id="prixExemplaire">{{ selected.prix_achat }}</p>
+                        </b-col>
+                        <b-col sm="4">
+                            <label for="numSerieExemplaire">numéro de série</label>
+                        </b-col>
+                        <b-col sm="7">
+                            <p id="numSerieExemplaire">{{ selected.num_serie }}</p>
+                        </b-col>
+                        <b-col sm="4">
+                            <label for="urlExemplaire">URL</label>
+                        </b-col>
+                        <b-col sm="7">
+                            <p id="urlExemplaire"><a v-bind:href="selected.url" target="_blank">{{ selected.url }}</a></p>
+                        </b-col>
+                        <b-col sm="4">
+                            <label for="dateAchatExemplaire">Date d'achat</label>
+                        </b-col>
+                        <b-col sm="7">
+                            <p id="dateAchatExemplaire">{{ selected.date_achat }}</p>
+                        </b-col>
+                    </b-row>
+            </b-card>
 
-        <b-row align-h="between" class="mt-2">
-            <b-col sm="4">
-                <label for="refExemplaire">Référence</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="refExemplaire">{{ selected.reference }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="stockageExemplaire">Lieu de stockage</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="stockageExemplaire">{{ selected.stockage }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="prixExemplaire">Prix d'achat</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="prixExemplaire">{{ selected.prix_achat }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="numSerieExemplaire">numéro de série</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="numSerieExemplaire">{{ selected.num_serie }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="urlExemplaire">URL</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="urlExemplaire"><a v-bind:href="selected.url" target="_blank">{{ selected.url }}</a></p>
-            </b-col>
-            <b-col sm="4">
-                <label for="dateAchatExemplaire">Date d'achat</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="dateAchatExemplaire">{{ selected.date_achat }}</p>
-            </b-col>
-        </b-row>
+            <b-card class="mt-4">
+                <b-card-title>Fournisseur</b-card-title>
+                <b-row align-h="between" class="mt-2">
+                    <b-col sm="4">
+                        <label for="nomFournisseur">Nom</label>
+                    </b-col>
+                    <b-col sm="7">
+                        <p id="nomFournisseur">{{ selectedFournisseur.nom }}</p>
+                    </b-col>
+                    <b-col sm="4">
+                        <label for="adresseFournisseur">adresse</label>
+                    </b-col>
+                    <b-col sm="7">
+                        <p id="adresseFournisseur">{{ selectedFournisseur.adresse }}</p>
+                    </b-col>
+                    <b-col sm="4">
+                        <label for="villeFournisseur">Ville</label>
+                    </b-col>
+                    <b-col sm="7">
+                        <p id="villeFournisseur">{{ selectedFournisseur.ville }}</p>
+                    </b-col>
+                    <b-col sm="4">
+                        <label for="codePostalFournisseur">Code Postal</label>
+                    </b-col>
+                    <b-col sm="7">
+                        <p id="codePostalFournisseur">{{ selectedFournisseur.code_postal }}</p>
+                    </b-col>
+                    <b-col sm="4">
+                        <label for="siteWebFournisseur">Site Web</label>
+                    </b-col>
+                    <b-col sm="7">
+                        <p id="siteWebFournisseur"><a v-bind:href="selectedFournisseur.site_web" target="_blank">{{ selectedFournisseur.site_web }}</a></p>
+                    </b-col>
+                    <b-col sm="4">
+                        <label for="mailFournisseur">Mail</label>
+                    </b-col>
+                    <b-col sm="7">
+                        <p id="mailFournisseur">{{ selectedFournisseur.mail }}</p>
+                    </b-col>
+                    <b-col sm="4">
+                        <label for="telFournisseur">Téléphone</label>
+                    </b-col>
+                    <b-col sm="7">
+                        <p id="telFournisseur">{{ selectedFournisseur.tel }}</p>
+                    </b-col>
 
-        <b-row class="mt-2">
-            <h4>Fournisseur</h4>
-        </b-row>
+                </b-row>
+            </b-card>
 
-        <b-row align-h="between" class="mt-2">
-            <b-col sm="4">
-                <label for="nomFournisseur">Nom</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="nomFournisseur">{{ selectedFournisseur.nom }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="adresseFournisseur">adresse</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="adresseFournisseur">{{ selectedFournisseur.adresse }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="villeFournisseur">Ville</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="villeFournisseur">{{ selectedFournisseur.ville }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="codePostalFournisseur">Code Postal</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="codePostalFournisseur">{{ selectedFournisseur.code_postal }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="siteWebFournisseur">Site Web</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="siteWebFournisseur"><a v-bind:href="selectedFournisseur.site_web" target="_blank">{{ selectedFournisseur.site_web }}</a></p>
-            </b-col>
-            <b-col sm="4">
-                <label for="mailFournisseur">Mail</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="mailFournisseur">{{ selectedFournisseur.mail }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="telFournisseur">Téléphone</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="telFournisseur">{{ selectedFournisseur.tel }}</p>
-            </b-col>
-
-        </b-row>
+            <b-card class="mt-4" v-if="selectedFournisseur.commercial_nom || selectedFournisseur.commercial_prenom || selectedFournisseur.commercial_tel || selectedFournisseur.commercial_mail">
+                <b-card-title>Commercial</b-card-title>
+                <b-row align-h="between" class="mt-2">
+                    <b-col sm="4">
+                        <label for="comNomFournisseur">Commercial</label>
+                    </b-col>
+                    <b-col sm="7">
+                        <p id="comNomFournisseur">{{ selectedFournisseur.commercial_nom }} {{ selectedFournisseur.commercial_prenom }}</p>
+                    </b-col>
+                    <b-col sm="4">
+                        <label for="comTelFournisseur">Tel Commercial</label>
+                    </b-col>
+                    <b-col sm="7">
+                        <p id="comTelFournisseur">{{ selectedFournisseur.commercial_tel }}</p>
+                    </b-col>
+                    <b-col sm="4">
+                        <label for="comMailFournisseur">Mail Commercial</label>
+                    </b-col>
+                    <b-col sm="7">
+                        <p id="comMailFournisseur">{{ selectedFournisseur.commercial_mail }}</p>
+                    </b-col>
+                </b-row>
+            </b-card>
 
 
-        <b-row align-h="between" class="mt-2" v-if="selectedFournisseur.commercial_nom || selectedFournisseur.commercial_prenom || selectedFournisseur.commercial_tel || selectedFournisseur.commercialmail">
-            <b-col sm="4">
-                <label for="comNomFournisseur">Commercial</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="comNomFournisseur">{{ selectedFournisseur.commercial_nom }} {{ selectedFournisseur.commercial_prenom }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="comTelFournisseur">Tel Commercial</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="comTelFournisseur">{{ selectedFournisseur.commercial_tel }}</p>
-            </b-col>
-            <b-col sm="4">
-                <label for="comMailFournisseur">Mail Commercial</label>
-            </b-col>
-            <b-col sm="7">
-                <p id="comMailFournisseur">{{ selectedFournisseur.commercial_mail }}</p>
-            </b-col>
-        </b-row>
+
+
+
+
 
     </div>
 
@@ -226,7 +232,6 @@
                         console.log(error);
                     })
             },
-
             getFournisseurs() {
                 axios.get('/fournisseurs')
                     .then( response => {

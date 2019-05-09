@@ -36,7 +36,6 @@
                                     <h3>Informations</h3>
                                     <b-col cols="4">
                                         <b-button class="mrs-2" variant="primary" v-b-modal.modal-EditFournisseur @click="modalEditFournisseur">Modifier</b-button>
-                                        <b-button class="ml-2" variant="outline-danger" v-b-modal.modal-DeleteFournisseur @click="modalDeleteFournisseur">Supprimer Fournisseur</b-button>
                                     </b-col>
                                 </b-row>
 
@@ -211,12 +210,10 @@
                         console.log(error.response);
                     })
             },
+
             modalEditFournisseur () {
                 eventBus.$emit('editFournisseur', {'fournisseur': this.fournisseur})
             },
-            modalDeleteFournisseur () {
-
-            }
 
         }
 

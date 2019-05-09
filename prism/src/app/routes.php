@@ -29,6 +29,7 @@ $app->post('/fournisseurs[/]', 'FournisseurController:post');
 $app->group('', function() {
     $this->get('/fournisseurs/{id}[/]', 'FournisseurController:getOne');
     $this->put('/fournisseurs/{id}[/]', 'FournisseurController:put');
+    //$this->delete('/fournisseurs/{id}[/]', 'FournisseurController:delete');
 
     $this->get('/types/{id}[/]', 'TypeController:getOne');
     $this->put('/types/{id}[/]', 'TypeController:put');
