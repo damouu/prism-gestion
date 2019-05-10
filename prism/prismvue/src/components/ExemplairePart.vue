@@ -54,10 +54,16 @@
                             <p id="stockageExemplaire">{{ selected.stockage }}</p>
                         </b-col>
                         <b-col sm="4">
-                            <label for="prixExemplaire">Prix d'achat</label>
+                            <label for="htExemplaire">Prix d'achat HT</label>
                         </b-col>
                         <b-col sm="7">
-                            <p id="prixExemplaire">{{ selected.prix_achat }}</p>
+                            <p id="htExemplaire">{{ selected.prix_ht }}</p>
+                        </b-col>
+                        <b-col sm="4">
+                            <label for="ttcExemplaire">Prix d'achat TTC</label>
+                        </b-col>
+                        <b-col sm="7">
+                            <p id="ttcExemplaire">{{ selected.prix_ttc }}</p>
                         </b-col>
                         <b-col sm="4">
                             <label for="numSerieExemplaire">numéro de série</label>
@@ -71,6 +77,25 @@
                         <b-col sm="7">
                             <p id="urlExemplaire"><a v-bind:href="selected.url" target="_blank">{{ selected.url }}</a></p>
                         </b-col>
+                        <b-col sm="4">
+                            <label for="boncomExemplaire">Bon de commande</label>
+                        </b-col>
+                        <b-col sm="7">
+                            <p id="boncomExemplaire">{{ selected.bon_commande }}</p>
+                        </b-col>
+                        <b-col sm="4">
+                            <label for="financementExemplaire">Financement</label>
+                        </b-col>
+                        <b-col sm="7">
+                            <p id="financementExemplaire">{{ selected.financement }}</p>
+                        </b-col>
+                        <b-col sm="4">
+                            <label for="immobilisationExemplaire">Immobilisation</label>
+                        </b-col>
+                        <b-col sm="7">
+                            <p id="immobilisationExemplaire">{{ selected.immobilisation }}</p>
+                        </b-col>
+
                         <b-col sm="4">
                             <label for="dateAchatExemplaire">Date d'achat</label>
                         </b-col>

@@ -26,8 +26,7 @@ class ExemplaireController extends Controller
         {
             if($params['select'] === 'service')
             {
-                $exemplaire = Exemplaire::select('id','materiel','reference','prix_achat','fournisseur','num_serie','stockage','url','etat','num_ex','date_achat','date_modif');
-                $exemplaire = $exemplaire->get();
+                $exemplaire = Exemplaire::get();
 
                 $data = [
                     'type' => "success",
@@ -37,7 +36,7 @@ class ExemplaireController extends Controller
             }
             else if ($params['select'] === 'reforme')
             {
-                $exemplaire = Exemplaire::onlyTrashed()->select('exemplaire.id','materiel','exemplaire.reference','exemplaire.prix_achat','exemplaire.fournisseur','exemplaire.num_serie','exemplaire.stockage','exemplaire.url','exemplaire.etat','exemplaire.num_ex','exemplaire.date_achat','exemplaire.date_modif','exemplaire.date_sortie')
+                $exemplaire = Exemplaire::onlyTrashed()
                     ->join('materiel','exemplaire.materiel','=','materiel.id')
                     ->join('type','materiel.type','=','type.id')
                     ->with(['materiel.type' => function ($q) {
@@ -134,9 +133,9 @@ class ExemplaireController extends Controller
 
         try
         {
-            $exemplaire = Exemplaire::select('id','materiel','reference','prix_achat','fournisseur','num_serie','url','stockage','etat','num_ex','date_achat','date_modif')->where('id','=',$id)->with('materiel');
-
-            $exemplaire = $exemplaire->first();
+            $exemplaire = Exemplaire::where('id','=',$id)
+                ->with('materiel')
+                ->first();
 
             $data = [
                 'type' => "success",
@@ -199,7 +198,19 @@ class ExemplaireController extends Controller
         $content = $request->getParsedBody();
         $materiel = Materiel::where('id','=',$content['materiel'])->first();
 
-        if( !isset($content['materiel']) || !isset($content['reference']) || !isset($content['etat']) || !isset($content['fournisseur']) || !isset($content['prix_achat']) || !isset($content['num_serie']) || !isset($content['date_achat']) || !isset($content['stockage']) )
+        if(
+            !isset($content['materiel'])
+            || !isset($content['reference'])
+            || !isset($content['etat'])
+            || !isset($content['fournisseur'])
+            || !isset($content['prix_ht'])
+            || !isset($content['prix_ttc'])
+            || !isset($content['num_serie'])
+            || !isset($content['financement'])
+            || !isset($content['bon_commande'])
+            || !isset($content['date_achat'])
+            || !isset($content['stockage'])
+        )
         {
             $data = ApiErrors::BadRequest();
         }
@@ -219,6 +230,8 @@ class ExemplaireController extends Controller
                     $exemplaire->fournisseur = $content['fournisseur'];
                     $exemplaire->prix_achat = $content['prix_achat'];
                     $exemplaire->num_serie = $content['num_serie'];
+                    $exemplaire->financement = $content['financement'];
+                    $exemplaire->bon_commande = $content['bon_commande'];
                     $exemplaire->stockage = $content['stockage'];
                     if(isset($content["url"])){
                         $exemplaire->url = $content['url'];
@@ -258,7 +271,19 @@ class ExemplaireController extends Controller
         $exemplaire = Exemplaire::find($id);
 
 
-        if( !isset($content['materiel']) || !isset($content['reference']) || !isset($content['etat']) || !isset($content['fournisseur']) || !isset($content['prix_achat']) || !isset($content['num_serie']) || !isset($content['stockage']) || !isset($content['date_achat']) )
+        if(
+            !isset($content['materiel'])
+            || !isset($content['reference'])
+            || !isset($content['etat'])
+            || !isset($content['fournisseur'])
+            || !isset($content['prix_ht'])
+            || !isset($content['prix_ttc'])
+            || !isset($content['num_serie'])
+            || !isset($content['financement'])
+            || !isset($content['bon_commande'])
+            || !isset($content['stockage'])
+            || !isset($content['date_achat'])
+        )
         {
             $data = ApiErrors::BadRequest();
         }
@@ -281,8 +306,11 @@ class ExemplaireController extends Controller
                         $exemplaire->reference = $content['reference'];
                         $exemplaire->etat = $content['etat'];
                         $exemplaire->fournisseur = $content['fournisseur'];
-                        $exemplaire->prix_achat = $content['prix_achat'];
+                        $exemplaire->prix_ht = $content['prix_ht'];
+                        $exemplaire->prix_ttc = $content['prix_ttc'];
                         $exemplaire->num_serie = $content['num_serie'];
+                        $exemplaire->financement = $content['financement'];
+                        $exemplaire->bon_commande = $content['bon_commande'];
                         $exemplaire->stockage = $content['stockage'];
                         if(isset($content["url"])){
                             $exemplaire->url = $content['url'];

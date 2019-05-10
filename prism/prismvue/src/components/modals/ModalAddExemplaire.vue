@@ -24,19 +24,34 @@
                     <b-form-invalid-feedback id="invalidReference">Veuillez écrire une référence ou scannez-la</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Prix Achat *" label-cols-sm="4" label-align-sm="left" label-for="addExemplairePrix">
+                <b-form-group label="Prix Achat HT *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireHt">
                     <b-form-input
-                            id="addExemplairePrix"
-                            data-vv-name="addExPrixAchat"
-                            v-model="postExemplaire.prix_achat"
+                            id="addExemplaireHt"
+                            data-vv-name="addExHt"
+                            v-model="postExemplaire.prix_ht"
                             v-validate="{required:true, decimal:2}"
-                            :state="validateState('addExPrixAchat')"
-                            aria-describedby="invalidPrixAchat"
-                            placeholder="Prix d'achat de l'exemplaire (en euros)"
+                            :state="validateState('addExPrixHt')"
+                            aria-describedby="invalidHt"
+                            placeholder="Prix d'achat HT de l'exemplaire (en euros)"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidPrixAchat">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidHt">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
                 </b-form-group>
+
+                <b-form-group label="Prix Achat TTC *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireTtc">
+                    <b-form-input
+                            id="addExemplaireTtc"
+                            data-vv-name="addExTtc"
+                            v-model="postExemplaire.prix_ttc"
+                            v-validate="{required:true, decimal:2}"
+                            :state="validateState('addExTtc')"
+                            aria-describedby="invalidTtc"
+                            placeholder="Prix d'achat TTC de l'exemplaire (en euros)"
+                            type="text" required>
+                    </b-form-input>
+                    <b-form-invalid-feedback id="invalidTtc">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
+                </b-form-group>
+
                 <b-form-group label="Numéro de Série *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireNumSerie">
                     <b-form-input
                             id="addExemplaireNumSerie"
@@ -121,6 +136,46 @@
                     <b-form-invalid-feedback id="invalidFournisseur">Vous devez choisir un fournisseur.</b-form-invalid-feedback>
                 </b-form-group>
 
+                <b-form-group label="Financement *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireFinancement">
+                    <b-form-input
+                            id="addExemplaireFinancement"
+                            data-vv-name="addExFinancement"
+                            v-model="postExemplaire.financement"
+                            v-validate="{required:true}"
+                            :state="validateState('addExFinancement')"
+                            aria-describedby="invalidFinancement"
+                            placeholder="Nom du financeur"
+                            type="text" required>
+                    </b-form-input>
+                    <b-form-invalid-feedback id="invalidFinancement">Vous devez entrer un nom de financement</b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group label="Bon de commande *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireCommande">
+                    <b-form-input
+                            id="addExemplaireCommande"
+                            data-vv-name="addExCommande"
+                            v-model="postExemplaire.bon_commande"
+                            v-validate="{required:true}"
+                            :state="validateState('addExCommande')"
+                            aria-describedby="invalidCommande"
+                            placeholder="Numéro de commande"
+                            type="text" required>
+                    </b-form-input>
+                    <b-form-invalid-feedback id="invalidCommande">Vous devez entrer un numéro de commande</b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group label="Immobilisation *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireImmobilisation">
+                    <b-form-input
+                            id="addExemplaireImmobilisation"
+                            data-vv-name="addExImmobilisation"
+                            v-model="postExemplaire.immobilisation"
+                            v-validate="{required:true}"
+                            :state="validateState('addExImmobilisation')"
+                            aria-describedby="invalidImmobilisation"
+                            placeholder="Numéro d'immobilisation"
+                            type="text" required>
+                    </b-form-input>
+                    <b-form-invalid-feedback id="invalidImmobilisation">Vous devez entrer un numéro d'immobilisation</b-form-invalid-feedback>
+                </b-form-group>
+
                 <span class="text-danger">* champs obligatoires</span>
             </form>
 
@@ -183,8 +238,12 @@
                                 "reference": this.postExemplaire.reference,
                                 "etat": this.postExemplaire.etat,
                                 "fournisseur": this.postExemplaire.fournisseur,
-                                "prix_achat": this.postExemplaire.prix_achat,
+                                "prix_ht": this.postExemplaire.prix_ht,
+                                "prix_ttc": this.postExemplaire.prix_ttc,
                                 "num_serie": this.postExemplaire.num_serie,
+                                "financement": this.postExemplaire.financement,
+                                "bon_commande": this.postExemplaire.bon_commande,
+                                 "immobilisation": this.postExemplaire.immobilisation,
                                 "date_achat": this.postExemplaire.date_achat,
                                 "stockage": this.postExemplaire.stockage,
                                 "url": this.postExemplaire.url

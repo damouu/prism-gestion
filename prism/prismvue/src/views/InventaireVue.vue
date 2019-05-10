@@ -109,7 +109,6 @@
                 sortBy : 'id',
                 sortDesc: false,
                 fieldsRow: [
-                    { key: 'id', sortable:true },
                     { key: 'constructeur', sortable:true },
                     { key: 'modele', sortable:true },
                     { key: 'nb_ex', sortable:true },
