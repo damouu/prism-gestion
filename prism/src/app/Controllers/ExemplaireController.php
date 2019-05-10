@@ -58,7 +58,6 @@ class ExemplaireController extends Controller
         }
         catch(\Exception $e)
         {
-            var_dump($e);die;
             $data = ApiErrors::NotFound($request->getUri());
         }
 
@@ -68,30 +67,57 @@ class ExemplaireController extends Controller
 
     public function getOne(Request $request, Response $response, $args)
     {
-
+        $params = [
+            'select' => $request->getQueryParam('select','service')
+        ];
         $id = intval($args['id']);
 
         if(!is_null($id) )
         {
-            try
-            {
-                $exemplaire = Exemplaire::with('fournisseur')->find($id);
+            try {
+                if($params['select'] === 'service')
+                {
+                    $exemplaire = Exemplaire::with('fournisseur')->with('materiel')->find($id);
 
-                if(empty($exemplaire)){
-                    $data = ApiErrors::NotFound($request->getUri());
+                    if (empty($exemplaire)) {
+                        $data = ApiErrors::NotFound($request->getUri());
+                    } else {
+                        $data = [
+                            'type' => "success",
+                            'code' => 200,
+                            'exemplaire' => $exemplaire
+                        ];
+                    }
+
                 }
-                else {
-                    $data = [
-                        'type' => "success",
-                        'code' => 200,
-                        'exemplaire' => $exemplaire
-                    ];
+                else if ($params['select'] === 'reforme')
+                {
+                    $exemplaire = Exemplaire::onlyTrashed()->with('fournisseur')
+                        ->join('materiel','exemplaire.materiel','=','materiel.id')
+                        ->join('type','materiel.type','=','type.id')
+                        ->with(['materiel.type' => function ($q) {
+                            $q->select('type.id','type.nom');
+                        }])
+                        ->find($id);
+
+                    if (empty($exemplaire)) {
+                        $data = ApiErrors::NotFound($request->getUri());
+                    } else {
+                        $data = [
+                            'type' => "success",
+                            'code' => 200,
+                            'exemplaire' => $exemplaire
+                        ];
+                    }
                 }
-            }
-            catch(\Exception $e)
-            {
+                else
+                {
+                    $data = ApiErrors::BadRequest();
+                }
+            } catch (\Exception $e) {
                 $data = ApiErrors::NotFound($request->getUri());
             }
+
         }
         else
         {
@@ -314,34 +340,68 @@ class ExemplaireController extends Controller
     public function patch(Request $request, Response $response, $args)
     {
 
+        $params = [
+            'select' => $request->getQueryParam('select','service')
+        ];
         $id = intval($args['id']);
-        $etat = $request->getParsedBody();
 
-        $exemplaire = Exemplaire::find($id);
-
-        if(!isset($etat['etat'])){
-            $data = ApiErrors::BadRequest();
-        }
-        else if(empty($exemplaire))
+        if(!is_null($id) )
         {
-            $data = ApiErrors::NotFound($request->getUri());
+            try {
+
+                if($params['select'] === 'service')
+                {
+                    $etat = $request->getParsedBody();
+                    $exemplaire = Exemplaire::find($id);
+
+                    if(!isset($etat['etat'])){
+                        $data = ApiErrors::BadRequest();
+                    }
+                    else if(empty($exemplaire))
+                    {
+                        $data = ApiErrors::NotFound($request->getUri());
+                    }
+                    else
+                    {
+                        $exemplaire->etat = $etat['etat'];
+                        $exemplaire->save();
+                        $data = [
+                            'type' => "success",
+                            'code' => 200,
+                            'exemplaire' => $exemplaire
+                        ];
+                    }
+
+                }
+                else if ($params['select'] === 'reforme')
+                {
+                    $exemplaire = Exemplaire::onlyTrashed()->find($id);
+
+                    if (empty($exemplaire)) {
+                        $data = ApiErrors::NotFound($request->getUri());
+                    } else {
+
+                        $exemplaire->date_sortie = null;
+                        $exemplaire->save();
+                        $data = [
+                            'type' => "success",
+                            'code' => 200,
+                            'exemplaire' => $exemplaire
+                        ];
+                    }
+                }
+                else
+                {
+                    $data = ApiErrors::BadRequest();
+                }
+            } catch (\Exception $e) {
+                $data = ApiErrors::NotFound($request->getUri());
+            }
+
         }
         else
         {
-            try
-            {
-                $exemplaire->etat = $etat['etat'];
-                $exemplaire->save();
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'exemplaire' => $exemplaire
-                ];
-            }
-            catch(\Exception $e)
-            {
-                $data = ApiErrors::InternalError();
-            }
+            $data = ApiErrors::BadRequest();
         }
 
         return ResponseWriter::ResponseWriter($response, $data);
