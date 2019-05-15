@@ -400,13 +400,26 @@ class ExemplaireController extends Controller
                 else if ($params['select'] === 'reforme')
                 {
                     $exemplaire = Exemplaire::onlyTrashed()->find($id);
+                    $materiel = Materiel::withTrashed()->find($exemplaire->materiel);
+                    $type = Type::withTrashed()->find($materiel->type);
 
                     if (empty($exemplaire)) {
                         $data = ApiErrors::NotFound($request->getUri());
                     } else {
 
-                        $exemplaire->date_sortie = null;
-                        $exemplaire->save();
+                        DB::transaction(function () use ($exemplaire, $materiel, $type) {
+                            $exemplaire->date_sortie = null;
+                            if(!empty($materiel->date_suppression)){
+                                $materiel->date_suppression = null;
+                                $materiel->save();
+                            }
+                            if(!empty($type->date_suppression)){
+                                $type->date_suppression = null;
+                                $type->save();
+                            }
+                            $exemplaire->save();
+                        });
+
                         $data = [
                             'type' => "success",
                             'code' => 200,
