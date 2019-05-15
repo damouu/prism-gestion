@@ -2,12 +2,11 @@
 
 namespace PrismGestion\Controllers;
 
-
-
 use Illuminate\Database\Capsule\Manager as DB;
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Exemplaire;
 use PrismGestion\Models\Materiel;
+use PrismGestion\Models\Type;
 use PrismGestion\Utils\ResponseWriter;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -36,13 +35,11 @@ class ExemplaireController extends Controller
             }
             else if ($params['select'] === 'reforme')
             {
-                $exemplaire = Exemplaire::onlyTrashed()
-                    ->join('materiel','exemplaire.materiel','=','materiel.id')
-                    ->join('type','materiel.type','=','type.id')
-                    ->with(['materiel.type' => function ($q) {
-                        $q->select('type.id','type.nom');
-                    }])
-                    ->get();
+                $exemplaire = Exemplaire::onlyTrashed()->get();
+                foreach($exemplaire as $row) {
+                    $row->materiel = Materiel::withTrashed()->find($row->materiel);
+                    $row->materiel['type'] = Type::withTrashed()->find($row->materiel['type']);
+                };
 
                 $data = [
                     'type' => "success",
@@ -57,6 +54,7 @@ class ExemplaireController extends Controller
         }
         catch(\Exception $e)
         {
+            var_dump($e);die;
             $data = ApiErrors::NotFound($request->getUri());
         }
 
@@ -91,13 +89,10 @@ class ExemplaireController extends Controller
                 }
                 else if ($params['select'] === 'reforme')
                 {
-                    $exemplaire = Exemplaire::onlyTrashed()->with('fournisseur')
-                        ->join('materiel','exemplaire.materiel','=','materiel.id')
-                        ->join('type','materiel.type','=','type.id')
-                        ->with(['materiel.type' => function ($q) {
-                            $q->select('type.id','type.nom');
-                        }])
-                        ->find($id);
+
+                    $exemplaire = Exemplaire::onlyTrashed()->with('fournisseur')->find($id);
+                    $exemplaire->materiel = Materiel::withTrashed()->find($exemplaire->materiel);
+                    $exemplaire->materiel['type'] = Type::withTrashed()->find($exemplaire->materiel['type']);
 
                     if (empty($exemplaire)) {
                         $data = ApiErrors::NotFound($request->getUri());

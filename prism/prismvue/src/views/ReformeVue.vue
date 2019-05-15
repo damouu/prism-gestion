@@ -46,13 +46,12 @@
 
                                 <b-card>
                                     <b-row align-h="between" class="my-1">
-                                        <b-col sm="4" class="mt-1">
-                                            <label for="referenceReforme">Reference</label>
+                                        <b-col sm="4">
+                                            <label for="refReforme">Référence</label>
                                         </b-col>
-                                        <b-col sm="7" class="mt-1">
-                                            <p id="referenceReforme">{{reforme.reference}}</p>
+                                        <b-col sm="7">
+                                            <p id="refReforme">{{ reforme.reference }}</p>
                                         </b-col>
-
                                         <b-col sm="4">
                                             <label for="stockageReforme">Lieu de stockage</label>
                                         </b-col>
@@ -60,10 +59,16 @@
                                             <p id="stockageReforme">{{ reforme.stockage }}</p>
                                         </b-col>
                                         <b-col sm="4">
-                                            <label for="prixReforme">Prix d'achat</label>
+                                            <label for="htReforme">Prix d'achat HT</label>
                                         </b-col>
                                         <b-col sm="7">
-                                            <p id="prixReforme">{{ reforme.prix_achat }}</p>
+                                            <p id="htReforme">{{ reforme.prix_ht }}</p>
+                                        </b-col>
+                                        <b-col sm="4">
+                                            <label for="ttcReforme">Prix d'achat TTC</label>
+                                        </b-col>
+                                        <b-col sm="7">
+                                            <p id="ttcReforme">{{ reforme.prix_ttc }}</p>
                                         </b-col>
                                         <b-col sm="4">
                                             <label for="numSerieReforme">numéro de série</label>
@@ -77,6 +82,25 @@
                                         <b-col sm="7">
                                             <p id="urlReforme"><a v-bind:href="reforme.url" target="_blank">{{ reforme.url }}</a></p>
                                         </b-col>
+                                        <b-col sm="4">
+                                            <label for="boncomReforme">Bon de commande</label>
+                                        </b-col>
+                                        <b-col sm="7">
+                                            <p id="boncomReforme">{{ reforme.bon_commande }}</p>
+                                        </b-col>
+                                        <b-col sm="4">
+                                            <label for="financementReforme">Financement</label>
+                                        </b-col>
+                                        <b-col sm="7">
+                                            <p id="financementReforme">{{ reforme.financement }}</p>
+                                        </b-col>
+                                        <b-col sm="4">
+                                            <label for="immobilisationReforme">Immobilisation</label>
+                                        </b-col>
+                                        <b-col sm="7">
+                                            <p id="immobilisationReforme">{{ reforme.immobilisation }}</p>
+                                        </b-col>
+
                                         <b-col sm="4">
                                             <label for="dateAchatReforme">Date d'achat</label>
                                         </b-col>
