@@ -70,7 +70,6 @@
                 sortDesc: false,
                 fieldsRow: [
                     { key: 'reference', sortable:true },
-                    { key: 'prix_achat', sortable:true },
                     { key: 'type', sortable:true },
                     { key: 'num_serie', sortable:true },
                     { key: 'date_achat', sortable:true },
