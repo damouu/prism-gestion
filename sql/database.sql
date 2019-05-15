@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `materiel` (
     `constructeur` varchar(128) NOT NULL,
     `modele` varchar(128) NOT NULL,
     `description` TEXT DEFAULT NULL,
-    `nb_ex` INT NOT NULL,
+    `nb_ex` INT NULL,
     `type` INT NOT NULL,
     `date_creation` date NOT NULL,
     `date_modification` date DEFAULT NULL,

@@ -223,12 +223,12 @@ class ExemplaireController extends Controller
                 DB::transaction(function () use ($content) {
 
                     $count = Exemplaire::where('materiel','=',$content['materiel'])->withTrashed()->count();
-                    $count1 = Exemplaire::where('materiel','=',$content['materiel'])->count();
                     $exemplaire = new Exemplaire();
                     $exemplaire->materiel = $content['materiel'];
                     $exemplaire->reference = $content['reference'];
                     $exemplaire->fournisseur = $content['fournisseur'];
-                    $exemplaire->prix_achat = $content['prix_achat'];
+                    $exemplaire->prix_ht = $content['prix_ht'];
+                    $exemplaire->prix_ttc = $content['prix_ttc'];
                     $exemplaire->num_serie = $content['num_serie'];
                     $exemplaire->financement = $content['financement'];
                     $exemplaire->bon_commande = $content['bon_commande'];
@@ -236,13 +236,14 @@ class ExemplaireController extends Controller
                     if(isset($content["url"])){
                         $exemplaire->url = $content['url'];
                     }
+                    if(isset($content["immobilisation"])){
+                        $exemplaire->immobilisation = $content['immobilisation'];
+                    }
                     $exemplaire->etat = $content['etat'];
                     $exemplaire->date_achat = $content['date_achat'];
                     $exemplaire->num_ex = ($count)+1;
                     $exemplaire->save();
-                    $materiel = Materiel::where('id','=',$content['materiel'])->first();
-                    $materiel->nb_ex = ($count1)+1;
-                    $materiel->save();
+
                 });
 
                 $data = [

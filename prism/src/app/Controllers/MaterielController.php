@@ -66,9 +66,7 @@ class MaterielController extends Controller
                     $data = ApiErrors::NotFound($request->getUri());
                 }
                 else {
-                    foreach($materiel as $row){
-                        $row->nb_ex = Exemplaire::where('materiel','=',$row->id)->count();
-                    }
+                    $materiel->nb_ex = Exemplaire::where('materiel','=',$materiel->id)->count();
                     $data = [
                         'type' => "success",
                         'code' => 200,
@@ -184,7 +182,6 @@ class MaterielController extends Controller
                 $materiel->description = $content['description'];
             }
             $materiel->type = $content['type'];
-
             try
             {
                 $materiel->save();
@@ -234,9 +231,9 @@ class MaterielController extends Controller
                         $q->select('type.id','type.nom');
                     }])
                 ->find($id);
-                foreach($materiel as $row){
-                    $row->nb_ex = Exemplaire::where('materiel','=',$row->id)->count();
-                }
+
+                $materiel->nb_ex = Exemplaire::where('materiel','=',$materiel->id)->count();
+
                 $data = [
                     'type' => "success",
                     'code' => 201,
@@ -262,10 +259,8 @@ class MaterielController extends Controller
                         $q->select('type.id','type.nom');
                     }])
                 ->find($id);
+                    $materiel->nb_ex = Exemplaire::where('materiel','=',$materiel->id)->count();
 
-                foreach($materiel as $row){
-                    $row->nb_ex = Exemplaire::where('materiel','=',$row->id)->count();
-                }
 
                 $data = [
                     'type' => "success",

@@ -126,7 +126,6 @@
                             "constructeur": this.materielModif.constructeur,
                             "modele": this.materielModif.modele,
                             "type": this.materielTypeModif,
-                            "nb_ex": this.materielModif.nb_ex,
                             "description": this.materielModif.description
                         })
                             .then( response => {

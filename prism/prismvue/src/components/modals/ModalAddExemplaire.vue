@@ -243,7 +243,7 @@
                                 "num_serie": this.postExemplaire.num_serie,
                                 "financement": this.postExemplaire.financement,
                                 "bon_commande": this.postExemplaire.bon_commande,
-                                 "immobilisation": this.postExemplaire.immobilisation,
+                                "immobilisation": this.postExemplaire.immobilisation,
                                 "date_achat": this.postExemplaire.date_achat,
                                 "stockage": this.postExemplaire.stockage,
                                 "url": this.postExemplaire.url
