@@ -17,7 +17,101 @@ use stdClass;
 class ExemplaireController extends Controller
 {
 
-
+    /**
+     * @api {get} /exemplaires
+     * @apiName getAll
+     * @apiGroup Exemplaires
+     * @apiDescription Récupère tous les exemplaires selon le paramètre passé dans le ?select.
+     * Paramètres possibles:
+     * ?select=reforme
+     * ?select=service
+     *
+     * @apiSuccess {String} type Type de la réponse
+     * @apiSuccess {String} code Code de la réponse
+     * @apiSuccess {Object[]} exemplaires Liste d'exemplaires
+     * @apiSuccess {Number} exemplaires.id Identifiant primaire de l'exemplaire
+     * @apiSuccess {Number} exemplaires.materiel Identifiant étranger du matériel
+     * @apiSuccess {String} exemplaires.reference Référence UL de l'exemplaire
+     * @apiSuccess {Number} exemplaires.fournisseur Identifiant étranger du fournisseur
+     * @apiSuccess {Number} exemplaires.prix_ht Prix Hors Taxes d'achat de l'exemplaire
+     * @apiSuccess {Number} exemplaires.prix_ttc Prix Toutes Taxes Comprises d'achat de l'exemplaire
+     * @apiSuccess {String} exemplaires.num_serie Numéro de série constructeur de l'exemplaire
+     * @apiSuccess {String} exemplaires.url URL de référence de l'objet
+     * @apiSuccess {String} exemplaires.stockage Lieu de stockage de l'exemplaire
+     * @apiSuccess {String} exemplaire.etat Etat de l'exemplaire
+     * @apiSuccess {Number} exemplaires.num_ex Numéro d'exemplaire
+     * @apiSuccess {String} exemplaires.financement Organisme de financement d'achat de l'exemplaire
+     * @apiSuccess {String} exemplaires.bon_commande Numéro de bon de commande
+     * @apiSuccess {String} exemplaires.immobilisation Numéro de fiche d'immobilisation
+     * @apiSuccess {Date} exemplaires.date_achat Date d'achat de l'exemplaire
+     * @apiSuccess {Date} exemplaires.date_modif Date de dernière modification
+     * @apiSuccess {Date} exemplaires.date_Sortie Date de sortie de l'exemplaire
+     *
+     * @apiSuccessExample Success-Response:
+     *      HTTP/1.1 200 OK
+     *      {
+     *           "type": "success",
+     *           "code": 200,
+     *           "exemplaires": [
+     *                               {
+     *                                   "id": 2,
+     *                                   "materiel": 1,
+     *                                   "reference": "ESOSHAJSD",
+     *                                   "fournisseur": 2,
+     *                                   "prix_ht": "200.00",
+     *                                   "prix_ttc": "200.00",
+     *                                   "num_serie": "AZEYI738-3739",
+     *                                   "url": "http://www.google.fr",
+     *                                   "stockage": "701",
+     *                                   "etat": "réparation",
+     *                                   "num_ex": 2,
+     *                                   "financement": "Tech de co",
+     *                                   "bon_commande": "345678AZ",
+     *                                   "immobilisation": "4567890987",
+     *                                   "date_achat": "2019-04-18",
+     *                                   "date_modif": null,
+     *                                   "date_sortie": null
+     *                               },
+     *                               {
+     *                                   "id": 3,
+     *                                   "materiel": 1,
+     *                                   "reference": "ESOSHDDD",
+     *                                   "fournisseur": 1,
+     *                                   "prix_ht": "200.00",
+     *                                   "prix_ttc": "200.00",
+     *                                   "num_serie": "AZEYTUE-YSJ",
+     *                                   "url": "http://www.google.fr",
+     *                                   "stockage": "bureau",
+     *                                   "etat": "emprunté",
+     *                                   "num_ex": 3,
+     *                                   "financement": "UL",
+     *                                   "bon_commande": "TYUI567890",
+     *                                   "immobilisation": "45654567890",
+     *                                   "date_achat": "2019-04-18",
+     *                                   "date_modif": null,
+     *                                   "date_sortie": null
+     *                               }
+     *                          ]
+     *      }
+     *
+     * @apiError BadRequest La méthode n'est pas correctement utilisée.
+     * @apiErrorExample Bad Request:
+     *      HTTP/1.1 405 Bad Request
+     *      {
+     *           "type": "error",
+     *           "code": 405,
+     *           "message": "La méthode n'est pas correctement utilisée."
+     *      }
+     *
+     * @apiError NotFound Ressource non trouvée.
+     * @apiErrorExample Not Found:
+     *      HTTP/1.1 404 Not Found
+     *      {
+     *           "type": "error",
+     *           "code": 404,
+     *           "message": "Ressource non trouvée."
+     *      }
+     */
 
     public function getAll(Request $request, Response $response, $args)
     {
@@ -59,13 +153,12 @@ class ExemplaireController extends Controller
         }
         catch(\Exception $e)
         {
-            var_dump($e);die;
             $data = ApiErrors::NotFound($request->getUri());
         }
 
         return ResponseWriter::ResponseWriter($response, $data);
-
     }
+
 
     public function getOne(Request $request, Response $response, $args)
     {
