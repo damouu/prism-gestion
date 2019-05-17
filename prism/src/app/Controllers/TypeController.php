@@ -17,38 +17,15 @@ class TypeController extends Controller
     public function getAll(Request $request, Response $response, $args)
     {
 
-        $params = [
-            'nb' => intval($request->getQueryParam('nb',10)),
-            'page' => intval($request->getQueryParam('page',1)),
-        ];
-
         try
         {
 
             $type = Type::select('id','nom');
-
-            $elementCounter = $type->count();
-            if( (($params['nb']*($params['page']))>$elementCounter) || ($params['nb']<=0) || ($params['page']<=0) )
-            {
-                $params['nb'] = 10;
-                $params['page'] = 1;
-            }
-            if($params['nb'])
-                $type = $type->take($params['nb']);
-            if($params['page'])
-                $type = $type->skip($params['nb']*($params['page']-1));
-            $pageMax = ceil($elementCounter/$params['nb']);
             $type = $type->get();
 
             $data = [
                 'type' => "success",
                 'code' => 200,
-                'ressource' => [
-                    'total' => $elementCounter,
-                    'nb_per_page' => $params['nb'],
-                    'page' => $params['page'],
-                    'page_max' => $pageMax,
-                ],
                 'types' => $type
             ];
 

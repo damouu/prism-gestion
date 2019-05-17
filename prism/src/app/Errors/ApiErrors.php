@@ -36,4 +36,14 @@ class ApiErrors
         ];
         return $data;
     }
+    public static function ValidationError($error)
+    {
+        $data = [
+            'type' => 'error',
+            'code' => 405,
+            'message' => 'Une ou plusieurs validations n\'ont pas été respectées.',
+            'validation' => $error
+        ];
+        return $data;
+    }
 }

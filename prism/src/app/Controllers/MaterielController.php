@@ -3,6 +3,7 @@
 namespace PrismGestion\Controllers;
 
 use PrismGestion\Errors\ApiErrors;
+use PrismGestion\Models\Exemplaire;
 use PrismGestion\Models\Materiel;
 use PrismGestion\Models\Type;
 use PrismGestion\Utils\ResponseWriter;
@@ -14,46 +15,14 @@ class MaterielController extends Controller
 
     public function getAll(Request $request, Response $response, $args)
     {
-
-        $params = [
-            'nb' => intval($request->getQueryParam('nb',10)),
-            'page' => intval($request->getQueryParam('page',1)),
-            'types' => $request->getQueryParam('types',null),
-        ];
-
         try
         {
 
-            if(is_null($params['types']))
-            {
-                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','materiel.nb_ex','type','materiel.date_creation')
-                    ->join('type', 'materiel.type','=','type.id')
-                    ->with(['type' => function ($q) {
-                        $q->select('type.id','type.nom');
-                    }]);
-            }
-            else
-            {
-                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','materiel.nb_ex','type','materiel.date_creation')
-                    ->join('type', 'materiel.type','=','type.id')
-                    ->where('type.nom','=',$params['types'])
-                    ->with(['type' => function ($q) {
-                        $q->select('type.id','type.nom');
-                    }]);
-            }
-
-
-            $elementCounter = $materiel->get()->count();
-            if( (($params['nb']*($params['page']))>$elementCounter) || ($params['nb']<=0) || ($params['page']<=0) )
-            {
-                $params['nb'] = 10;
-                $params['page'] = 1;
-            }
-            if($params['nb'])
-                $materiel = $materiel->take($params['nb']);
-            if($params['page'])
-                $materiel = $materiel->skip($params['nb']*($params['page']-1));
-            $pageMax = ceil($elementCounter/$params['nb']);
+            $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','type','materiel.date_creation')
+                ->join('type', 'materiel.type','=','type.id')
+                ->with(['type' => function ($q) {
+                    $q->select('type.id','type.nom');
+                }]);
 
             $materiel = $materiel->get();
 
@@ -63,19 +32,15 @@ class MaterielController extends Controller
             }
             else
             {
+                foreach($materiel as $row){
+                    $row->nb_ex = Exemplaire::where('materiel','=',$row->id)->count();
+                }
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'ressource' => [
-                        'total' => $elementCounter,
-                        'nb_per_page' => $params['nb'],
-                        'page' => $params['page'],
-                        'page_max' => $pageMax,
-                    ],
-                    'materiels' => $materiel
+                    'materiels' => $materiel,
                 ];
             }
-
 
         }
         catch(\Exception $e)
@@ -101,6 +66,7 @@ class MaterielController extends Controller
                     $data = ApiErrors::NotFound($request->getUri());
                 }
                 else {
+                    $materiel->nb_ex = Exemplaire::where('materiel','=',$materiel->id)->count();
                     $data = [
                         'type' => "success",
                         'code' => 200,
@@ -167,6 +133,7 @@ class MaterielController extends Controller
         try
         {
             $materiel = Materiel::find($id);
+            $materiel->nb_ex = Exemplaire::where('materiel','=',$materiel->id)->count();
 
             if($materiel->nb_ex == 0)
             {
@@ -182,7 +149,7 @@ class MaterielController extends Controller
                 $data = [
                     'type' => 'error',
                     'code' => 403,
-                    'message' => 'Le matériel \'a pas été supprimé: Des exemplaires sont encore liés.'
+                    'message' => 'Le matériel n\'a pas été supprimé: Des exemplaires sont encore liés.'
                 ];
             }
         }
@@ -202,7 +169,7 @@ class MaterielController extends Controller
 
         $content = $request->getParsedBody();
 
-        if(!isset($content['constructeur']) || !isset($content['modele']) || !isset($content['description']) || !isset($content['nb_ex']) || !isset($content['type']))
+        if(!isset($content['constructeur']) || !isset($content['modele']) || !isset($content['type']))
         {
             $data = ApiErrors::BadRequest();
         }
@@ -211,10 +178,10 @@ class MaterielController extends Controller
             $materiel = new Materiel();
             $materiel->constructeur = $content['constructeur'];
             $materiel->modele = $content['modele'];
-            $materiel->description = $content['description'];
-            $materiel->nb_ex = $content['nb_ex'];
+            if(isset($content['description'])){
+                $materiel->description = $content['description'];
+            }
             $materiel->type = $content['type'];
-
             try
             {
                 $materiel->save();
@@ -243,7 +210,7 @@ class MaterielController extends Controller
 
         $materiel = Materiel::find($id);
 
-        if(!isset($content['constructeur']) || !isset($content['modele']) || !isset($content['description']) || !isset($content['nb_ex']) || !isset($content['type']))
+        if(!isset($content['constructeur']) || !isset($content['modele']) || !isset($content['description']) || !isset($content['type']))
         {
             $data = ApiErrors::BadRequest();
         }
@@ -254,17 +221,18 @@ class MaterielController extends Controller
             $materiel->constructeur = $content['constructeur'];
             $materiel->modele = $content['modele'];
             $materiel->description = $content['description'];
-            $materiel->nb_ex = $content['nb_ex'];
             $materiel->type = $content['type'];
 
             try {
                 $materiel->save();
-                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','materiel.nb_ex','type','materiel.date_creation')
+                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','type','materiel.date_creation')
                     ->join('type', 'materiel.type','=','type.id')
                     ->with(['type' => function ($q) {
                         $q->select('type.id','type.nom');
                     }])
                 ->find($id);
+
+                $materiel->nb_ex = Exemplaire::where('materiel','=',$materiel->id)->count();
 
                 $data = [
                     'type' => "success",
@@ -282,7 +250,6 @@ class MaterielController extends Controller
                 $materiel->constructeur = $content['constructeur'];
                 $materiel->modele = $content['modele'];
                 $materiel->description = $content['description'];
-                $materiel->nb_ex = $content['nb_ex'];
                 $materiel->type = $content['type'];
                 $materiel->save();
 
@@ -292,6 +259,8 @@ class MaterielController extends Controller
                         $q->select('type.id','type.nom');
                     }])
                 ->find($id);
+                    $materiel->nb_ex = Exemplaire::where('materiel','=',$materiel->id)->count();
+
 
                 $data = [
                     'type' => "success",
@@ -307,7 +276,7 @@ class MaterielController extends Controller
     }
 
 
-
+/*
     public function patch(Request $request, Response $response, $args)
     {
 
@@ -344,6 +313,6 @@ class MaterielController extends Controller
 
         return ResponseWriter::ResponseWriter($response, $data);
     }
-
+*/
 
 }
