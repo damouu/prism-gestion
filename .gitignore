@@ -106,18 +106,12 @@ local.properties
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 #composer.lock
 
-#nos vendors
-#backoffice/vendor/*
-#mobile/vendor/*
-#player/vendor/*
-
 vendor/
 \.idea/
 composer.lock
 .vscode/
 
-!app_mobile/app/vue-rx/dist/*
-!app_mobile/app/vuex/dist/*
+!apidoc/vendor
 
 node_modules
 /dist
