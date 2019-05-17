@@ -111,7 +111,7 @@ vendor/
 composer.lock
 .vscode/
 
-!apidoc/vendor
+!apidoc/vendor/*
 
 node_modules
 /dist
