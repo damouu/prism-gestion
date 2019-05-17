@@ -473,7 +473,7 @@ class ExemplaireController extends Controller
         }
         else {
             try{
-
+                $exemplaire->delete();
                 $exemplaire->save();
 
                 $data = [
