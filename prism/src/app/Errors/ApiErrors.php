@@ -41,7 +41,7 @@ class ApiErrors
         $data = [
             'type' => 'error',
             'code' => 405,
-            'message' => 'une ou plusieurs validations n\'ont pas été respectées.',
+            'message' => 'Une ou plusieurs validations n\'ont pas été respectées.',
             'validation' => $error
         ];
         return $data;

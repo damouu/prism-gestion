@@ -418,6 +418,48 @@ class ExemplaireController extends Controller
     }
 
 
+
+
+    /**
+     * @api {delete} /exemplaires/:id delete
+     * @apiGroup Exemplaires
+     * @apiName delete
+     * @apiVersion 0.1.0
+     *
+     * @apiParam {Number} id Identifiant primaire de l'exemplaire
+     * @apiDescription Supprime un exemplaire
+     *
+     * @apiSuccess {String} type Type de la réponse
+     * @apiSuccess {String} code Code de la réponse
+     * @apiSuccess {String} message Message réponse
+     *
+     * @apiSuccessExample Success-Response:
+     *      HTTP/1.1 200 OK
+     *      {
+     *           "type": "success",
+     *           "code": 200,
+     *           "message": "L'exemplaire :id a bien été supprimé."
+     *
+     *      }
+     *
+     * @apiError (500) InternalError Internal Server Error..
+     * @apiErrorExample Internal Error:
+     *      HTTP/1.1 500 Internal Error
+     *      {
+     *           "type": "error",
+     *           "code": 500,
+     *           "message": "Internal Server Error."
+     *      }
+     *
+     * @apiError NotFound Ressource non trouvée.
+     * @apiErrorExample Not Found:
+     *      HTTP/1.1 404 Not Found
+     *      {
+     *           "type": "error",
+     *           "code": 404,
+     *           "message": "Ressource non trouvée."
+     *      }
+     */
     public function delete(Request $request, Response $response, $args)
     {
 
@@ -431,14 +473,8 @@ class ExemplaireController extends Controller
         }
         else {
             try{
-                $exem = Exemplaire::find($id);
-                $mat = Materiel::find($exem->materiel);
 
-                DB::transaction( function () use ($exem,$mat) {
-                    $exem->delete();
-                    $mat->nb_ex = Exemplaire::where('materiel','=',$exem->materiel)->count();
-                    $mat->save();
-                });
+                $exemplaire->save();
 
                 $data = [
                     'type' => "success",
@@ -452,12 +488,82 @@ class ExemplaireController extends Controller
             }
         }
 
-
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
 
 
+    /**
+     * @api {post} /exemplaires post
+     * @apiGroup Exemplaires
+     * @apiName post
+     * @apiVersion 0.1.0
+     *
+     * @apiDescription Crée un nouvel exemplaire avec les informations fournies
+     *
+     * @apiParam {Number} materiel Identifiant primaire d'un matériel
+     * @apiParam {String} reference Référence UL de l'exemplaire
+     * @apiParam {String} etat Etat de l'exemplaire
+     * @apiParam {Number} fournisseur Identifiant primaire d'un fournisseur
+     * @apiParam {Number} prix_ttc Prix Toutes Taxes Comprises de l'exemplaire
+     * @apiParam {Number} prix_ht Prix Hors Taxes de l'exemplaire
+     * @apiParam {String} num_serie Numéro de série constructeur
+     * @apiParam {String} financement Financement de l'exemplaire
+     * @apiParam {String} bon_commande Numéro de bon de commande de l'exemplaire
+     * @apiParam {Date} date_achat Date d'achat de l'exemplaire
+     * @apiParam {String} stockage Lieu de stockage de l'exemplaire
+     * @apiParam (optional) {String} url Url de référence de l'exemplaire
+     * @apiParam (optional) {String} immobilisation Numéro de fiche d'immobilisation
+     *
+     * @apiSuccess {String} type Type de la réponse
+     * @apiSuccess {String} code Code de la réponse
+     * @apiSuccess {String} Message de réussite
+     *
+     * @apiSuccessExample Success-Response:
+     *      HTTP/1.1 200 OK
+     *      {
+     *           "type": "success",
+     *           "code": 200,
+     *           "exemplaire": "reussi"
+     *      }
+     *
+     * @apiError BadRequest La méthode n'est pas correctement utilisée.
+     * @apiErrorExample Bad Request:
+     *      HTTP/1.1 405 Bad Request
+     *      {
+     *           "type": "error",
+     *           "code": 405,
+     *           "message": "La méthode n'est pas correctement utilisée."
+     *      }
+     *
+     * @apiError ValidationError Une ou plusieurs validations n'ont pas été respectées.
+     * @apiErrorExample Bad Request:
+     *      HTTP/1.1 405 Bad Request
+     *      {
+     *           "type": "error",
+     *           "code": 405,
+     *           "message": "Une ou plusieurs validations n'ont pas été respectées."
+     *           "validation": "erreurs à afficher"
+     *      }
+     *
+     * @apiError NotFound Ressource non trouvée.
+     * @apiErrorExample Not Found:
+     *      HTTP/1.1 404 Not Found
+     *      {
+     *           "type": "error",
+     *           "code": 404,
+     *           "message": "Ressource non trouvée."
+     *      }
+     *
+     * @apiError (500) InternalError Internal Server Error..
+     * @apiErrorExample Internal Error:
+     *      HTTP/1.1 500 Internal Error
+     *      {
+     *           "type": "error",
+     *           "code": 500,
+     *           "message": "Internal Server Error."
+     *      }
+     */
     public function post(Request $request, Response $response, $args)
     {
 
@@ -510,6 +616,7 @@ class ExemplaireController extends Controller
             $postValeur->num_serie = trim($content['num_serie']);
             $postValeur->financement = trim($content['financement']);
             $postValeur->bon_commande = trim($content['bon_commande']);
+
             if(isset($content["immobilisation"])){
                 $postValeur->immobilisation = trim($content['immobilisation']);
             }
@@ -586,7 +693,89 @@ class ExemplaireController extends Controller
     }
 
 
-
+    /**
+     * @api {put} /exemplaires/:id put
+     * @apiGroup Exemplaires
+     * @apiName put
+     * @apiVersion 0.1.0
+     *
+     * @apiDescription Modifie ou crée un exemplaire avec les informations fournies
+     *
+     * @apiParam {Number} materiel Identifiant primaire d'un matériel
+     * @apiParam {String} reference Référence UL de l'exemplaire
+     * @apiParam {String} etat Etat de l'exemplaire
+     * @apiParam {Number} fournisseur Identifiant primaire d'un fournisseur
+     * @apiParam {Number} prix_ttc Prix Toutes Taxes Comprises de l'exemplaire
+     * @apiParam {Number} prix_ht Prix Hors Taxes de l'exemplaire
+     * @apiParam {String} num_serie Numéro de série constructeur
+     * @apiParam {String} financement Financement de l'exemplaire
+     * @apiParam {String} bon_commande Numéro de bon de commande de l'exemplaire
+     * @apiParam {Date} date_achat Date d'achat de l'exemplaire
+     * @apiParam {String} stockage Lieu de stockage de l'exemplaire
+     * @apiParam (optional) {String} url Url de référence de l'exemplaire
+     * @apiParam (optional) {String} immobilisation Numéro de fiche d'immobilisation
+     *
+     * @apiSuccess (201) {String} type Type de la réponse
+     * @apiSuccess (201) {String} code Code de la réponse
+     * @apiSuccess (201) {String} Message de réussite
+     *
+     * @apiSuccessExample SuccessAdd-Response:
+     *      HTTP/1.1 201 CREATED
+     *      {
+     *           "type": "success",
+     *           "code": 201,
+     *           "exemplaire": "reussi"
+     *      }
+     *
+     * @apiSuccess {String} type Type de la réponse
+     * @apiSuccess {String} code Code de la réponse
+     * @apiSuccess {String} Message de réussite
+     *
+     * @apiSuccessExample SuccessEdit-Response:
+     *      HTTP/1.1 200 OK
+     *      {
+     *           "type": "success",
+     *           "code": 200,
+     *           "exemplaire": "reussi"
+     *      }
+     *
+     * @apiError BadRequest La méthode n'est pas correctement utilisée.
+     * @apiErrorExample Bad Request:
+     *      HTTP/1.1 405 Bad Request
+     *      {
+     *           "type": "error",
+     *           "code": 405,
+     *           "message": "La méthode n'est pas correctement utilisée."
+     *      }
+     *
+     * @apiError ValidationError Une ou plusieurs validations n'ont pas été respectées.
+     * @apiErrorExample Bad Request:
+     *      HTTP/1.1 405 Bad Request
+     *      {
+     *           "type": "error",
+     *           "code": 405,
+     *           "message": "Une ou plusieurs validations n'ont pas été respectées."
+     *           "validation": "erreurs à afficher"
+     *      }
+     *
+     * @apiError NotFound Ressource non trouvée.
+     * @apiErrorExample Not Found:
+     *      HTTP/1.1 404 Not Found
+     *      {
+     *           "type": "error",
+     *           "code": 404,
+     *           "message": "Ressource non trouvée."
+     *      }
+     *
+     * @apiError (500) InternalError Internal Server Error..
+     * @apiErrorExample Internal Error:
+     *      HTTP/1.1 500 Internal Error
+     *      {
+     *           "type": "error",
+     *           "code": 500,
+     *           "message": "Internal Server Error."
+     *      }
+     */
     public function put(Request $request, Response $response, $args)
     {
 
@@ -776,7 +965,7 @@ class ExemplaireController extends Controller
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'exemplaire' => $exemplaire
+                    'exemplaire' => 'reussi'
                 ];
             }
             catch(NestedValidationException $e)
@@ -794,7 +983,44 @@ class ExemplaireController extends Controller
 
 
 
-
+    /**
+     * @api {patch} /exemplaires/:id patch
+     * @apiGroup Exemplaires
+     * @apiName patch
+     * @apiVersion 0.1.0
+     *
+     * @apiDescription Remet en service un exemplaire supprimé grace au parametre ?select=reforme
+     *
+     * @apiSuccess {String} type Type de la réponse
+     * @apiSuccess {String} code Code de la réponse
+     * @apiSuccess {String} Message de réussite
+     *
+     * @apiSuccessExample Success-Response:
+     *      HTTP/1.1 200 OK
+     *      {
+     *           "type": "success",
+     *           "code": 200,
+     *           "exemplaire": "reussi"
+     *      }
+     *
+     * @apiError BadRequest La méthode n'est pas correctement utilisée.
+     * @apiErrorExample Bad Request:
+     *      HTTP/1.1 405 Bad Request
+     *      {
+     *           "type": "error",
+     *           "code": 405,
+     *           "message": "La méthode n'est pas correctement utilisée."
+     *      }
+     *
+     * @apiError NotFound Ressource non trouvée.
+     * @apiErrorExample Not Found:
+     *      HTTP/1.1 404 Not Found
+     *      {
+     *           "type": "error",
+     *           "code": 404,
+     *           "message": "Ressource non trouvée."
+     *      }
+     */
     public function patch(Request $request, Response $response, $args)
     {
 
@@ -817,24 +1043,24 @@ class ExemplaireController extends Controller
                         $data = ApiErrors::NotFound($request->getUri());
                     } else {
 
-                        DB::transaction(function () use ($exemplaire, $materiel, $type) {
-                            $exemplaire->date_sortie = null;
-                            if(!empty($materiel->date_suppression)){
-                                $materiel->date_suppression = null;
-                                $materiel->save();
-                            }
-                            if(!empty($type->date_suppression)){
-                                $type->date_suppression = null;
-                                $type->save();
-                            }
-                            $exemplaire->save();
-                        });
+                            DB::transaction(function () use ($exemplaire, $materiel, $type) {
+                                $exemplaire->date_sortie = null;
+                                if(!empty($materiel->date_suppression)){
+                                    $materiel->date_suppression = null;
+                                    $materiel->save();
+                                }
+                                if(!empty($type->date_suppression)){
+                                    $type->date_suppression = null;
+                                    $type->save();
+                                }
+                                $exemplaire->save();
+                            });
 
-                        $data = [
-                            'type' => "success",
-                            'code' => 200,
-                            'exemplaire' => $exemplaire
-                        ];
+                            $data = [
+                                'type' => "success",
+                                'code' => 200,
+                                'exemplaire' => "reussi"
+                            ];
                     }
                 }
                 else
@@ -844,7 +1070,6 @@ class ExemplaireController extends Controller
             } catch (\Exception $e) {
                 $data = ApiErrors::NotFound($request->getUri());
             }
-
         }
         else
         {
