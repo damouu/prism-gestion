@@ -2,7 +2,21 @@
     <div id="reformes">
         <div>
 
-            <b-container fluid class="mt-5">
+            <b-container>
+                <b-alert
+                        :show="dismissCountDown"
+                        variant="danger"
+                        dismissible
+                        @dismissed="dismissCountDown=0"
+                        @dismiss-count-down="countDownChanged"
+                >
+
+                    <p class="text-center">{{ alert.status }} {{ alert.error }}: {{ alert.message }}</p>
+                    <p class="text-right">Cette alerte se fermera dans {{ dismissCountDown }} secondes.</p>
+                </b-alert>
+            </b-container>
+
+            <b-container fluid class="mt-5 ">
 
                 <b-row class="mr-5 ml-5">
 
@@ -79,6 +93,9 @@
                 currentPage: 1,
                 perPage: 10,
 
+                dismissCountDown:0,
+                dismissSecs:10,
+                alert: {'show':false,'showMateriel':false},
             }
         },
         computed: {
@@ -106,7 +123,8 @@
                         this.fillTable();
                     })
                     .catch( error => {
-                        console.log(error.response);
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+
                     })
             },
 
@@ -117,7 +135,17 @@
                     reforme.type = reforme.materiel.type.nom;
                     this.fillReformes.push(reforme);
                 });
-            }
+            },
+
+            countDownChanged(dismissCountDown) {
+                this.dismissCountDown = dismissCountDown;
+            },
+            showAlert(error, status, message) {
+                this.alert.error = error;
+                this.alert.status = status;
+                this.alert.message = message;
+                this.dismissCountDown = this.dismissSecs;
+            },
 
 
         }

@@ -183,6 +183,10 @@
                 this.getFournisseur();
             });
 
+            eventBus.$on('error', data => {
+                this.showAlert(data.error, data.status, data.message);
+            });
+
         },
         methods: {
 
@@ -207,7 +211,7 @@
                         this.fournisseur = response.data.fournisseur;
                     })
                     .catch( error => {
-                        console.log(error.response);
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     })
             },
 
