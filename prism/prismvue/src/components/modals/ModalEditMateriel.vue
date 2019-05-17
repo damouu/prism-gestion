@@ -101,7 +101,7 @@
         methods: {
 
             validateState(ref) {
-                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                if (this.veeFields[ref]&&(this.veeFields[ref].dirty||this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
@@ -149,7 +149,11 @@
                                 this.materielTypeModif = [];
                             })
                             .catch( error => {
-                                console.log(error.response);
+                                eventBus.$emit('error', {
+                                    'error': error.response.statusText,
+                                    'status': error.response.status,
+                                    'message': error.response.data.message
+                                });
                             });
                     }
                 })

@@ -62,7 +62,11 @@
                             this.$nextTick(() => {
                                 this.$refs.modal7.hide();
                             });
-                            eventBus.$emit('deleteError', {'error':error.response.statusText, 'status': error.response.status, 'message': error.response.data.message});
+                        eventBus.$emit('error', {
+                            'error': error.response.statusText,
+                            'status': error.response.status,
+                            'message': error.response.data.message
+                        });
                     })
             }
         }

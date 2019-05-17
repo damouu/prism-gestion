@@ -578,8 +578,8 @@ class ExemplaireController extends Controller
         $postValidatePrixHt = v::notOptional()->floatType();
         $postValidatePrixTtc = v::notOptional()->floatType();
         $postValidateNumSerie = v::notOptional()->StringType()->length(1,128);
-        $postValidateFinancement = v::notOptional()->StringType()->length(1,128);
-        $postValidateBonCommande = v::notOptional()->StringType()->length(1,128);
+        $postValidateFinancement = v::Optional(v::StringType()->length(1,128));
+        $postValidateBonCommande = v::Optional(v::StringType()->length(1,128));
         $postValidateImmobilisation = v::Optional(v::StringType()->length(1,128));
         $postValidateUrl = v::Optional(v::url());
         $postValidateDateAchat = v::date('Y-m-d');
@@ -593,8 +593,6 @@ class ExemplaireController extends Controller
             || !isset($content['prix_ht'])
             || !isset($content['prix_ttc'])
             || !isset($content['num_serie'])
-            || !isset($content['financement'])
-            || !isset($content['bon_commande'])
             || !isset($content['date_achat'])
             || !isset($content['stockage'])
         )
@@ -614,9 +612,20 @@ class ExemplaireController extends Controller
             $postValeur->prix_ht = $content['prix_ht'];
             $postValeur->prix_ttc = $content['prix_ttc'];
             $postValeur->num_serie = trim($content['num_serie']);
-            $postValeur->financement = trim($content['financement']);
-            $postValeur->bon_commande = trim($content['bon_commande']);
-
+            if(isset($content["financement"])){
+                $postValeur->financement = trim($content['financement']);
+            }
+            else
+            {
+                $postValeur->financement = null;
+            }
+            if(isset($content["bon_commande"])){
+                $postValeur->bon_commande = trim($content['bon_commande']);
+            }
+            else
+            {
+                $postValeur->financement = null;
+            }
             if(isset($content["immobilisation"])){
                 $postValeur->immobilisation = trim($content['immobilisation']);
             }
@@ -791,8 +800,8 @@ class ExemplaireController extends Controller
         $putValidatePrixHt = v::notOptional()->floatType();
         $putValidatePrixTtc = v::notOptional()->floatType();
         $putValidateNumSerie = v::notOptional()->StringType()->length(1,128);
-        $putValidateFinancement = v::notOptional()->StringType()->length(1,128);
-        $putValidateBonCommande = v::notOptional()->StringType()->length(1,128);
+        $putValidateFinancement = v::Optional(v::StringType()->length(1,128));
+        $putValidateBonCommande = v::Optional(v::StringType()->length(1,128));
         $putValidateImmobilisation = v::Optional(v::StringType()->length(1,128));
         $putValidateUrl = v::Optional(v::url());
         $putValidateDateAchat = v::date('Y-m-d');
@@ -807,8 +816,6 @@ class ExemplaireController extends Controller
             || !isset($content['prix_ht'])
             || !isset($content['prix_ttc'])
             || !isset($content['num_serie'])
-            || !isset($content['financement'])
-            || !isset($content['bon_commande'])
             || !isset($content['stockage'])
             || !isset($content['date_achat'])
         )
@@ -826,8 +833,20 @@ class ExemplaireController extends Controller
             $putValeur->prix_ht = $content['prix_ht'];
             $putValeur->prix_ttc = $content['prix_ttc'];
             $putValeur->num_serie = trim($content['num_serie']);
-            $putValeur->financement = trim($content['financement']);
-            $putValeur->bon_commande = trim($content['bon_commande']);
+            if(isset($content["bon_commande"])){
+                $putValeur->bon_commande = trim($content['bon_commande']);
+            }
+            else
+            {
+                $putValeur->bon_commande = null;
+            }
+            if(isset($content["financement"])){
+                $putValeur->financement = trim($content['financement']);
+            }
+            else
+            {
+                $putValeur->financement = null;
+            }
             if(isset($content["immobilisation"])){
                 $putValeur->immobilisation = trim($content['immobilisation']);
             }
@@ -914,8 +933,20 @@ class ExemplaireController extends Controller
             $putValeur->prix_ht = $content['prix_ht'];
             $putValeur->prix_ttc = $content['prix_ttc'];
             $putValeur->num_serie = trim($content['num_serie']);
-            $putValeur->financement = trim($content['financement']);
-            $putValeur->bon_commande = trim($content['bon_commande']);
+            if(isset($content["bon_commande"])){
+                $putValeur->bon_commande = trim($content['bon_commande']);
+            }
+            else
+            {
+                $putValeur->bon_commande = null;
+            }
+            if(isset($content["financement"])){
+                $putValeur->financement = trim($content['financement']);
+            }
+            else
+            {
+                $putValeur->financement = null;
+            }
             if(isset($content["immobilisation"])){
                 $putValeur->immobilisation = trim($content['immobilisation']);
             }

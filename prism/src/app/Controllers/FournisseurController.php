@@ -4,7 +4,6 @@ namespace PrismGestion\Controllers;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use PrismGestion\Errors\ApiErrors;
-use PrismGestion\Models\Exemplaire;
 use PrismGestion\Models\Fournisseur;
 use PrismGestion\Utils\ResponseWriter;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -207,31 +206,4 @@ class FournisseurController extends Controller
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
-    /*
-    public function delete(Request $request, Response $response, $args)
-    {
-        $id = intval($args['id']);
-
-        try
-        {
-            $fournisseur = Fournisseur::find($id);
-
-            $fournisseur->delete();
-            $data = [
-                'type' => "success",
-                'code' => 200,
-                'message' => 'le matériel '. $fournisseur->id . ' a bien été supprimé.'
-            ];
-
-
-        }
-        catch(\Exception$e)
-        {
-            $data = ApiErrors::NotFound($request->getUri());
-        }
-
-
-        return ResponseWriter::ResponseWriter($response, $data);
-    }
-    */
 }

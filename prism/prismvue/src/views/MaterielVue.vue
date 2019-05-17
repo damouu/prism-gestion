@@ -167,9 +167,9 @@
             eventBus.$on('deletedMateriel', data => {
                 this.backInventaire();
             });
-            eventBus.$on('deleteError', data => {
+            eventBus.$on('error',data => {
                 this.showAlert(data.error, data.status, data.message);
-            });
+            })
 
         },
         methods : {
@@ -181,7 +181,7 @@
                         this.materielType = { 'value': response.data.materiel.type.id, 'text': response.data.materiel.type.nom };
                     })
                     .catch( error => {
-                        console.log(error)
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     });
             },
 
@@ -193,7 +193,7 @@
                         }
                     })
                     .catch( error => {
-                        console.log(error)
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     });
             },
 

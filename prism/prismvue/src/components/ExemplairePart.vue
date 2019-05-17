@@ -254,7 +254,11 @@
                         }
                     })
                     .catch( error => {
-                        console.log(error);
+                        eventBus.$emit('error', {
+                            'error': error.response.statusText,
+                            'status': error.response.status,
+                            'message': error.response.data.message
+                        });
                     })
             },
             getFournisseurs() {
@@ -265,7 +269,11 @@
                         }
                     })
                     .catch( error => {
-                        console.log(error);
+                        eventBus.$emit('error', {
+                            'error': error.response.statusText,
+                            'status': error.response.status,
+                            'message': error.response.data.message
+                        });
                     });
             },
 
@@ -283,7 +291,11 @@
                         this.selectedFournisseur = response.data.exemplaire.fournisseur;
                     })
                     .catch( error => {
-                        console.log(error);
+                        eventBus.$emit('error', {
+                            'error': error.response.statusText,
+                            'status': error.response.status,
+                            'message': error.response.data.message
+                        });
                     });
             },
 

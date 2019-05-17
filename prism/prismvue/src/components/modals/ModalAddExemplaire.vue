@@ -136,12 +136,12 @@
                     <b-form-invalid-feedback id="invalidFournisseur">Vous devez choisir un fournisseur.</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Financement *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireFinancement">
+                <b-form-group label="Financement" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireFinancement">
                     <b-form-input
                             id="addExemplaireFinancement"
                             data-vv-name="addExFinancement"
                             v-model="postExemplaire.financement"
-                            v-validate="{required:true}"
+                            v-validate="{required:false}"
                             :state="validateState('addExFinancement')"
                             aria-describedby="invalidFinancement"
                             placeholder="Nom du financeur"
@@ -149,12 +149,12 @@
                     </b-form-input>
                     <b-form-invalid-feedback id="invalidFinancement">Vous devez entrer un nom de financement</b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Bon de commande *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireCommande">
+                <b-form-group label="Bon de commande" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireCommande">
                     <b-form-input
                             id="addExemplaireCommande"
                             data-vv-name="addExCommande"
                             v-model="postExemplaire.bon_commande"
-                            v-validate="{required:true}"
+                            v-validate="{required:false}"
                             :state="validateState('addExCommande')"
                             aria-describedby="invalidCommande"
                             placeholder="Numéro de commande"
@@ -162,12 +162,12 @@
                     </b-form-input>
                     <b-form-invalid-feedback id="invalidCommande">Vous devez entrer un numéro de commande</b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Immobilisation *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireImmobilisation">
+                <b-form-group label="Immobilisation" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireImmobilisation">
                     <b-form-input
                             id="addExemplaireImmobilisation"
                             data-vv-name="addExImmobilisation"
                             v-model="postExemplaire.immobilisation"
-                            v-validate="{required:true}"
+                            v-validate="{required:false}"
                             :state="validateState('addExImmobilisation')"
                             aria-describedby="invalidImmobilisation"
                             placeholder="Numéro d'immobilisation"
@@ -203,6 +203,7 @@
         },
         mounted() {
 
+            // evenement
             eventBus.$on('addExemplaire', data => {
                 this.materielId = data.materielId;
                 this.fournisseurs = data.fournisseurs;
@@ -211,6 +212,7 @@
         },
         methods: {
 
+            //validation client
             validateState(ref) {
                 if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);

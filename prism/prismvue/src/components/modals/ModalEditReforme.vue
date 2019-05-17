@@ -30,7 +30,6 @@
         mounted() {
             eventBus.$on('editReforme', data => {
                 this.reforme = data.reforme;
-                console.log(this.reforme);
             });
 
         },
@@ -60,7 +59,11 @@
                     eventBus.$emit('editedReforme');
                 })
                 .catch( error => {
-                    console.log(error.response)
+                    eventBus.$emit('error', {
+                        'error': error.response.statusText,
+                        'status': error.response.status,
+                        'message': error.response.data.message
+                    });
                 })
             }
 

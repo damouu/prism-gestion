@@ -143,7 +143,7 @@
                 this.materiels = [];
                 this.getAll();
             });
-            eventBus.$on('deleteError', data => {
+            eventBus.$on('error', data => {
                 this.showAlert(data.error, data.status, data.message);
             });
             eventBus.$on('deleteSuccessCategorie', data => {
@@ -159,7 +159,7 @@
                         this.fillTable();
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     });
             },
 
@@ -169,7 +169,7 @@
                         this.types = response.data.types;
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     });
             },
 

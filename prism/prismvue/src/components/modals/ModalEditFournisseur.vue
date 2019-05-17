@@ -238,7 +238,11 @@
                                 eventBus.$emit('editedFournisseur');
                             })
                             .catch(error => {
-                                console.log(error.response);
+                                eventBus.$emit('error', {
+                                    'error': error.response.statusText,
+                                    'status': error.response.status,
+                                    'message': error.response.data.message
+                                });
                             });
                     }
                 });

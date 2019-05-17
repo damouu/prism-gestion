@@ -89,7 +89,7 @@
                                 this.$nextTick(() => {
                                     this.$refs.modal8.hide();
                                 });
-                                eventBus.$emit('deleteError', {
+                                eventBus.$emit('error', {
                                     'error': error.response.statusText,
                                     'status': error.response.status,
                                     'message': error.response.data.message
@@ -108,7 +108,11 @@
                         }
                     })
                     .catch( error => {
-                        console.log(error)
+                        eventBus.$emit('error', {
+                            'error': error.response.statusText,
+                            'status': error.response.status,
+                            'message': error.response.data.message
+                        });
                     });
             },
 
