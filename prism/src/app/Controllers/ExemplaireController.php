@@ -605,12 +605,12 @@ class ExemplaireController extends Controller
         }else{
 
             $postValeur = new stdClass;
-            $postValeur->materiel = $content['materiel'];
+            $postValeur->materiel = (int)$content['materiel'];
             $postValeur->reference = $content['reference'];
             $postValeur->etat = trim($content['etat']);
             $postValeur->fournisseur = $content['fournisseur'];
-            $postValeur->prix_ht = $content['prix_ht'];
-            $postValeur->prix_ttc = $content['prix_ttc'];
+            $postValeur->prix_ht = (float)$content['prix_ht'];
+            $postValeur->prix_ttc = (float)$content['prix_ttc'];
             $postValeur->num_serie = trim($content['num_serie']);
             if(isset($content["financement"])){
                 $postValeur->financement = trim($content['financement']);
@@ -624,7 +624,7 @@ class ExemplaireController extends Controller
             }
             else
             {
-                $postValeur->financement = null;
+                $postValeur->bon_commande = null;
             }
             if(isset($content["immobilisation"])){
                 $postValeur->immobilisation = trim($content['immobilisation']);
@@ -926,12 +926,12 @@ class ExemplaireController extends Controller
         else
         {
             $putValeur = new stdClass;
-            $putValeur->materiel = $content['materiel'];
+            $putValeur->materiel = (int)$content['materiel'];
             $putValeur->reference = $content['reference'];
             $putValeur->etat = trim($content['etat']);
             $putValeur->fournisseur = $content['fournisseur'];
-            $putValeur->prix_ht = $content['prix_ht'];
-            $putValeur->prix_ttc = $content['prix_ttc'];
+            $putValeur->prix_ht = (float)$content['prix_ht'];
+            $putValeur->prix_ttc = (float)$content['prix_ttc'];
             $putValeur->num_serie = trim($content['num_serie']);
             if(isset($content["bon_commande"])){
                 $putValeur->bon_commande = trim($content['bon_commande']);
