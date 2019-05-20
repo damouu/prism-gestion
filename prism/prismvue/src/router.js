@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/HomeVue'
 import Inventaire from './views/InventaireVue'
+import Reservation from './views/ReservationVue'
 import Materiel from './views/MaterielVue'
 import Fournisseur from './views/FournisseurVue'
 import Fournisseurs from './views/FournisseursVue.vue'
@@ -45,7 +46,11 @@ export default new Router({
       path: '/inventaire/reforme/:id',
       name: 'reforme',
       component: Reforme,
-
+    },
+    {
+      path: '/reservation',
+      name: 'reservation',
+      component: Reservation,
     }
   ]
 })

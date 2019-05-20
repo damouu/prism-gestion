@@ -39,6 +39,15 @@ $container['TypeController'] = function ($container) {
 $container['FournisseurController'] = function ($container) {
     return new \PrismGestion\Controllers\FournisseurController($container);
 };
+$container['DepartementController'] = function ($container) {
+    return new \PrismGestion\Controllers\DepartementController($container);
+};
+$container['EtudiantController'] = function ($container) {
+    return new \PrismGestion\Controllers\EtudiantController($container);
+};
+$container['ProfesseurController'] = function ($container) {
+    return new \PrismGestion\Controllers\ProfesseurController($container);
+};
 
 
 
