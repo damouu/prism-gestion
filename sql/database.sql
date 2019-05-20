@@ -115,6 +115,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
     `date_retour` timestamp NOT NULL,
     `observation` TEXT DEFAULT NULL,
     `created_at` date NOT NULL,
+    `updated_at` date DEFAULT NULL,
     `deleted_at` date DEFAULT NULL,
     FOREIGN KEY (`departement`) REFERENCES `departement`(`id`),
     FOREIGN KEY (`responsable_projet`) REFERENCES `professeur`(`id`),

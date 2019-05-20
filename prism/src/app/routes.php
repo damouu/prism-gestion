@@ -28,6 +28,8 @@ $app->get('/etudiants[/]', 'EtudiantController:getAll');
 $app->post('/etudiants[/]', 'EtudiantController:post');
 $app->get('/professeurs[/]', 'ProfesseurController:getAll');
 $app->post('/professeurs[/]', 'ProfesseurController:post');
+$app->get('/reservations[/]','ReservationController:getAll');
+$app->post('/reservations[/]','ReservationController:post');
 
 
 

@@ -48,6 +48,9 @@ $container['EtudiantController'] = function ($container) {
 $container['ProfesseurController'] = function ($container) {
     return new \PrismGestion\Controllers\ProfesseurController($container);
 };
+$container['ReservationController'] = function ($container) {
+    return new \PrismGestion\Controllers\ReservationController($container);
+};
 
 
 
@@ -56,9 +59,6 @@ $container['HomeController'] = function ($container) {
 };
 $container['AgendaController'] = function ($container) {
     return new \PrismGestion\Controllers\AgendaController($container);
-};
-$container['ReservationController'] = function ($container) {
-    return new \PrismGestion\Controllers\ReservationController($container);
 };
 
 

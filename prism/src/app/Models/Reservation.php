@@ -11,6 +11,9 @@ class Reservation extends Model
 
     use SoftDeletes;
     protected $table = 'reservation';
+    public $timestamps = true;
+    protected $dateFormat = 'Y-m-d';
+    protected $primaryKey = 'id';
 
 
 
@@ -29,10 +32,6 @@ class Reservation extends Model
         return $this->hasMany('PrimsGestion\Models\Departement', 'id');
     }
 
-    public function resa()
-    {
-        return $this->belongsTo('PrismGestion\Models\Resa', 'id');
-    }
 
 
 

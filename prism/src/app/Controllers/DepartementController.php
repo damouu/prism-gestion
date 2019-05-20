@@ -27,7 +27,7 @@ class DepartementController extends Controller {
     }
 
 
-    public function getOne(Request $request, REsponse $response, $args) {
+    public function getOne(Request $request, Response $response, $args) {
         $id = intval($args['id']);
         if(is_int($id))
         {
