@@ -2,7 +2,21 @@
     <div id="fournisseurs">
         <div>
 
-            <b-container fluid class="mt-5">
+            <b-container>
+                <b-alert
+                        :show="dismissCountDown"
+                        variant="danger"
+                        dismissible
+                        @dismissed="dismissCountDown=0"
+                        @dismiss-count-down="countDownChanged"
+                >
+
+                    <p class="text-center">{{ alert.status }} {{ alert.error }}: {{ alert.message }}</p>
+                    <p class="text-right">Cette alerte se fermera dans {{ dismissCountDown }} secondes.</p>
+                </b-alert>
+            </b-container>
+
+            <b-container fluid class="mt-5 ">
 
                 <b-row class="mr-5 ml-5">
 
@@ -88,6 +102,10 @@
                 currentPage: 1,
                 perPage: 10,
 
+                alert: {'show':false,'showMateriel':false},
+                dismissCountDown:0,
+                dismissSecs:10,
+
             }
         },
         computed: {
@@ -101,6 +119,10 @@
             eventBus.$on('addedFournisseur', data => {
                 this.fournisseurs = [];
                 this.getFournisseurs();
+            });
+
+            eventBus.$on('error', data => {
+                this.showAlert(data.error, data.status, data.message);
             });
         },
         methods : {
@@ -128,7 +150,17 @@
                 listeFournisseurs.forEach(fournisseur => {
                    this.fillFournisseurs.push(fournisseur);
                 });
-            }
+            },
+
+            countDownChanged(dismissCountDown) {
+                this.dismissCountDown = dismissCountDown;
+            },
+            showAlert(error, status, message) {
+                this.alert.error = error;
+                this.alert.status = status;
+                this.alert.message = message;
+                this.dismissCountDown = this.dismissSecs;
+            },
 
 
         }

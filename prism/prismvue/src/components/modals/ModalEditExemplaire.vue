@@ -30,10 +30,10 @@
                             data-vv-name="modExHt"
                             v-model="modExemplaire.prix_ht"
                             v-validate="{required:true, decimal:2}"
-                            :state="validateState('modExPrixHt')"
+                            :state="validateState('modExHt')"
                             aria-describedby="invalidHt"
                             placeholder="Prix d'achat HT de l'exemplaire (en euros)"
-                            type="text" required>
+                            type="number" step="any" required>
                     </b-form-input>
                     <b-form-invalid-feedback id="invalidHt">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
                 </b-form-group>
@@ -47,7 +47,7 @@
                             :state="validateState('modExTtc')"
                             aria-describedby="invalidTtc"
                             placeholder="Prix d'achat TTC de l'exemplaire (en euros)"
-                            type="text" required>
+                            type="number" step="any" required>
                     </b-form-input>
                     <b-form-invalid-feedback id="invalidTtc">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
                 </b-form-group>
@@ -135,12 +135,12 @@
                     <b-form-invalid-feedback id="invalidModFournisseur">Vous devez choisir un fournisseur.</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Financement *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireFinancement">
+                <b-form-group label="Financement" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireFinancement">
                     <b-form-input
                             id="modExemplaireFinancement"
                             data-vv-name="modExFinancement"
                             v-model="modExemplaire.financement"
-                            v-validate="{required:true}"
+                            v-validate="{required:false}"
                             :state="validateState('modExFinancement')"
                             aria-describedby="invalidFinancement"
                             placeholder="Nom du financeur"
@@ -148,12 +148,12 @@
                     </b-form-input>
                     <b-form-invalid-feedback id="invalidFinancement">Vous devez entrer un nom de financement</b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Bon de commande *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireCommande">
+                <b-form-group label="Bon de commande" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireCommande">
                     <b-form-input
                             id="modExemplaireCommande"
                             data-vv-name="modExCommande"
                             v-model="modExemplaire.bon_commande"
-                            v-validate="{required:true}"
+                            v-validate="{required:false}"
                             :state="validateState('modExCommande')"
                             aria-describedby="invalidCommande"
                             placeholder="Numéro de commande"
@@ -162,12 +162,12 @@
                     <b-form-invalid-feedback id="invalidCommande">Vous devez entrer un numéro de commande</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Immobilisation *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireImmobilisation">
+                <b-form-group label="Immobilisation" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireImmobilisation">
                     <b-form-input
                             id="modExemplaireImmobilisation"
                             data-vv-name="modExImmobilisation"
                             v-model="modExemplaire.immobilisation"
-                            v-validate="{required:true}"
+                            v-validate="{required:false}"
                             :state="validateState('modExImmobilisation')"
                             aria-describedby="invalidImmobilisation"
                             placeholder="Numéro d'immobilisation"
@@ -208,9 +208,9 @@
         },
         mounted() {
             eventBus.$on('editExemplaire', data => {
-                this.fournisseurs = data.fournisseurs;
-                this.modExemplaire = data.exemplaire;
-                this.modExemplaireFournisseur = data.fournisseurExemplaire.value;
+                this.fournisseurs = JSON.parse(JSON.stringify(data.fournisseurs));
+                this.modExemplaire = JSON.parse(JSON.stringify(data.exemplaire));
+                this.modExemplaireFournisseur = JSON.parse(JSON.stringify(data.fournisseurExemplaire.value));
             });
 
         },

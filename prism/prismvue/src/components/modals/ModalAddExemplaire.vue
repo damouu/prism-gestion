@@ -30,10 +30,10 @@
                             data-vv-name="addExHt"
                             v-model="postExemplaire.prix_ht"
                             v-validate="{required:true, decimal:2}"
-                            :state="validateState('addExPrixHt')"
+                            :state="validateState('addExHt')"
                             aria-describedby="invalidHt"
                             placeholder="Prix d'achat HT de l'exemplaire (en euros)"
-                            type="text" required>
+                            type="number" step="any" required>
                     </b-form-input>
                     <b-form-invalid-feedback id="invalidHt">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
                 </b-form-group>
@@ -47,7 +47,7 @@
                             :state="validateState('addExTtc')"
                             aria-describedby="invalidTtc"
                             placeholder="Prix d'achat TTC de l'exemplaire (en euros)"
-                            type="text" required>
+                            type="number" step="any" required>
                     </b-form-input>
                     <b-form-invalid-feedback id="invalidTtc">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
                 </b-form-group>
@@ -267,9 +267,11 @@
                                 this.postExemplaire = [];
                             })
                             .catch(error => {
-                                console.log(this.materielId);
-                                console.log(this.postExemplaire);
-                                console.log(error.response);
+                                eventBus.$emit('error', {
+                                    'error': error.response.statusText,
+                                    'status': error.response.status,
+                                    'message': error.response.data.message
+                                });
                             })
                     }
                 });
