@@ -1110,4 +1110,33 @@ class ExemplaireController extends Controller
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
+    public function getExemplaireReservation(Request $request, Response $response, $args)
+    {
+        $id = $args['id'];
+
+        $exemplaire = Exemplaire::find($id);
+
+        if(empty($exemplaire))
+        {
+            $data = ApiErrors::NotFound($request->getUri());
+        }
+        else
+        {
+            $resa = Exemplaire::with('reservation')->where('id','=',$id)->get();
+           /* $reservations = [];
+            foreach($resa as $row)
+            {
+                array_push($reservations, $row->reservation);
+            }
+*/
+            $data = [
+                'type' => "success",
+                'code' => 200,
+                'exemplaire' => $resa,
+            ];
+        }
+
+        return ResponseWriter::ResponseWriter($response,$data);
+    }
+
 }

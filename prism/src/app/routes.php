@@ -34,6 +34,9 @@ $app->post('/reservations[/]','ReservationController:post');
 
 
 $app->group('', function() {
+
+    $this->get('/reservations/{id}[/]','ReservationController:getOne');
+
     $this->get('/departements/{id}[/]', 'DepartementController:getOne');
     $this->delete('/departements/{id}[/]', 'DepartementController:delete');
     $this->put('/departements/{id}[/]', 'DepartementController:put');
@@ -66,6 +69,7 @@ $app->group('', function() {
     $this->delete('/exemplaires/{id}[/]', 'ExemplaireController:delete');
     $this->patch('/exemplaires/{id}[/]', 'ExemplaireController:patch');
     $this->get('/exemplaires/{id}/materiels[/]', 'ExemplaireController:getExemplairesMateriel');
+    $this->get('/exemplaires/{id}/reservations','ExemplaireController:getExemplaireReservation');
 })
 
 ->add( new \PrismGestion\Middlewares\IdCheckerMiddleware() );

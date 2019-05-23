@@ -1,5 +1,5 @@
 <template>
-    <div id="reservation">
+    <div id="reservations">
         <div>
             <b-container>
                 <b-alert
