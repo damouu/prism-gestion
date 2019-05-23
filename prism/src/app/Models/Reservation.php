@@ -34,7 +34,11 @@ class Reservation extends Model
 
     public function exemplaire()
     {
-        return $this->belongsToMany('PrismGestion\Models\Exemplaire', 'reservation_exemplaire', 'id_exemplaire','id_reservation')
+        return $this->belongsToMany(
+            'PrismGestion\Models\Exemplaire',
+            'reservation_exemplaire',
+            'id_reservation',
+            'id_exemplaire')
             ->withPivot(['emprunt','rendu','incident'])->as('reservation_exemplaire');
     }
 
