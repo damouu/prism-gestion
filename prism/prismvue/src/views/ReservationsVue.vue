@@ -1,5 +1,5 @@
 <template>
-    <div id="reservation">
+    <div id="reservations">
         <div>
             <b-container>
                 <b-alert
@@ -17,26 +17,23 @@
 
                 <b-row class="mr-5 ml-5">
 
+                    <b-col cols="2">
+                        <NavigationReservation/>
+                    </b-col>
+
                     <b-col cols="10">
                         <b-row align-h="between" class="mb-4">
                             <b-col>
-                                <h1 class="ml-5"></h1>
+                                <h1 class="ml-5">Reservation</h1>
                             </b-col>
                         </b-row>
-                    </b-col>
 
-                    <b-col cols="6">
-                        <h1>Reservations à venir</h1>
-                        <b-table>
+                        <b-row>
+                            <b-form>
+                                <b-form-group label=""
+                            </b-form>
+                        </b-row>
 
-                        </b-table>
-                    </b-col>
-
-                    <b-col cols="6">
-                        <h1>Emprunts en cours</h1>
-                        <b-table>
-
-                        </b-table>
                     </b-col>
                 </b-row>
             </b-container>
@@ -45,8 +42,13 @@
 </template>
 
 <script>
+    import NavigationReservation from '../components/navigation/NavigationReservation';
+
     export default {
         name:"reservation",
+        components:{
+            NavigationReservation,
+        },
         data() {
             return {
                 alert: {'show':false,'showMateriel':false},

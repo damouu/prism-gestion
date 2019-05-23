@@ -25,3 +25,15 @@ INSERT INTO `exemplaire` (`materiel`,`reference`,`prix_ttc`,`prix_ht`,`fournisse
 INSERT INTO `exemplaire` (`materiel`,`reference`,`prix_ttc`,`prix_ht`,`fournisseur`,`num_serie`,`stockage`,`url`,`etat`,`num_ex`,`financement`,`bon_commande`,`immobilisation`,`date_achat`) VALUES (3,'ESOSHAJSD',200,200,1,'AZEYI738-3739','fort fort lointain','http://www.google.fr','non empruntable',1,'test','345678AZ','rtyuioiuytr','2019-04-18');
 
 
+INSERT INTO `departement` (`nom`,`created_at`) VALUES ('MMI','2019-05-20');
+INSERT INTO `departement` (`nom`,`created_at`) VALUES ('TECH DE CO','2019-05-20');
+
+INSERT INTO `professeur` (`nom`,`prenom`,`mail`,`telephone`) VALUES ('jean','test','test@test.jean','0782565656');
+INSERT INTO `professeur` (`nom`,`prenom`,`mail`,`telephone`) VALUES ('jean','jean','test@jean.jean','0782555656');
+INSERT INTO `professeur` (`nom`,`prenom`,`mail`,`telephone`) VALUES ('jean','qle','test@qle.jean','0782565956');
+
+INSERT INTO `etudiant` (`nom`,`prenom`,`mail`,`telephone`) VALUES ('tro','ane','ane@tro.tro','0786789567');
+INSERT INTO `etudiant` (`nom`,`prenom`,`mail`,`telephone`) VALUES ('oui','oui','oui@qle.oui','0787865435');
+
+INSERT INTO `reservation` (`responsable_projet`,`departement`,`matiere`,`projet`,`referent`,`date_depart`,`date_retour`,`observation`,`created_at`) VALUES (1,1,'test matiere','le projet du génie',1,'1997-03-15 08:23:24','2019-05-21 12:30:12','ben que dalle','2019-05-18');
+INSERT INTO `reservation` (`responsable_projet`,`departement`,`matiere`,`projet`,`referent`,`date_depart`,`date_retour`,`observation`,`created_at`) VALUES (1,1,'test matiere','le projet du génie',1,'1997-03-15 08:23:24','2019-05-20 12:30:12','ben que dalle bis','2019-04-18');
