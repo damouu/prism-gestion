@@ -5,10 +5,15 @@ import router from './router'
 import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 import VeeValidate from 'vee-validate'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCoffee } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
+library.add(faCoffee)
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VeeValidate, {
   inject: true,

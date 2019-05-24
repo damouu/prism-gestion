@@ -22,18 +22,18 @@
                     </b-col>
 
                     <b-col cols="10">
-                        <b-row align-h="between" class="mb-4">
-                            <b-col>
-                                <h1 class="ml-5">Reservation</h1>
-                            </b-col>
-                        </b-row>
 
-                        <b-row>
-                            <b-form>
-                                <b-form-group label=""
-                            </b-form>
-                        </b-row>
+                        <div v-if="navigation === 'etudiant'">
+                            <ReservationFormulaireEtu />
+                        </div>
 
+                        <div v-else-if="navigation === 'professeur'">
+                            2
+                        </div>
+
+                        <div v-else>
+                            3
+                        </div>
                     </b-col>
                 </b-row>
             </b-container>
@@ -43,21 +43,28 @@
 
 <script>
     import NavigationReservation from '../components/navigation/NavigationReservation';
+    import ReservationFormulaireEtu from '../components/ReservationFormulaireEtu';
+    import { eventBus } from "../main";
 
     export default {
         name:"reservation",
         components:{
             NavigationReservation,
+            ReservationFormulaireEtu,
         },
         data() {
             return {
                 alert: {'show':false,'showMateriel':false},
                 dismissCountDown:0,
                 dismissSecs:10,
+
+                navigation: 'etudiant',
             }
         },
         mounted() {
-
+            eventBus.$on('navigation', data => {
+                this.navigation = data.navigation;
+            });
         },
         methods: {
             countDownChanged(dismissCountDown) {
