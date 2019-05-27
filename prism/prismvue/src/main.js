@@ -8,11 +8,12 @@ import VeeValidate from 'vee-validate'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
-library.add(faCoffee)
+library.add(faCoffee);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VeeValidate, {
@@ -20,6 +21,7 @@ Vue.use(VeeValidate, {
   fieldsBagName: 'veeFields'
 });
 
+Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead);
 
 export const eventBus = new Vue();
 
