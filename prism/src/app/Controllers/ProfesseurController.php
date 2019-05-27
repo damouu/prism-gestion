@@ -17,12 +17,53 @@ class ProfesseurController extends Controller {
 
 
     public function getAll(Request $request, Response $response, $args) {
-        $professeur = Professeur::get();
-        $data = [
-            'type' => "success",
-            'code' => 200,
-            'professeurs' => $professeur
+
+        $params = [
+            'query' => $request->getQueryParam('query',null),
         ];
+
+        if($params['query'] === null)
+        {
+            $professeur = Professeur::get();
+            $data = [
+                'type' => "success",
+                'code' => 200,
+                'professeurs' => $professeur
+            ];
+        }
+        else if ($params['query'] != null)
+        {
+            $exploded = explode(" ",$params['query']);
+            $counted = count($exploded);
+            if($counted>2) {
+                $data = ApiErrors::BadRequest();
+            }
+            else {
+                if($counted === 1){
+                    $professeur = Professeur::where('nom','like','%'.$exploded[0].'%')
+                        ->orWhere('prenom', 'like','%'.$exploded[0].'%')
+                        ->get();
+                }
+                else
+                {
+                    $professeur = Professeur::where('nom','like','%'.$exploded[0].'%')
+                        ->orWhere('prenom', 'like','%'.$exploded[0].'%')
+                        ->orWhere(function ($q) use ($exploded) {
+                            $q->where('nom','like', '%'.$exploded[0].'%')
+                                ->where('prenom','like','%'.$exploded[1].'%');})
+                        ->orWhere(function ($q) use ($exploded) {
+                            $q->where('nom','like', '%'.$exploded[1].'%')
+                                ->where('prenom','like','%'.$exploded[0].'%');})
+                        ->get();
+                }
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'professeurs' => $professeur
+                ];
+            }
+        }
+
         return ResponseWriter::ResponseWriter($response, $data);
     }
 

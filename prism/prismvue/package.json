@@ -16,6 +16,7 @@
     "bootstrap-vue": "^2.0.0-rc.20",
     "core-js": "^2.6.5",
     "jspdf": "^1.5.3",
+    "underscore": "^1.9.1",
     "vee-validate": "^2.2.5",
     "vue": "^2.6.10",
     "vue-bootstrap-typeahead": "^0.2.6",

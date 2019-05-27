@@ -10,6 +10,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 
+
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);

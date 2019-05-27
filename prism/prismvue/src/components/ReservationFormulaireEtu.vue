@@ -13,22 +13,20 @@
                 <b-col cols="12">
                     <b-card
                             title="Responsable du projet">
-
                         <b-row>
                             <b-col cols="3">
                                 <b-form-group label="Nom Prénom" label-for="formEtuResponsable">
                                     <vue-bootstrap-typeahead
                                             id="formEtuResponsable"
                                             :data="responsables"
-                                            v-model="chosenResponsable"
-                                            v-validate="{required:true}"
-                                            data-vv-name="responsable"
-                                            :state="validateState('responsable')"
-                                            aria-describedby="invalidResponsable"
+                                            v-model="query"
+                                            :serializer="item => item.nom +' '+item.prenom"
                                             placeholder="Nom du responsable"
-                                            @hit="selectedResponsable = $event"
-                                            type="text"/>
-                                    <b-form-invalid-feedback id="invalidResponsable">Veuillez choisir un Responsable</b-form-invalid-feedback>
+                                            @hit="selectResp($event)"/>
+                                    <template slot="suggestion" slot-scope="{data, htmlText}">
+                                        <div><span class="mr-3" v-html="htmlText"></span></div>
+                                    </template>
+
                                 </b-form-group>
                             </b-col>
 
@@ -70,9 +68,9 @@
                     </b-card>
                 </b-col>
 
-
-                <b-card
-                    title="Etudiant Référent">
+                <b-col cols="12"  class="mt-4">
+                    <b-card
+                            title="Etudiant Référent">
                     <b-row>
                         <b-col cols="4">
                             <b-form-group label="Département *" label-for="formEtuDepartement">
@@ -123,7 +121,9 @@
                             </b-form-group>
                         </b-col>
                     </b-row>
-                </b-card>
+                    </b-card>
+                </b-col>
+
 
 
 
@@ -148,14 +148,18 @@
 <script>
 
 
+
+    import _ from 'underscore';
+    import {eventBus} from "../main";
+
     export default {
         name: 'ReservationFormulaireEtu',
         data() {
             return {
                 formulaire: true,
                 formEtu: [],
+                query: '',
 
-                professeurs: [],
                 departement: [],
                 departements: [],
                 responsables: [],
@@ -168,9 +172,9 @@
             this.getResponsables();
         },
         watch: {
-            selectedResponsable: function (val) {
-                this.selectResp(val);
-            },
+            query: _.debounce(function(newQuery) {
+                this.getResponsables(newQuery);
+            },250)
         },
         methods: {
             next(){
@@ -206,12 +210,12 @@
                     })
             },
 
-            getResponsables() {
-                axios.get('/professeurs')
+            getResponsables(newQuery) {
+                axios.get('/professeurs?query='+newQuery)
                     .then( response => {
-                        this.professeurs = response.data.professeurs;
-                        response.data.professeurs.forEach( element => {
-                            this.responsables.push(element.id + ' | '+ element.nom +' '+element.prenom);
+                        this.responsables=[];
+                        response.data.professeurs.forEach( element =>  {
+                                this.responsables.push(element);
                         });
                     })
                     .catch( error => {
@@ -219,25 +223,26 @@
                     })
             },
 
+            selectResp: function ($event) {
 
-            getOneResponsable(id) {
-                axios.get('/professeurs/'+id)
-                    .then( response => {
-                        this.formEtu.responsableTel = response.data.professeur.telephone;
-                        this.formEtu.responsableMail = response.data.professeur.mail;
-                        console.log(this.formEtu.responsableTel);
-                    })
-                    .catch( error => {
-                        console.log(error.response);
-                    })
+
+                this.refresh(() => {
+                    this.$nextTick( () => {
+                        this.formEtu.responsableTel = $event.telephone;
+                        this.formEtu.responsableMail = $event.mail;
+                        this.formEtu.responsable_projet = $event.id;
+                        console.log('voila');
+                    });
+                });
+            },
+            refresh(callback) {
+                requestAnimationFrame( () => {
+                    requestAnimationFrame(callback)
+                });
+
             },
 
-            selectResp(val){
-                let test = val.split(' | ',2);
-                this.formEtu.responsable = test[0];
-                this.chosenResponsable = test[1];
-                this.getOneResponsable(test[0]);
-            }
+
 
 
 
