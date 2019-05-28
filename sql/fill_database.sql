@@ -35,5 +35,5 @@ INSERT INTO `professeur` (`nom`,`prenom`,`mail`,`telephone`) VALUES ('jean','qle
 INSERT INTO `etudiant` (`nom`,`prenom`,`mail`,`telephone`) VALUES ('tro','ane','ane@tro.tro','0786789567');
 INSERT INTO `etudiant` (`nom`,`prenom`,`mail`,`telephone`) VALUES ('oui','oui','oui@qle.oui','0787865435');
 
-INSERT INTO `reservation` (`responsable_projet`,`departement`,`annee`,`dep_groupe`,`matiere`,`projet`,`referent`,`date_depart`,`date_retour`,`observation`,`created_at`) VALUES (1,1,'1ere','LP1','test matiere','le projet du génie',1,'1997-03-15 08:23:24','2019-05-21 12:30:12','ben que dalle','2019-05-18');
-INSERT INTO `reservation` (`responsable_projet`,`departement`,`annee`,`dep_groupe`,`matiere`,`projet`,`referent`,`date_depart`,`date_retour`,`observation`,`created_at`) VALUES (1,1,'2eme','A2','test matiere','le projet du génie',1,'1997-03-15 08:23:24','2019-05-20 12:30:12','ben que dalle bis','2019-04-18');
+INSERT INTO `reservation` (`responsable_projet`,`departement`,`annee`,`dep_groupe`,`matiere`,`referent`,`observation`,`created_at`) VALUES (1,1,'1ere','LP1','test matiere',1,'ben que dalle','2019-05-18');
+INSERT INTO `reservation` (`responsable_projet`,`departement`,`annee`,`dep_groupe`,`matiere`,`referent`,`observation`,`created_at`) VALUES (1,1,'2eme','A2','test matiere',1,'ben que dalle bis','2019-04-18');

@@ -1,6 +1,7 @@
 -- DROPS
 DROP TABLE IF EXISTS `reservation_exemplaire`;
 DROP TABLE IF EXISTS `groupe`;
+DROP TABLE IF EXISTS `fiche_resa`;
 DROP TABLE IF EXISTS `reservation`;
 DROP TABLE IF EXISTS `departement`;
 DROP TABLE IF EXISTS `professeur`;
@@ -109,12 +110,9 @@ CREATE TABLE IF NOT EXISTS `reservation` (
     `responsable_projet` INT NOT NULL,
     `departement` INT NOT NULL,
     `matiere` varchar(255) NOT NULL,
-    `projet` TEXT DEFAULT NULL,
     `referent` INT DEFAULT NULL,
     `annee` varchar(128) NOT NULL,
     `dep_groupe` varchar(128) NOT NULL,
-    `date_depart` timestamp NOT NULL,
-    `date_retour` timestamp NOT NULL,
     `observation` TEXT DEFAULT NULL,
     `created_at` date NOT NULL,
     `updated_at` date DEFAULT NULL,
@@ -125,6 +123,22 @@ CREATE TABLE IF NOT EXISTS `reservation` (
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE IF NOT EXISTS `fiche_resa` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `reservation` INT NOT NULL,
+    `date_depart` timestamp NOT NULL,
+    `date_retour` timestamp NOT NULL,
+    `rendu` BOOL DEFAULT 0,
+    `observation` TEXT DEFAULT NULL,
+    `created_at` date NOT NULL,
+    `updated_at` date DEFAULT NULL,
+    `deleted_at` date DEFAULT NULL,
+    FOREIGN KEY (`reservation`) REFERENCES `reservation`(`id`),
+    PRIMARY KEY (`id`)
+)Engine=InnoDB DEFAULT CHARSET=utf8;
+
+
 CREATE TABLE IF NOT EXISTS `groupe` (
     `reservation` INT NOT NULL,
     `etudiant` INT NOT NULL,
@@ -134,14 +148,14 @@ CREATE TABLE IF NOT EXISTS `groupe` (
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `reservation_exemplaire` (
-    `id_reservation` INT NOT NULL,
+    `fiche_reservation` INT NOT NULL,
     `id_exemplaire` INT NOT NULL,
     `emprunt` BOOL DEFAULT 0,
     `rendu` BOOL DEFAULT 0,
     `incident` TEXT DEFAULT NULL,
-    FOREIGN KEY (`id_reservation`) REFERENCES `reservation`(`id`),
+    FOREIGN KEY (`fiche_reservation`) REFERENCES `fiche_resa`(`id`),
     FOREIGN KEY (`id_exemplaire`) REFERENCES `exemplaire`(`id`),
-    PRIMARY KEY (`id_reservation`,`id_exemplaire`)
+    PRIMARY KEY (`fiche_reservation`,`id_exemplaire`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
 -- verifier emprunt depart et retour des tables reservation et resa_materiel
