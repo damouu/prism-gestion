@@ -17,12 +17,51 @@ class EtudiantController extends Controller {
 
 
     public function getAll(Request $request, Response $response, $args) {
-        $etudiant = Etudiant::get();
-        $data = [
-            'type' => "success",
-            'code' => 200,
-            'etudiants' => $etudiant
+
+        $params = [
+            'query' => $request->getQueryParam('query',null),
         ];
+
+        if($params['query'] === null) {
+            $etudiant = Etudiant::get();
+            $data = [
+                'type' => "success",
+                'code' => 200,
+                'etudiants' => $etudiant
+            ];
+        }
+        else if ($params['query'] != null)
+        {
+            $exploded = explode(" ",$params['query']);
+            $counted = count($exploded);
+            if($counted>2) {
+                $data = ApiErrors::BadRequest();
+            }
+            else {
+                if($counted === 1){
+                    $etudiant = Etudiant::where('nom','like','%'.$exploded[0].'%')
+                        ->orWhere('prenom', 'like','%'.$exploded[0].'%')
+                        ->get();
+                }
+                else
+                {
+                    $etudiant = Etudiant::where('nom','like','%'.$exploded[0].'%')
+                        ->orWhere('prenom', 'like','%'.$exploded[0].'%')
+                        ->orWhere(function ($q) use ($exploded) {
+                            $q->where('nom','like', '%'.$exploded[0].'%')
+                                ->where('prenom','like','%'.$exploded[1].'%');})
+                        ->orWhere(function ($q) use ($exploded) {
+                            $q->where('nom','like', '%'.$exploded[1].'%')
+                                ->where('prenom','like','%'.$exploded[0].'%');})
+                        ->get();
+                }
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'etudiants' => $etudiant
+                ];
+            }
+        }
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
@@ -90,7 +129,7 @@ class EtudiantController extends Controller {
                 $etudiant->nom = $content['nom'];
                 $etudiant->prenom = $content['prenom'];
                 $etudiant->mail = $content['mail'];
-                $etudiant->tel = $content['telephone'];
+                $etudiant->telephone = $content['telephone'];
                 $etudiant->save();
             }
             catch(NestedValidationException $e)
@@ -170,7 +209,7 @@ class EtudiantController extends Controller {
                         $etudiant->nom = $content['nom'];
                         $etudiant->prenom = $content['prenom'];
                         $etudiant->mail = $content['mail'];
-                        $etudiant->tel = $content['telephone'];
+                        $etudiant->telephone  = $content['telephone'];
                         $etudiant->save();
                         $data = [
                             'type' => "success",
@@ -199,7 +238,7 @@ class EtudiantController extends Controller {
                         $etudiant->nom = $content['nom'];
                         $etudiant->prenom = $content['prenom'];
                         $etudiant->mail = $content['mail'];
-                        $etudiant->tel = $content['telephone'];
+                        $etudiant->telephone  = $content['telephone'];
                         $etudiant->save();
                         $data = [
                             'type' => "success",

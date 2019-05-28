@@ -111,6 +111,8 @@ CREATE TABLE IF NOT EXISTS `reservation` (
     `matiere` varchar(255) NOT NULL,
     `projet` TEXT DEFAULT NULL,
     `referent` INT DEFAULT NULL,
+    `annee` varchar(128) NOT NULL,
+    `dep_groupe` varchar(128) NOT NULL,
     `date_depart` timestamp NOT NULL,
     `date_retour` timestamp NOT NULL,
     `observation` TEXT DEFAULT NULL,

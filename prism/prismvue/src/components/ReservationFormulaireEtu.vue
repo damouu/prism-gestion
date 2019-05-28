@@ -25,8 +25,8 @@
 
             <b-row v-show="formulaire">
                 <b-col cols="12">
-                    <b-card
-                            title="Responsable du projet">
+                    <b-card>
+                        <b-card-title>Responsable du projet <b-button pill variant="outline-info" v-b-modal.modal-AddResaProf>Ajouter un responsable</b-button></b-card-title>
                         <b-row>
                             <b-col cols="3">
                                 <b-form-group label="Nom Prénom" label-for="formEtuResponsable">
@@ -75,9 +75,6 @@
                                     <b-form-invalid-feedback id="invalidResponsableMail">Veuillez entrer un mail valide</b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
-                            <b-col cols="3">
-                                <b-button pill variant="outline-info" v-b-modal.modal-AddResaProf>Ajouter un responsable</b-button>
-                            </b-col>
                         </b-row>
                     </b-card>
                 </b-col>
@@ -86,7 +83,7 @@
                     <b-card
                             title="Etudiant Référent">
                         <b-row>
-                            <b-col cols="4">
+                            <b-col cols="2">
                                 <b-form-group label="Département *" label-for="formEtuDepartement">
                                     <b-form-select
                                             id="formEtuDepartement"
@@ -103,7 +100,7 @@
                                 </b-form-group>
                             </b-col>
 
-                            <b-col cols="4">
+                            <b-col cols="2">
                                 <b-form-group label="Matière" label-for="formEtuMatiere">
                                     <b-form-input
                                             id="formEtuMatiere"
@@ -119,7 +116,7 @@
                                 </b-form-group>
                             </b-col>
 
-                            <b-col cols="4">
+                            <b-col cols="2">
                                 <b-form-group label="Projet" label-for="formEtuProjet">
                                     <b-form-input
                                             id="formEtuProjet"
@@ -134,7 +131,83 @@
                                     <b-form-invalid-feedback id="invalidProjet">Veuillez écrire le nom du projet</b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
+
+                            <b-col cols="2">
+                                <b-form-group label="Année" label-for="formEtuAnnee">
+                                    <b-form-input
+                                            id="formEtuAnnee"
+                                            v-model="formEtu.annee"
+                                            v-validate="{required:true}"
+                                            data-vv-name="annee"
+                                            :state="validateState('annee')"
+                                            aria-describedby="invalidAnnee"
+                                            placeholder="Annee"
+                                            type="text">
+                                    </b-form-input>
+                                    <b-form-invalid-feedback id="invalidAnnee">Veuillez écrire l'année étudiante</b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+
+                            <b-col cols="2">
+                                <b-form-group label="Groupe" label-for="formEtuGroupe">
+                                    <b-form-input
+                                            id="formEtuGroupe"
+                                            v-model="formEtu.dep_groupe"
+                                            v-validate="{required:true}"
+                                            data-vv-name="groupe"
+                                            :state="validateState('groupe')"
+                                            aria-describedby="invalidGroupe"
+                                            placeholder="Groupe"
+                                            type="text">
+                                    </b-form-input>
+                                    <b-form-invalid-feedback id="invalidGroupe">Veuillez écrire le groupe de classe</b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+
                         </b-row>
+                    </b-card>
+                </b-col>
+
+                <b-col cols="12" class="mt-4">
+                    <b-card>
+                        <b-card-title>Etudiant Référent, Groupe d'élèves <b-button pill variant="outline-info">Ajouter un élève</b-button></b-card-title>
+
+                        <b-form-group label="Nom et Prénom d'élève" label-for="formEtuEtudiant">
+                            <vue-bootstrap-typeahead
+                                    id="formEtuEtudiant"
+                                    :data="etudiant"
+                                    v-model="queryEtudiant"
+                                    :serializer="item => item.nom +' '+item.prenom"
+                                    placeholder="Nom et prénom de l'élève"
+                                    @hit="selectRespEleve($event)"/>
+                            <template slot="suggestion" slot-scope="{data, htmlText}">
+                                <div><span class="mr-3" v-html="htmlText"></span></div>
+                            </template>
+
+                        </b-form-group>
+
+                        <b-table
+                                :items="etudiants"
+
+                                striped hover
+                                :fields="fields"
+                                :sort-by.sync="sortBy"
+                                :sort-desc.sync="sortDesc"
+
+                                selectable
+                                :select-mode="mode"
+                                selectedVariant="success"
+                                @row-selected="rowSelected"
+
+                                show-empty
+                                class="mt-4">
+
+                            <template slot="empty" slot-scope="scope">
+                                <h6 class="text-center">Pas d'étudiants à afficher. Ajoutez-en en cliquant sur le bouton "Ajouter un élève".</h6>
+                            </template>
+
+                        </b-table>
+
                     </b-card>
                 </b-col>
 
@@ -174,13 +247,30 @@
             return {
                 formulaire: true,
 
+                fields: [
+                    { key: 'nom', sortable:true },
+                    { key: 'prenom', sortable:true },
+                    { key: 'mail', sortable:true },
+                    { key: 'telephone', sortable:true },
+                ],
+                etudiants: [],
+
                 formEtu: [],
                 query: '',
+                queryEtudiant: '',
+                etudiant: [],
+
                 departement: [],
                 departements: [],
                 responsables: [],
                 selectedResponsable: null,
                 chosenResponsable: '',
+
+
+                sortBy : 'id',
+                sortDesc: false,
+                mode: 'single',
+                selected: [],
 
                 dismissCountDown:0,
                 dismissSecs:10,
@@ -205,7 +295,11 @@
         watch: {
             query: _.debounce(function(newQuery) {
                 this.getResponsables(newQuery);
-            },250)
+            },250),
+
+            queryEtudiant: _.debounce(function(newQuery) {
+                this.getEtudiants(newQuery);
+            },250),
         },
         methods: {
             next(){
@@ -254,11 +348,27 @@
                     })
             },
 
+            getEtudiants(newQuery) {
+                axios.get('/etudiants?query='+newQuery)
+                    .then( response => {
+                        this.etudiant = [];
+                        response.data.etudiants.forEach( element => {
+                            this.etudiant.push(element);
+                        });
+                    })
+                    .catch( error => {
+                        console.log(error.response);
+                    })
+            },
+
             selectResp($event) {
                 this.$set(this.formEtu,'responsableTel',$event['telephone']);
                 this.$set(this.formEtu,'responsableMail',$event['mail']);
                 this.$set(this.formEtu,'responsabe_projet',$event['id']);
+            },
 
+            selectRespEleve($event) {
+                this.etudiants.push($event);
             },
 
             showAlert(error, status, message) {
@@ -271,6 +381,13 @@
             countDownChanged(dismissCountDown) {
                 this.dismissCountDown = dismissCountDown;
             },
+
+            rowSelected(items) {
+                this.selected = items;
+                let idSelected = items[0];
+                //this.$router.push({name: 'materiel', params: { id: idSelected.id }});
+            },
+
         }
 
     }
