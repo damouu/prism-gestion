@@ -131,8 +131,14 @@ class ProfesseurController extends Controller {
                 $professeur->nom = $content['nom'];
                 $professeur->prenom = $content['prenom'];
                 $professeur->mail = $content['mail'];
-                $professeur->tel = $content['telephone'];
+                $professeur->telephone = $content['telephone'];
                 $professeur->save();
+
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'professeur' => 'reussi'
+                ];
             }
             catch(NestedValidationException $e)
             {
@@ -211,7 +217,7 @@ class ProfesseurController extends Controller {
                         $professeur->nom = $content['nom'];
                         $professeur->prenom = $content['prenom'];
                         $professeur->mail = $content['mail'];
-                        $professeur->tel = $content['telephone'];
+                        $professeur->telephone = $content['telephone'];
                         $professeur->save();
                         $data = [
                             'type' => "success",
@@ -240,7 +246,7 @@ class ProfesseurController extends Controller {
                         $professeur->nom = $content['nom'];
                         $professeur->prenom = $content['prenom'];
                         $professeur->mail = $content['mail'];
-                        $professeur->tel = $content['telephone'];
+                        $professeur->telephone = $content['telephone'];
                         $professeur->save();
                         $data = [
                             'type' => "success",
