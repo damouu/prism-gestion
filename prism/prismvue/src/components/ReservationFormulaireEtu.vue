@@ -44,7 +44,7 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Nom" label-for="formEtuResponsableNom">
+                                        <b-form-group label="Nom *" label-for="formEtuResponsableNom">
                                             <b-form-input
                                                     id="formEtuResponsableNom"
                                                     v-model="formEtu.responsableNom"
@@ -60,7 +60,7 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Prénom" label-for="formEtuResponsablePrenom">
+                                        <b-form-group label="Prénom *" label-for="formEtuResponsablePrenom">
                                             <b-form-input
                                                     id="formEtuResponsablePrenom"
                                                     v-model="formEtu.responsablePrenom"
@@ -76,7 +76,7 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Téléphone" label-for="formEtuResponsableTel">
+                                        <b-form-group label="Téléphone *" label-for="formEtuResponsableTel">
                                             <b-form-input
                                                     id="formEtuResponsableTel"
                                                     v-model="formEtu.responsableTel"
@@ -92,7 +92,7 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Mail" label-for="formEtuResponsableMail">
+                                        <b-form-group label="Mail *" label-for="formEtuResponsableMail">
                                             <b-form-input
                                                     id="formEtuResponsableMail"
                                                     v-model="formEtu.responsableMail"
@@ -132,7 +132,7 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Matière" label-for="formEtuMatiere">
+                                        <b-form-group label="Matière *" label-for="formEtuMatiere">
                                             <b-form-input
                                                     id="formEtuMatiere"
                                                     v-model="formEtu.matiere"
@@ -148,7 +148,7 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Année" label-for="formEtuAnnee">
+                                        <b-form-group label="Année *" label-for="formEtuAnnee">
                                             <b-form-input
                                                     id="formEtuAnnee"
                                                     v-model="formEtu.annee"
@@ -164,7 +164,7 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Groupe" label-for="formEtuGroupe">
+                                        <b-form-group label="Groupe *" label-for="formEtuGroupe">
                                             <b-form-input
                                                     id="formEtuGroupe"
                                                     v-model="formEtu.dep_groupe"
@@ -179,13 +179,26 @@
                                         </b-form-group>
                                     </b-col>
 
+                                    <b-col cols="12">
+                                        <b-form-group label="Observations" label-for="formEtuObservation">
+                                            <b-form-textarea
+                                                    id="formEtuObservation"
+                                                    v-model="formEtu.observation"
+                                                    placeholder="Ecrivez quelque chose..."
+                                                    rows="2"
+                                                    max-rows="6"
+                                            ></b-form-textarea>
+                                        </b-form-group>
+
+                                    </b-col>
+
                                 </b-row>
                             </b-card>
                         </b-col>
 
                         <b-col cols="12" class="mt-4">
                             <b-card>
-                                <b-card-title>Etudiant Référent, Groupe d'élèves <b-button pill variant="outline-info" v-b-modal.modal-AddResaEtu>Ajouter un élève</b-button></b-card-title>
+                                <b-card-title>Etudiant Référent, Groupe d'élèves  <b-button pill variant="outline-info" v-b-modal.modal-AddResaEtu>Ajouter un élève</b-button></b-card-title>
 
                                 <b-form-group label="Nom et Prénom d'élève" label-for="formEtuEtudiant">
                                     <vue-bootstrap-typeahead
@@ -222,6 +235,8 @@
 
                             </b-card>
                         </b-col>
+
+                        <span class="text-danger mt-4">* champs obligatoires</span>
 
                         <b-col md="3" offset-md="9">
                             <b-button variant="outline-success" class="mt-4 mb-5" @click="next">Passer à la réservation</b-button>
@@ -311,9 +326,71 @@
             },250),
         },
         methods: {
+
             next(){
-                this.formulaire = false;
+                this.$validator.validateAll().then( result => {
+                    if (!result) {
+                        return;
+                    } else
+                    {
+
+                            if(!this.formEtu.responsable_projet)
+                            {
+                                axios.post('/professeurs', {
+                                    'nom': this.formEtu.responsableNom,
+                                    'prenom': this.formEtu.responsablePrenom,
+                                    'mail': this.formEtu.responsableMail,
+                                    'telephone': this.formEtu.responsableTel
+                                })
+                                    .then( response => {
+                                        this.formEtu.responsable_projet = response.data.etudiant.id;
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    })
+                            }
+                            else
+                            {
+                                axios.put('/professeurs/'+this.formEtu.responsable_projet, {
+                                    'nom': this.formEtu.responsableNom,
+                                    'prenom': this.formEtu.responsablePrenom,
+                                    'mail': this.formEtu.responsableMail,
+                                    'telephone': this.formEtu.responsableTel
+                                })
+                                    .then( response => {
+                                        console.log(response);
+                                        this.formEtu.responsable_projet = response.data.professeur.id;
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    })
+
+                            }
+
+                                axios.post('/reservations', {
+                                    'responsable_projet': this.formEtu.responsable_projet,
+                                    'departement': this.formEtu.departement,
+                                    'matiere': this.formEtu.matiere,
+                                    'annee': this.formEtu.annee,
+                                    'dep_groupe': this.formEtu.dep_groupe,
+                                    'observation': this.formEtu.observation
+                                })
+                                .then( response => {
+
+                                    let resa = response.data.reservation.id;
+                                    console.log('reservation n°'+resa);
+                                })
+                                    .catch(error => {
+                                        console.log(error.response);
+                                    })
+
+
+                    }
+
+                });
             },
+
+
             back(){
                 this.formulaire = true;
             },
@@ -375,7 +452,7 @@
                 this.$set(this.formEtu,'responsablePrenom',$event['prenom']);
                 this.$set(this.formEtu,'responsableTel',$event['telephone']);
                 this.$set(this.formEtu,'responsableMail',$event['mail']);
-                this.$set(this.formEtu,'responsabe_projet',$event['id']);
+                this.$set(this.formEtu,'responsable_projet',$event['id']);
             },
 
             selectRespEleve($event) {

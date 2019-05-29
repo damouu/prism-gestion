@@ -9,6 +9,7 @@ use PrismGestion\Models\Reservation;
 use PrismGestion\Utils\ResponseWriter;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Respect\Validation\Validator as v;
 
 
 class ReservationController extends Controller
@@ -110,6 +111,61 @@ class ReservationController extends Controller
             echo "<pre>".$e->getMessage()."</pre>";
             $data = ApiErrors::InternalError();
         }
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
+
+    public function post(Request $request, Response $response, $args)
+    {
+        $content = $request->getParsedBody();
+
+        if(!isset($content['responsable_projet'])
+            || !isset($content['departement'])
+            || !isset($content['matiere'])
+            || !isset($content['annee'])
+            || !isset($content['dep_groupe']))
+        {
+            $data = ApiErrors::BadRequest();
+        }
+        else
+        {
+            try{
+                $content['responsable_projet'] = trim($content['responsable_projet']);
+                $content['departement'] = trim($content['departement']);
+                $content['matiere'] = trim($content['matiere']);
+                $content['annee'] = trim($content['annee']);
+                $content['dep_groupe'] = trim($content['dep_groupe']);
+
+                if(isset($content['observation']))
+                {
+                    $content['observation'] = trim($content['observation']);
+                }
+                else {
+                    $content['observation'] = null;
+                }
+
+                $reservation = new Reservation();
+
+                $reservation->responsable_projet = $content['responsable_projet'];
+                $reservation->departement = $content['departement'];
+                $reservation->matiere = $content['matiere'];
+                $reservation->annee = $content['annee'];
+                $reservation->dep_groupe = $content['dep_groupe'];
+                $reservation->observation = $content['observation'];
+                $reservation->save();
+
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'reservation' => $reservation
+                ];
+
+            }
+            catch(\Exception $e)
+            {
+                $data = ApiErrors::InternalError();
+            }
+        }
+
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
