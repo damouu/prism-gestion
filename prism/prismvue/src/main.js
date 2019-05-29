@@ -5,16 +5,20 @@ import router from './router'
 import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 import VeeValidate from 'vee-validate'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCoffee } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faSortUp } from '@fortawesome/free-solid-svg-icons'
+import { faSortDown } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
-library.add(faCoffee);
+library.add(faTrashAlt,faSortUp,faSortDown);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VeeValidate, {

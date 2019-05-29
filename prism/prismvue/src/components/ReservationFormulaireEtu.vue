@@ -21,201 +21,214 @@
             </b-col>
         </b-row>
 
-        <form ref="modifMateriel" @submit.stop.prevent="modifMateriel" >
+                <form v-if="formulaire" ref="modifMateriel" @submit.stop.prevent="modifMateriel" >
+                    <b-row>
+                        <b-col cols="12">
+                            <b-card>
+                                <b-card-title>Responsable du projet</b-card-title>
+                                <b-row>
+                                    <b-col cols="12">
+                                        <b-form-group label="Nom Prénom" label-for="formEtuResponsable">
+                                            <vue-bootstrap-typeahead
+                                                    id="formEtuResponsable"
+                                                    :data="responsables"
+                                                    v-model="query"
+                                                    :serializer="item => item.nom +' '+item.prenom"
+                                                    placeholder="Nom du responsable"
+                                                    @hit="selectResp($event)"/>
+                                            <template slot="suggestion" slot-scope="{data, htmlText}">
+                                                <div><span class="mr-3" v-html="htmlText"></span></div>
+                                            </template>
 
-            <b-row v-show="formulaire">
-                <b-col cols="12">
-                    <b-card>
-                        <b-card-title>Responsable du projet <b-button pill variant="outline-info" v-b-modal.modal-AddResaProf>Ajouter un responsable</b-button></b-card-title>
-                        <b-row>
-                            <b-col cols="3">
-                                <b-form-group label="Nom Prénom" label-for="formEtuResponsable">
+                                        </b-form-group>
+                                    </b-col>
+
+                                    <b-col cols="3">
+                                        <b-form-group label="Nom" label-for="formEtuResponsableNom">
+                                            <b-form-input
+                                                    id="formEtuResponsableNom"
+                                                    v-model="formEtu.responsableNom"
+                                                    v-validate="{required:true, regex:/^[a-zé7àùûêâôëîï\s-]{1}[a-zé7àùûêâôëîï\'-]*[a-zé7àùûêâôëîï]$/i}"
+                                                    data-vv-name="responsableNom"
+                                                    :state="validateState('responsableNom')"
+                                                    aria-describedby="invalidResponsableNom"
+                                                    placeholder="Nom du responsable"
+                                                    type="text">
+                                            </b-form-input>
+                                            <b-form-invalid-feedback id="invalidResponsableNom">Veuillez entrer un nom valide</b-form-invalid-feedback>
+                                        </b-form-group>
+                                    </b-col>
+
+                                    <b-col cols="3">
+                                        <b-form-group label="Prénom" label-for="formEtuResponsablePrenom">
+                                            <b-form-input
+                                                    id="formEtuResponsablePrenom"
+                                                    v-model="formEtu.responsablePrenom"
+                                                    v-validate="{required:true, regex:/^[a-zé7àùûêâôëîï\s-]{1}[a-zé7àùûêâôëîï\'-]*[a-zé7àùûêâôëîï]$/i}"
+                                                    data-vv-name="responsablePrenom"
+                                                    :state="validateState('responsablePrenom')"
+                                                    aria-describedby="invalidResponsablePrenom"
+                                                    placeholder="Prénom du responsable"
+                                                    type="text">
+                                            </b-form-input>
+                                            <b-form-invalid-feedback id="invalidResponsablePrenom">Veuillez entrer un prénom valide</b-form-invalid-feedback>
+                                        </b-form-group>
+                                    </b-col>
+
+                                    <b-col cols="3">
+                                        <b-form-group label="Téléphone" label-for="formEtuResponsableTel">
+                                            <b-form-input
+                                                    id="formEtuResponsableTel"
+                                                    v-model="formEtu.responsableTel"
+                                                    v-validate="{required:true,max:20, numeric:true}"
+                                                    data-vv-name="responsableTel"
+                                                    :state="validateState('responsableTel')"
+                                                    aria-describedby="invalidResponsableTel"
+                                                    placeholder="Téléphone du responsable"
+                                                    type="text">
+                                            </b-form-input>
+                                            <b-form-invalid-feedback id="invalidResponsableTel">Veuillez entrer un numero de telephone valide</b-form-invalid-feedback>
+                                        </b-form-group>
+                                    </b-col>
+
+                                    <b-col cols="3">
+                                        <b-form-group label="Mail" label-for="formEtuResponsableMail">
+                                            <b-form-input
+                                                    id="formEtuResponsableMail"
+                                                    v-model="formEtu.responsableMail"
+                                                    v-validate="{required:true, email:true}"
+                                                    data-vv-name="responsableMail"
+                                                    :state="validateState('responsableMail')"
+                                                    aria-describedby="invalidResponsable"
+                                                    placeholder="mail du responsable"
+                                                    type="text">
+                                            </b-form-input>
+                                            <b-form-invalid-feedback id="invalidResponsableMail">Veuillez entrer un mail valide</b-form-invalid-feedback>
+                                        </b-form-group>
+                                    </b-col>
+                                </b-row>
+                            </b-card>
+                        </b-col>
+
+                        <b-col cols="12"  class="mt-4">
+                            <b-card
+                                    title="Information réservations">
+                                <b-row>
+                                    <b-col cols="3">
+                                        <b-form-group label="Département *" label-for="formEtuDepartement">
+                                            <b-form-select
+                                                    id="formEtuDepartement"
+                                                    v-model="formEtu.departement"
+                                                    v-validate="{required:true}"
+                                                    data-vv-name="departement"
+                                                    :state="validateState('departement')"
+                                                    aria-describedby="invalidDepartement">
+                                                <option v-for="option in departement" v-bind:value="option.value">
+                                                    {{ option.text }}
+                                                </option>
+                                                <b-form-invalid-feedback id="invalidDepartemnt">Choisissez un département</b-form-invalid-feedback>
+                                            </b-form-select>
+                                        </b-form-group>
+                                    </b-col>
+
+                                    <b-col cols="3">
+                                        <b-form-group label="Matière" label-for="formEtuMatiere">
+                                            <b-form-input
+                                                    id="formEtuMatiere"
+                                                    v-model="formEtu.matiere"
+                                                    v-validate="{required:true}"
+                                                    data-vv-name="matiere"
+                                                    :state="validateState('matiere')"
+                                                    aria-describedby="invalidMatiere"
+                                                    placeholder="Matière"
+                                                    type="text">
+                                            </b-form-input>
+                                            <b-form-invalid-feedback id="invalidMatiere">Veuillez choisir une matiere</b-form-invalid-feedback>
+                                        </b-form-group>
+                                    </b-col>
+
+                                    <b-col cols="3">
+                                        <b-form-group label="Année" label-for="formEtuAnnee">
+                                            <b-form-input
+                                                    id="formEtuAnnee"
+                                                    v-model="formEtu.annee"
+                                                    v-validate="{required:true}"
+                                                    data-vv-name="annee"
+                                                    :state="validateState('annee')"
+                                                    aria-describedby="invalidAnnee"
+                                                    placeholder="Annee"
+                                                    type="text">
+                                            </b-form-input>
+                                            <b-form-invalid-feedback id="invalidAnnee">Veuillez écrire l'année étudiante</b-form-invalid-feedback>
+                                        </b-form-group>
+                                    </b-col>
+
+                                    <b-col cols="3">
+                                        <b-form-group label="Groupe" label-for="formEtuGroupe">
+                                            <b-form-input
+                                                    id="formEtuGroupe"
+                                                    v-model="formEtu.dep_groupe"
+                                                    v-validate="{required:true}"
+                                                    data-vv-name="groupe"
+                                                    :state="validateState('groupe')"
+                                                    aria-describedby="invalidGroupe"
+                                                    placeholder="Groupe"
+                                                    type="text">
+                                            </b-form-input>
+                                            <b-form-invalid-feedback id="invalidGroupe">Veuillez écrire le groupe de classe</b-form-invalid-feedback>
+                                        </b-form-group>
+                                    </b-col>
+
+                                </b-row>
+                            </b-card>
+                        </b-col>
+
+                        <b-col cols="12" class="mt-4">
+                            <b-card>
+                                <b-card-title>Etudiant Référent, Groupe d'élèves <b-button pill variant="outline-info" v-b-modal.modal-AddResaEtu>Ajouter un élève</b-button></b-card-title>
+
+                                <b-form-group label="Nom et Prénom d'élève" label-for="formEtuEtudiant">
                                     <vue-bootstrap-typeahead
-                                            id="formEtuResponsable"
-                                            :data="responsables"
-                                            v-model="query"
+                                            id="formEtuEtudiant"
+                                            :data="etudiant"
+                                            v-model="queryEtudiant"
                                             :serializer="item => item.nom +' '+item.prenom"
-                                            placeholder="Nom du responsable"
-                                            @hit="selectResp($event)"/>
+                                            placeholder="Nom et prénom de l'élève"
+                                            @hit="selectRespEleve($event)"/>
                                     <template slot="suggestion" slot-scope="{data, htmlText}">
                                         <div><span class="mr-3" v-html="htmlText"></span></div>
                                     </template>
 
                                 </b-form-group>
-                            </b-col>
 
-                            <b-col cols="2">
-                                <b-form-group label="Téléphone" label-for="formEtuResponsableTel">
-                                    <b-form-input
-                                            id="formEtuResponsableTel"
-                                            v-model="formEtu.responsableTel"
-                                            v-validate="{required:true}"
-                                            data-vv-name="responsableTel"
-                                            :state="validateState('responsableTel')"
-                                            aria-describedby="invalidResponsableTel"
-                                            placeholder="Téléphone du responsable"
-                                            type="text">
-                                    </b-form-input>
-                                    <b-form-invalid-feedback id="invalidResponsableTel">Veuillez entrer un numero de telephone valide</b-form-invalid-feedback>
-                                </b-form-group>
-                            </b-col>
+                                <b-table
+                                        :items="etudiants"
+                                        striped hover
+                                        :fields="fields"
+                                        show-empty
+                                        class="mt-4">
 
-                            <b-col cols="4">
-                                <b-form-group label="Mail" label-for="formEtuResponsableMail">
-                                    <b-form-input
-                                            id="formEtuResponsableMail"
-                                            v-model="formEtu.responsableMail"
-                                            v-validate="{required:true}"
-                                            data-vv-name="responsableMail"
-                                            :state="validateState('responsableMail')"
-                                            aria-describedby="invalidResponsable"
-                                            placeholder="mail du responsable"
-                                            type="text">
-                                    </b-form-input>
-                                    <b-form-invalid-feedback id="invalidResponsableMail">Veuillez entrer un mail valide</b-form-invalid-feedback>
-                                </b-form-group>
-                            </b-col>
-                        </b-row>
-                    </b-card>
-                </b-col>
+                                    <template slot="empty" slot-scope="scope">
+                                        <h6 class="text-center">Pas d'étudiants à afficher.</h6>
+                                    </template>
 
-                <b-col cols="12"  class="mt-4">
-                    <b-card
-                            title="Etudiant Référent">
-                        <b-row>
-                            <b-col cols="2">
-                                <b-form-group label="Département *" label-for="formEtuDepartement">
-                                    <b-form-select
-                                            id="formEtuDepartement"
-                                            v-model="formEtu.departement"
-                                            v-validate="{required:true}"
-                                            data-vv-name="departement"
-                                            :state="validateState('departement')"
-                                            aria-describedby="invalidDepartement">
-                                        <option v-for="option in departement" v-bind:value="option.value">
-                                            {{ option.text }}
-                                        </option>
-                                        <b-form-invalid-feedback id="invalidDepartemnt">Choisissez un département</b-form-invalid-feedback>
-                                    </b-form-select>
-                                </b-form-group>
-                            </b-col>
+                                    <template slot="actions" slot-scope="row">
+                                        <b-button size="sm" class="mr-1" variant="outline-danger" @click="deleteRow(row.item)"><font-awesome-icon :icon="['fas','trash-alt']" /></b-button>
+                                        <b-button size="sm" v-show="!(row.item.id === etudiants[0].id)" class="mr-1" @click="moveUpRow(row.item)"><font-awesome-icon :icon="['fas','sort-up']" /></b-button>
+                                        <b-button size="sm" v-show="!(row.item.id === etudiants[(etudiants.length)-1].id)" @click="moveDownRow(row.item)"><font-awesome-icon :icon="['fas','sort-down']" /></b-button>
+                                    </template>
 
-                            <b-col cols="2">
-                                <b-form-group label="Matière" label-for="formEtuMatiere">
-                                    <b-form-input
-                                            id="formEtuMatiere"
-                                            v-model="formEtu.matiere"
-                                            v-validate="{required:true}"
-                                            data-vv-name="matiere"
-                                            :state="validateState('matiere')"
-                                            aria-describedby="invalidMatiere"
-                                            placeholder="Matière"
-                                            type="text">
-                                    </b-form-input>
-                                    <b-form-invalid-feedback id="invalidMatiere">Veuillez choisir une matiere</b-form-invalid-feedback>
-                                </b-form-group>
-                            </b-col>
+                                </b-table>
 
-                            <b-col cols="2">
-                                <b-form-group label="Projet" label-for="formEtuProjet">
-                                    <b-form-input
-                                            id="formEtuProjet"
-                                            v-model="formEtu.projet"
-                                            v-validate="{required:true}"
-                                            data-vv-name="projet"
-                                            :state="validateState('projet')"
-                                            aria-describedby="invalidProjet"
-                                            placeholder="Projet"
-                                            type="text">
-                                    </b-form-input>
-                                    <b-form-invalid-feedback id="invalidProjet">Veuillez écrire le nom du projet</b-form-invalid-feedback>
-                                </b-form-group>
-                            </b-col>
+                            </b-card>
+                        </b-col>
 
-                            <b-col cols="2">
-                                <b-form-group label="Année" label-for="formEtuAnnee">
-                                    <b-form-input
-                                            id="formEtuAnnee"
-                                            v-model="formEtu.annee"
-                                            v-validate="{required:true}"
-                                            data-vv-name="annee"
-                                            :state="validateState('annee')"
-                                            aria-describedby="invalidAnnee"
-                                            placeholder="Annee"
-                                            type="text">
-                                    </b-form-input>
-                                    <b-form-invalid-feedback id="invalidAnnee">Veuillez écrire l'année étudiante</b-form-invalid-feedback>
-                                </b-form-group>
-                            </b-col>
+                        <b-col md="3" offset-md="9">
+                            <b-button variant="outline-success" class="mt-4 mb-5" @click="next">Passer à la réservation</b-button>
+                        </b-col>
+                    </b-row>
+                </form>
 
-                            <b-col cols="2">
-                                <b-form-group label="Groupe" label-for="formEtuGroupe">
-                                    <b-form-input
-                                            id="formEtuGroupe"
-                                            v-model="formEtu.dep_groupe"
-                                            v-validate="{required:true}"
-                                            data-vv-name="groupe"
-                                            :state="validateState('groupe')"
-                                            aria-describedby="invalidGroupe"
-                                            placeholder="Groupe"
-                                            type="text">
-                                    </b-form-input>
-                                    <b-form-invalid-feedback id="invalidGroupe">Veuillez écrire le groupe de classe</b-form-invalid-feedback>
-                                </b-form-group>
-                            </b-col>
-
-                        </b-row>
-                    </b-card>
-                </b-col>
-
-                <b-col cols="12" class="mt-4">
-                    <b-card>
-                        <b-card-title>Etudiant Référent, Groupe d'élèves <b-button pill variant="outline-info">Ajouter un élève</b-button></b-card-title>
-
-                        <b-form-group label="Nom et Prénom d'élève" label-for="formEtuEtudiant">
-                            <vue-bootstrap-typeahead
-                                    id="formEtuEtudiant"
-                                    :data="etudiant"
-                                    v-model="queryEtudiant"
-                                    :serializer="item => item.nom +' '+item.prenom"
-                                    placeholder="Nom et prénom de l'élève"
-                                    @hit="selectRespEleve($event)"/>
-                            <template slot="suggestion" slot-scope="{data, htmlText}">
-                                <div><span class="mr-3" v-html="htmlText"></span></div>
-                            </template>
-
-                        </b-form-group>
-
-                        <b-table
-                                :items="etudiants"
-
-                                striped hover
-                                :fields="fields"
-                                :sort-by.sync="sortBy"
-                                :sort-desc.sync="sortDesc"
-
-                                selectable
-                                :select-mode="mode"
-                                selectedVariant="success"
-                                @row-selected="rowSelected"
-
-                                show-empty
-                                class="mt-4">
-
-                            <template slot="empty" slot-scope="scope">
-                                <h6 class="text-center">Pas d'étudiants à afficher. Ajoutez-en en cliquant sur le bouton "Ajouter un élève".</h6>
-                            </template>
-
-                        </b-table>
-
-                    </b-card>
-                </b-col>
-
-
-                <b-col cols="12">
-                    <b-button variant="outline-success"  @click="next">Passer à la réservation</b-button>
-                </b-col>
-            </b-row>
 
 
 
@@ -224,9 +237,7 @@
                 <b-button variant="success" @click="validate">Valider</b-button>
             </b-row>
 
-        </form>
-
-        <ModalAddReservationProfesseur />
+        <ModalAddReservationEtudiant />
 
     </div>
 </template>
@@ -238,20 +249,23 @@
 
     import _ from 'underscore';
     import {eventBus} from "../main";
-    import ModalAddReservationProfesseur from "./modals/ModalAddReservationProfesseur";
+    import ModalAddReservationEtudiant from "./modals/ModalAddReservationEtudiant";
 
     export default {
         name: 'ReservationFormulaireEtu',
-        components: {ModalAddReservationProfesseur},
+        components: {
+            ModalAddReservationEtudiant,
+        },
         data() {
             return {
                 formulaire: true,
 
                 fields: [
-                    { key: 'nom', sortable:true },
-                    { key: 'prenom', sortable:true },
-                    { key: 'mail', sortable:true },
-                    { key: 'telephone', sortable:true },
+                    { key: 'nom', sortable:false },
+                    { key: 'prenom', sortable:false },
+                    { key: 'mail', sortable:false },
+                    { key: 'telephone', sortable:false },
+                    { key: 'actions', sortable:false },
                 ],
                 etudiants: [],
 
@@ -265,7 +279,6 @@
                 responsables: [],
                 selectedResponsable: null,
                 chosenResponsable: '',
-
 
                 sortBy : 'id',
                 sortDesc: false,
@@ -283,13 +296,9 @@
             eventBus.$on('error',data => {
                 this.showAlert(data.error, data.status, data.message);
             });
-            eventBus.$on('addedProf', data => {
-               //this.query = data.nom+" "+data.prenom;
-               this.formEtu.responsableTel = data.telephone;
-               this.formEtu.responsableMail = data.mail;
-               this.$set(this.query,data.nom+" "+data.prenom);
-
-                console.log(this.query);
+            eventBus.$on('addedEtu', data => {
+                let $event = data;
+               this.selectRespEleve($event);
             });
         },
         watch: {
@@ -362,13 +371,26 @@
             },
 
             selectResp($event) {
+                this.$set(this.formEtu,'responsableNom',$event['nom']);
+                this.$set(this.formEtu,'responsablePrenom',$event['prenom']);
                 this.$set(this.formEtu,'responsableTel',$event['telephone']);
                 this.$set(this.formEtu,'responsableMail',$event['mail']);
                 this.$set(this.formEtu,'responsabe_projet',$event['id']);
             },
 
             selectRespEleve($event) {
-                this.etudiants.push($event);
+                let test = false;
+                if(this.etudiants.length >= 1){
+                    this.etudiants.forEach( element => {
+                        if(element.id === $event.id)
+                        {
+                            test = true;
+                        }
+                    });
+                }
+                if(test===false) {
+                    this.etudiants.push($event);
+                }
             },
 
             showAlert(error, status, message) {
@@ -382,10 +404,40 @@
                 this.dismissCountDown = dismissCountDown;
             },
 
-            rowSelected(items) {
-                this.selected = items;
-                let idSelected = items[0];
-                //this.$router.push({name: 'materiel', params: { id: idSelected.id }});
+
+            deleteRow(items) {
+                for ( const [key,value] of Object.entries(this.etudiants)){
+                    if(value.id === items.id) {
+                        this.etudiants.splice(key,1);
+                        break;
+                    }
+                }
+            },
+            moveUpRow(items) {
+                console.log(items);
+                for ( const [key,value] of Object.entries(this.etudiants)){
+                    if(value.id === items.id) {
+                        if(key != 0 ){
+                            let del = this.etudiants.splice(key,1);
+                            let keyM = key-1;
+                            this.etudiants.splice(keyM,0,del[0]);
+                            break;
+                        }
+                    }
+                }
+            },
+            moveDownRow(items) {
+                let max = Object.keys(this.etudiants).length;
+                for ( const [key,value] of Object.entries(this.etudiants)){
+                    if(value.id === items.id) {
+                        if(key != (max-1) ){
+                            let del = this.etudiants.splice(key,1);
+                            let keyM = key+1;
+                            this.etudiants.splice(keyM,0,del[0]);
+                            break;
+                        }
+                    }
+                }
             },
 
         }

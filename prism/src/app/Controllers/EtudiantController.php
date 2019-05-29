@@ -103,12 +103,11 @@ class EtudiantController extends Controller {
         $content = $request->getParsedBody();
 
         $postValidateNomPrenom = v::notOptional()->StringType()->length(1,128);
-        $postValidateMail = v::notOptional()->email();
+        $postValidateMail = v::Optional(v::email());
         $postValidateTel = v::notOptional()->phone();
 
         if(!isset($content['nom'])
             ||!isset($content['prenom'])
-            ||!isset($content['mail'])
             ||!isset($content['telephone']))
         {
             $data = ApiErrors::BadRequest();
@@ -118,7 +117,14 @@ class EtudiantController extends Controller {
             try{
                 $content['nom'] = trim($content['nom']);
                 $content['prenom'] = trim($content['prenom']);
-                $content['mail'] = trim($content['mail']);
+                if(isset($content['mail']))
+                {
+                    $content['mail'] = trim($content['mail']);
+                }
+                else
+                {
+                    $content['mail'] = null;
+                }
                 $content['telephone'] = trim($content['telephone']);
                 $postValidateNomPrenom->assert($content['nom']);
                 $postValidateNomPrenom->assert($content['prenom']);
@@ -131,6 +137,11 @@ class EtudiantController extends Controller {
                 $etudiant->mail = $content['mail'];
                 $etudiant->telephone = $content['telephone'];
                 $etudiant->save();
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'etudiant' => $etudiant
+                ];
             }
             catch(NestedValidationException $e)
             {
@@ -184,18 +195,26 @@ class EtudiantController extends Controller {
         $content = $request->getParsedBody();
 
         $postValidateNomPrenom = v::notOptional()->StringType()->length(1,128);
-        $postValidateMail = v::notOptional()->email();
+        $postValidateMail = v::optional(v::email());
         $postValidateTel = v::notOptional()->phone();
 
         if(is_int($id))
         {
             $etudiant = Etudiant::find($id);
-            if(isset($content['nom'])&&isset($content['prenom'])&&isset($content['mail'])&&isset($content['telephone']))
+            if(isset($content['nom'])&&isset($content['prenom'])&&isset($content['telephone']))
             {
                 $content['nom'] = trim($content['nom']);
                 $content['prenom'] = trim($content['prenom']);
-                $content['mail'] = trim($content['mail']);
+                if(isset($content['mail']))
+                {
+                    $content['mail'] = trim($content['mail']);
+                }
+                else
+                {
+                    $content['mail'] = null;
+                }
                 $content['telephone'] = trim($content['telephone']);
+
                 if(empty($etudiant))
                 {
                     try

@@ -137,7 +137,7 @@ class ProfesseurController extends Controller {
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'professeur' => 'reussi'
+                    'professeur' => $professeur
                 ];
             }
             catch(NestedValidationException $e)

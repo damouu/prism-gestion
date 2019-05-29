@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `etudiant` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `nom` varchar(128) NOT NULL,
     `prenom` varchar(128) NOT NULL,
-    `mail` varchar(255) NOT NULL,
+    `mail` varchar(255) DEFAULT NULL,
     `telephone` varchar(20) NOT NULL,
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT Charset=utf8;
@@ -110,7 +110,6 @@ CREATE TABLE IF NOT EXISTS `reservation` (
     `responsable_projet` INT NOT NULL,
     `departement` INT NOT NULL,
     `matiere` varchar(255) NOT NULL,
-    `referent` INT DEFAULT NULL,
     `annee` varchar(128) NOT NULL,
     `dep_groupe` varchar(128) NOT NULL,
     `observation` TEXT DEFAULT NULL,
@@ -119,7 +118,6 @@ CREATE TABLE IF NOT EXISTS `reservation` (
     `deleted_at` date DEFAULT NULL,
     FOREIGN KEY (`departement`) REFERENCES `departement`(`id`),
     FOREIGN KEY (`responsable_projet`) REFERENCES `professeur`(`id`),
-    FOREIGN KEY (`referent`) REFERENCES `etudiant`(`id`),
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
@@ -142,6 +140,7 @@ CREATE TABLE IF NOT EXISTS `fiche_resa` (
 CREATE TABLE IF NOT EXISTS `groupe` (
     `reservation` INT NOT NULL,
     `etudiant` INT NOT NULL,
+    `referent` BOOL DEFAULT 0,
     FOREIGN KEY (`reservation`) REFERENCES `reservation`(`id`),
     FOREIGN KEY (`etudiant`) REFERENCES `etudiant`(`id`),
     PRIMARY KEY (`reservation`, `etudiant`)
