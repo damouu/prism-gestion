@@ -148,36 +148,43 @@ class ReservationController extends Controller
                     $content['observation'] = null;
                 }
 
+                $reservation = new Reservation();
+                $reservation->responsable_projet = $content['responsable_projet'];
+                $reservation->departement = $content['departement'];
+                $reservation->matiere = $content['matiere'];
+                $reservation->annee = $content['annee'];
+                $reservation->dep_groupe = $content['dep_groupe'];
+                $reservation->observation = $content['observation'];
 
-                DB::transaction(function () use ($content, $etudiants) {
+                if(is_null($content['groupes']))
+                {
+                    $reservation->save();
+                }
+                else
+                {
+                    DB::transaction(function () use ($content, $etudiants, $reservation) {
 
-                    $reservation = new Reservation();
-                    $reservation->responsable_projet = $content['responsable_projet'];
-                    $reservation->departement = $content['departement'];
-                    $reservation->matiere = $content['matiere'];
-                    $reservation->annee = $content['annee'];
-                    $reservation->dep_groupe = $content['dep_groupe'];
-                    $reservation->observation = $content['observation'];
-
-                    foreach($etudiants as $key => $row)
-                    {
-                        if($key===0)
+                        foreach($etudiants as $key => $row)
                         {
-                            $etudiant = Etudiant::find($row);
-                            $etudiant->groupe()->save($reservation, ['referent'=>1]);
+                            if($key===0)
+                            {
+                                $etudiant = Etudiant::find($row);
+                                $etudiant->groupe()->save($reservation, ['referent'=>1]);
+                            }
+                            else
+                            {
+                                $etudiant = Etudiant::find($row);
+                                $etudiant->groupe()->save($reservation, ['referent'=>0]);
+                            }
                         }
-                        else
-                        {
-                            $etudiant = Etudiant::find($row);
-                            $etudiant->groupe()->save($reservation, ['referent'=>0]);
-                        }
-                    }
-                    $data = [
-                        'type' => "success",
-                        'code' => 200,
-                        'reservation' => "reussi",
-                    ];
-                });
+                    });
+                }
+
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'reservation' => "reussi",
+                ];
 
             }
             catch(\Exception $e)

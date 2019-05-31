@@ -328,11 +328,20 @@
         methods: {
 
             next(){
-                this.$validator.validateAll().then( result => {
-                    if (!result) {
-                        return;
-                    } else
-                    {
+                if(this.etudiants.length === 0)
+                {
+                    this.$validator.validateAll().then( result => {
+                        if (!result) {
+                            return;
+                        }
+                    });
+                }
+                else {
+                    this.$validator.validateAll().then( result => {
+                        if (!result) {
+                            return;
+                        } else
+                        {
 
                             if(!this.formEtu.responsable_projet)
                             {
@@ -378,17 +387,19 @@
                                 'observation': this.formEtu.observation,
                                 'groupes': etu
                             })
-                            .then( response => {
-                                console.log(response.data);
-                            })
-                            .catch(error => {
-                                console.log(error.response);
-                            })
+                                .then( response => {
+                                    console.log(response.data);
+                                })
+                                .catch(error => {
+                                    console.log(error.response);
+                                })
 
 
-                    }
+                        }
 
-                });
+                    });
+                }
+
             },
 
 
