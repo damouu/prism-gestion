@@ -32,6 +32,17 @@ class Reservation extends Model
         return $this->hasMany('PrimsGestion\Models\Departement', 'id');
     }
 
+    public function groupe()
+    {
+        return $this->belongsToMany(
+            'PrismGestion\Models\Etudiant',
+            'groupe',
+            'reservation',
+            'etudiant')
+            ->withPivot(['referent'])->as('groupe');
+
+    }
+
     public function exemplaire()
     {
         return $this->belongsToMany(

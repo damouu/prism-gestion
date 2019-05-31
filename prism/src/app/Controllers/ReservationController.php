@@ -2,13 +2,16 @@
 
 namespace PrismGestion\Controllers;
 
+use Illuminate\Database\Capsule\Manager as DB;
 use DateTime;
 use PrismGestion\Errors\ApiErrors;
+use PrismGestion\Models\Etudiant;
 use PrismGestion\Models\Exemplaire;
 use PrismGestion\Models\Reservation;
 use PrismGestion\Utils\ResponseWriter;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as v;
 
 
@@ -118,6 +121,8 @@ class ReservationController extends Controller
     {
         $content = $request->getParsedBody();
 
+        $etudiants = $content['groupes'];
+
         if(!isset($content['responsable_projet'])
             || !isset($content['departement'])
             || !isset($content['matiere'])
@@ -143,21 +148,36 @@ class ReservationController extends Controller
                     $content['observation'] = null;
                 }
 
-                $reservation = new Reservation();
 
-                $reservation->responsable_projet = $content['responsable_projet'];
-                $reservation->departement = $content['departement'];
-                $reservation->matiere = $content['matiere'];
-                $reservation->annee = $content['annee'];
-                $reservation->dep_groupe = $content['dep_groupe'];
-                $reservation->observation = $content['observation'];
-                $reservation->save();
+                DB::transaction(function () use ($content, $etudiants) {
 
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'reservation' => $reservation
-                ];
+                    $reservation = new Reservation();
+                    $reservation->responsable_projet = $content['responsable_projet'];
+                    $reservation->departement = $content['departement'];
+                    $reservation->matiere = $content['matiere'];
+                    $reservation->annee = $content['annee'];
+                    $reservation->dep_groupe = $content['dep_groupe'];
+                    $reservation->observation = $content['observation'];
+
+                    foreach($etudiants as $key => $row)
+                    {
+                        if($key===0)
+                        {
+                            $etudiant = Etudiant::find($row);
+                            $etudiant->groupe()->save($reservation, ['referent'=>1]);
+                        }
+                        else
+                        {
+                            $etudiant = Etudiant::find($row);
+                            $etudiant->groupe()->save($reservation, ['referent'=>0]);
+                        }
+                    }
+                    $data = [
+                        'type' => "success",
+                        'code' => 200,
+                        'reservation' => "reussi",
+                    ];
+                });
 
             }
             catch(\Exception $e)
@@ -168,6 +188,8 @@ class ReservationController extends Controller
 
         return ResponseWriter::ResponseWriter($response, $data);
     }
+
+
 
 
 }

@@ -358,7 +358,6 @@
                                     'telephone': this.formEtu.responsableTel
                                 })
                                     .then( response => {
-                                        console.log(response);
                                         this.formEtu.responsable_projet = response.data.professeur.id;
                                     })
                                     .catch(error => {
@@ -366,23 +365,25 @@
                                     })
 
                             }
-
-                                axios.post('/reservations', {
-                                    'responsable_projet': this.formEtu.responsable_projet,
-                                    'departement': this.formEtu.departement,
-                                    'matiere': this.formEtu.matiere,
-                                    'annee': this.formEtu.annee,
-                                    'dep_groupe': this.formEtu.dep_groupe,
-                                    'observation': this.formEtu.observation
-                                })
-                                .then( response => {
-
-                                    let resa = response.data.reservation.id;
-                                    console.log('reservation n°'+resa);
-                                })
-                                    .catch(error => {
-                                        console.log(error.response);
-                                    })
+                            let etu = [];
+                            this.etudiants.forEach(element => {
+                                etu.push(element['id']);
+                            });
+                            axios.post('/reservations', {
+                                'responsable_projet': this.formEtu.responsable_projet,
+                                'departement': this.formEtu.departement,
+                                'matiere': this.formEtu.matiere,
+                                'annee': this.formEtu.annee,
+                                'dep_groupe': this.formEtu.dep_groupe,
+                                'observation': this.formEtu.observation,
+                                'groupes': etu
+                            })
+                            .then( response => {
+                                console.log(response.data);
+                            })
+                            .catch(error => {
+                                console.log(error.response);
+                            })
 
 
                     }
