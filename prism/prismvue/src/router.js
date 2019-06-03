@@ -8,6 +8,8 @@ import Fournisseur from './views/FournisseurVue'
 import Fournisseurs from './views/FournisseursVue.vue'
 import Reformes from './views/ReformesVue'
 import Reforme from './views/ReformeVue'
+import Feuille_Reservation from './views/ReservationFormulaireMaterielEtu'
+
 Vue.use(Router);
 
 export default new Router({
@@ -51,6 +53,12 @@ export default new Router({
       path: '/reservation',
       name: 'reservations',
       component: Reservations,
+    }
+    ,
+    {
+      path: '/reservation/:id/feuille',
+      name: 'fiche_reservation',
+      component: Feuille_Reservation,
     }
   ]
 })

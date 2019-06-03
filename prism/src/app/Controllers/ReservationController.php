@@ -183,7 +183,7 @@ class ReservationController extends Controller
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'reservation' => "reussi",
+                    'reservation' => $reservation,
                 ];
 
             }

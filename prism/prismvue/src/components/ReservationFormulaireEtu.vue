@@ -21,7 +21,7 @@
             </b-col>
         </b-row>
 
-                <form v-if="formulaire" ref="modifMateriel" @submit.stop.prevent="modifMateriel" >
+                <form>
                     <b-row>
                         <b-col cols="12">
                             <b-card>
@@ -273,8 +273,6 @@
         },
         data() {
             return {
-                formulaire: true,
-
                 fields: [
                     { key: 'nom', sortable:false },
                     { key: 'prenom', sortable:false },
@@ -388,7 +386,7 @@
                                 'groupes': etu
                             })
                                 .then( response => {
-                                    console.log(response.data);
+                                    this.$router.push({path: '/reservation/'+ response.data.reservation.id +'/feuille'});
                                 })
                                 .catch(error => {
                                     console.log(error.response);
