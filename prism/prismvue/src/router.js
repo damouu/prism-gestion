@@ -9,6 +9,7 @@ import Fournisseurs from './views/FournisseursVue.vue'
 import Reformes from './views/ReformesVue'
 import Reforme from './views/ReformeVue'
 import Feuille_Reservation from './views/ReservationFormulaireMaterielEtu'
+import Agenda from './views/AgendaVue'
 
 Vue.use(Router);
 
@@ -59,6 +60,11 @@ export default new Router({
       path: '/reservation/:id/feuille',
       name: 'fiche_reservation',
       component: Feuille_Reservation,
+    },
+    {
+      path: '/agenda',
+      name: 'agenda',
+      component: Agenda
     }
   ]
 })

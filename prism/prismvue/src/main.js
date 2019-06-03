@@ -12,13 +12,14 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { faSortUp } from '@fortawesome/free-solid-svg-icons'
 import { faSortDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
-library.add(faTrashAlt,faSortUp,faSortDown);
+library.add(faTrashAlt,faSortUp,faSortDown, faAngleLeft, faAngleRight);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VeeValidate, {
