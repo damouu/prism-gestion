@@ -6,19 +6,21 @@
         <b-row>
             <b-col cols="12">
                 <FullCalendar
-                        defaultView="dayGridMonth"
+                        defaultView="customWeek"
                         :events="calendarEvents"
                         themeSystem="bootstrap"
                         :plugins="plugins"
-                        event-limit="true"
+                        event-limit="false"
                         :locale="'fr'"
                         :header="{
-                            left: 'today prev,next',
+                            left: ' prev,today,next',
                             center:'title',
-                            right:'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                            right:'dayGridMonth customWeek customDay'
                         }"
                         :button-text="config"
                         bootstrap-font-awesome="false"
+                        :views="views"
+                        @eventClick="handleDateClick"
                 />
             </b-col>
 
@@ -38,6 +40,7 @@
     import dayGridPlugin from '@fullcalendar/daygrid';
     import bootstrapPlugin from '@fullcalendar/bootstrap';
     import timeGridPlugin from '@fullcalendar/timegrid';
+    import timeline from '@fullcalendar/timeline';
 
     export default {
         name: "agenda",
@@ -54,21 +57,25 @@
                         day: 'jour',
                         list: 'liste',
                         prev: 'précédent',
-                        next: 'suivant'
+                        next: 'suivant',
                     },
                 theming:
                     {
                         prev: 'fa-angle-left'
                     },
+                views: {
+                    customWeek:{ type: 'timeline', duration:{weeks:1}, slotDuration:{days:1}, buttonText:'customWeek'},
+                    customDay:{type:'timeline', titleFormat:{ day:'numeric', weekday:'long', month:'short', year:'numeric'}, columnHeaderHtml:{weekday:'long'} , duration:{days:1}, slotDuration:{days:1}, buttonText:'customDay'}
+                },
 
                 plugins: [
-                    bootstrapPlugin, dayGridPlugin, timeGridPlugin
+                    bootstrapPlugin, dayGridPlugin, timeGridPlugin, timeline
                 ],
                 calendarEvents: [
-                    {title: 'Event Now', start: new Date(), end: new Date('June 5, 2019 08:30:00'), color: 'yellow' },
-                    {title: 'Event Now', start: new Date(), end: new Date('June 5, 2019 08:30:00') },
-                    {title: 'Event Now', start: new Date(), end: new Date('June 5, 2019 08:30:00') },
-                    {title: 'Event Now', start: new Date(), end: new Date('June 5, 2019 08:30:00') },
+                    {title: 'Event Now2', start: new Date(), end: new Date('June 5, 2019 08:30:00'), color: 'yellow', id:6 },
+                    {title: 'Event Now1', start: new Date(), end: new Date('June 5, 2019 08:30:00') },
+                    {title: 'Event Now4', start: new Date(), end: new Date('June 5, 2019 08:30:00') },
+                    {title: 'Event Now3', start: new Date(), end: new Date('June 5, 2019 08:30:00') },
                     {title: 'Event Now', start: new Date(), end: new Date('June 5, 2019 08:30:00') },
                     {title: 'Event Now', start: new Date(), end: new Date('June 5, 2019 08:30:00') },
                     {title: 'Event Now', start: new Date(), end: new Date('June 5, 2019 08:30:00') },
@@ -84,6 +91,18 @@
         },
         methods: {
 
+            handleDateClick(arg) {
+                console.log(arg.event);
+                console.log(arg.el);
+                console.log(arg.jsEvent)
+            },
+            getEvents(){
+                axios.get()
+            },
+            getOneEvent(){
+
+            }
+
         }
     }
 </script>
@@ -95,4 +114,5 @@
     @import "~@fullcalendar/timegrid/main.css";
     @import "~@fullcalendar/daygrid/main.css";
     @import "~@fullcalendar/timegrid/main.css";
+    @import "~@fullcalendar/timeline/main.css";
 </style>
