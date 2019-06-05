@@ -19,23 +19,18 @@ class AgendaController extends Controller
     {
 
         $agenda = FicheReservation::with('exemplaire')->get();
+        /*
         foreach($agenda as $agen)
         {
             foreach($agen as $row)
             {
                 $row->type =
-                    Materiel::whereHas('exemplaire', function($query) use ($agen){
-                        $query->where('exemplaire.id','=',$agen.id);
+                    Materiel::whereHas('exemplaire', function($query) use ($row){
+                        $query->where('exemplaire.id','=',$row.id);
                     })->first();
             }
 
-        }
-
-        /*
-
-                ->join('exemplaire','=','')
-
-        */
+        }*/
         $data = [
             'type' => "success",
             'code' => 200,
