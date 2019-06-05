@@ -97,7 +97,14 @@
                 console.log(arg.jsEvent)
             },
             getEvents(){
-                axios.get()
+                axios.get('/agenda')
+                    .then( response => {
+                        response.
+                        this.calendarEvents.push({title: ''})
+                    })
+                    .catch( error => {
+
+                    })
             },
             getOneEvent(){
 

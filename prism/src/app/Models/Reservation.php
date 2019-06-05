@@ -40,17 +40,6 @@ class Reservation extends Model
             'reservation',
             'etudiant')
             ->withPivot(['referent'])->as('groupe');
-
-    }
-
-    public function exemplaire()
-    {
-        return $this->belongsToMany(
-            'PrismGestion\Models\Exemplaire',
-            'reservation_exemplaire',
-            'id_reservation',
-            'id_exemplaire')
-            ->withPivot(['emprunt','rendu','incident'])->as('reservation_exemplaire');
     }
 
 

@@ -31,6 +31,8 @@ $app->post('/professeurs[/]', 'ProfesseurController:post');
 $app->get('/reservations[/]','ReservationController:getAll');
 $app->post('/reservations[/]','ReservationController:post');
 
+$app->get('/agenda[/]', 'AgendaController:getAll');
+
 
 
 $app->group('', function() {
