@@ -140,10 +140,6 @@
             // API - GET TYPES
             this.getTypes();
 
-            eventBus.$on('addedCategorie', data => {
-                this.types = [];
-                this.getTypes();
-            });
             eventBus.$on('addedMateriel', data => {
                 this.materiels = [];
                 this.getAll();

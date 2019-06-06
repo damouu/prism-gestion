@@ -10,6 +10,7 @@ import Reformes from './views/ReformesVue'
 import Reforme from './views/ReformeVue'
 import Feuille_Reservation from './views/ReservationFormulaireMaterielEtu'
 import Agenda from './views/AgendaVue'
+import Categories from './views/CategoriesVue'
 
 Vue.use(Router);
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/inventaire/materiel/:id',
       name: 'materiel',
       component: Materiel,
+    },
+    {
+      path: '/inventaire/categories',
+      name: 'categories',
+      component: Categories,
     },
     {
       path: '/inventaire/fournisseurs',

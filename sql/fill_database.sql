@@ -1,7 +1,7 @@
-INSERT INTO `type` (`nom`) VALUES ('photo');
-INSERT INTO `type` (`nom`) VALUES ('Son');
-INSERT INTO `type` (`nom`) VALUES ('Eclairage');
-INSERT INTO `type` (`nom`) VALUES ('Video');
+INSERT INTO `type` (`nom`,`couleur`) VALUES ('photo','blue');
+INSERT INTO `type` (`nom`,`couleur`) VALUES ('Son','grey');
+INSERT INTO `type` (`nom`,`couleur`) VALUES ('Eclairage','Green');
+INSERT INTO `type` (`nom`,`couleur`) VALUES ('Video','Brown');
 
 
 INSERT INTO `materiel` (`constructeur`,`modele`,`description`,`nb_ex`,`type`,`date_creation`) VALUES ('Canon','EOS X5', 'appareil photo classique', 3, 1,'2019-04-16');
