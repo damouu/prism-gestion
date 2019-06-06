@@ -19,18 +19,15 @@ class AgendaController extends Controller
     {
 
         $agenda = FicheReservation::with('exemplaire')->get();
-        /*
-        foreach($agenda as $agen)
-        {
-            foreach($agen as $row)
-            {
-                $row->type =
-                    Materiel::whereHas('exemplaire', function($query) use ($row){
-                        $query->where('exemplaire.id','=',$row.id);
-                    })->first();
+
+        foreach ($agenda as $agen) {
+            foreach ($agen->exemplaire as $exemplaire) {
+                $materiel = $exemplaire->materiel()->first();
+                $materiel->type = $materiel->type()->first();
+                $exemplaire->materiel = $materiel;
             }
 
-        }*/
+        }
         $data = [
             'type' => "success",
             'code' => 200,
@@ -38,6 +35,5 @@ class AgendaController extends Controller
         ];
 
         return ResponseWriter::ResponseWriter($response, $data);
-
     }
 }
