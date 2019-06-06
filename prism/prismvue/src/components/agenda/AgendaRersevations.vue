@@ -24,6 +24,7 @@
                         }"
                         :button-text="config"
                         bootstrap-font-awesome="false"
+                        height="auto"
                         :views="views"
                         @eventClick="handleDateClick"
                 />

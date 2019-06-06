@@ -24,7 +24,6 @@
                         }"
                         :button-text="config"
                         bootstrap-font-awesome="false"
-                        :views="views"
                         @eventClick="handleDateClick"
                 />
             </b-col>

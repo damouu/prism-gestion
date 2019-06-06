@@ -37,6 +37,7 @@
                         }"
                         :button-text="config"
                         bootstrap-font-awesome="false"
+                        height="auto"
                         :views="views"
                         @eventClick="handleDateClick"
                 />
@@ -121,7 +122,6 @@
                 this.currentType = type;
                 this.calendarEvents = [];
                 this.getEventsEx();
-                console.log(this.calendarEvents);
             },
 
         }
