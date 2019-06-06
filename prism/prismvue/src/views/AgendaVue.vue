@@ -46,7 +46,7 @@
 
     import NavigationReservationAgenda from "../components/navigation/NavigationReservationAgenda";
     import {eventBus} from "../main";
-    import AgendaReservation from "../components/agenda/AgendaRersevation";
+    import AgendaReservation from "../components/agenda/AgendaRersevations";
     import AgendaEmprunts from "../components/agenda/AgendaEmprunts";
     import AgendaExemplaires from "../components/agenda/AgendaExemplaires";
 

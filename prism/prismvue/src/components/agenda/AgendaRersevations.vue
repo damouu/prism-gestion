@@ -48,6 +48,25 @@
         data() {
             return {
                 calendarEvents: [],
+                colors: [
+                    'red',
+                    'pink',
+                    'purple',
+                    'blue',
+                    'indigo',
+                    'deepPurple',
+                    'lightBlue',
+                    'teal',
+                    'green',
+                    'lightGreen',
+                    'lime',
+                    'amber',
+                    'orange',
+                    'deepOrange',
+                    'brown',
+                    'grey',
+                    'blueGrey'
+                ],
                 plugins: [
                     bootstrapPlugin, dayGridPlugin, timeGridPlugin, timeline
                 ],
@@ -77,7 +96,8 @@
                 axios.get('/agenda')
                     .then( response => {
                         response.data.agenda.forEach(element => {
-                            this.calendarEvents.push({title: element.reservation, start: element.date_depart, end:element.date_retour, id: element.id})
+                            let color = this.colors[Math.floor(Math.random() * this.colors.length)];
+                            this.calendarEvents.push({title: element.reservation, start: element.date_depart, end:element.date_retour, id: element.id, color: color})
                         })
 
                     })
