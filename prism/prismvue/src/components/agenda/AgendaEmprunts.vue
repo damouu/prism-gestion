@@ -14,6 +14,7 @@
                         :plugins="plugins"
                         :event-limit="'true'"
                         :locale="'fr'"
+                        height="auto"
                         min-time="08:00:00"
                         max-time="18:00:00"
                         :header="{

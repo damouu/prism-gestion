@@ -60,6 +60,8 @@
         },
         data() {
             return {
+                types : [],
+                currentType: 'Tous',
                 calendarEvents: [],
                 plugins: [
                     bootstrapPlugin, dayGridPlugin, timeGridPlugin, timeline
@@ -87,11 +89,11 @@
         },
         methods: {
             getEventsEx(){
-                axios.get('/agenda')
+                axios.get('/agenda?select='+this.currentType)
                     .then( response => {
                         response.data.agenda.forEach(element => {
-                            element.exemplaire.forEach( q => {
-                                this.calendarEvents.push({title: q.reference, start: element.date_depart, end:element.date_retour, id: q.id})
+                            element.exemplaires.forEach( q => {
+                                this.calendarEvents.push({title: q.reference, start: element.date_depart, end:element.date_retour, id: q.id, type:q.materiel.type.nom})
                             })
                         })
                     })
@@ -99,6 +101,7 @@
                         console.log(error);
                     })
             },
+
             handleDateClick(arg) {
                 console.log(arg.event);
                 console.log(arg.el);
@@ -116,7 +119,9 @@
             },
             setCurrentType(type){
                 this.currentType = type;
-                this.fillTable();
+                this.calendarEvents = [];
+                this.getEventsEx();
+                console.log(this.calendarEvents);
             },
 
         }
