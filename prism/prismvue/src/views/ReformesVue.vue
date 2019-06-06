@@ -32,13 +32,15 @@
                             </b-col>
                         </b-row>
 
-                        <b-table v-if="fillReformes.length > 0"
-                                 striped hover
+                        <b-table
+                                striped hover
                                  :items="fillReformes"
 
                                  :fields="fieldsRow"
                                  :sort-by.sync="sortBy"
                                  :sort-desc.sync="sortDesc"
+
+                                 show-empty
 
                                  selectable
                                  :select-mode="mode"
@@ -46,6 +48,11 @@
                                  :current-page="currentPage"
                                  selectedVariant="success"
                                  @row-selected="rowSelected">
+
+                            <template slot="empty" slot-scope="scope">
+                                <h6 class="text-center">Pas d'exemplaires en réforme.</h6>
+                            </template>
+
                         </b-table>
                         <b-pagination
                                 v-model="currentPage"
@@ -129,6 +136,7 @@
             },
 
             fillTable() {
+                this.loaded = 'false';
                 this.fillReformes = [];
                 let listeReforme = JSON.parse(JSON.stringify(this.reformes));
                 listeReforme.forEach(reforme => {

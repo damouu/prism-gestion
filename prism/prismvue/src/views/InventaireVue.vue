@@ -48,7 +48,7 @@
                             </template>
                         </b-tabs>
                         <br/>
-                        <b-table v-if="fillMateriels.length > 0"
+                        <b-table
                                  striped hover
                                  :items="fillMateriels"
 
@@ -56,12 +56,17 @@
                                  :sort-by.sync="sortBy"
                                  :sort-desc.sync="sortDesc"
 
+                                 show-empty
+
                                  selectable
                                  :select-mode="mode"
                                  :per-page="perPage"
                                  :current-page="currentPage"
                                  selectedVariant="success"
                                  @row-selected="rowSelected">
+                            <template slot="empty" slot-scope="scope">
+                                <h6 class="text-center">Pas de matériels à afficher.</h6>
+                            </template>
                         </b-table>
                         <b-pagination
                                 v-model="currentPage"

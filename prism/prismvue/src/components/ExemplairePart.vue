@@ -7,13 +7,15 @@
         </b-row>
     </div>
         <div v-if="!showEx">
-        <b-table v-if="exemplaires.length > 0"
+        <b-table
                  striped hover
                  :items="exemplaires"
 
                  :fields="fieldsRow"
                  :sort-by.sync="sortBy"
                  :sort-desc.sync="sortDesc"
+
+                 show-empty
 
                  selectable
                  :select-mode="mode"
@@ -26,6 +28,9 @@
                 <b-badge variant="warning" v-if="row.value == 'réparation'">{{row.value}}</b-badge>
                 <b-badge variant="danger" v-if="row.value == 'emprunté'">{{row.value}}</b-badge>
                 <b-badge variant="secondary" v-if="row.value == 'non empruntable'">{{row.value}}</b-badge>
+            </template>
+            <template slot="empty" slot-scope="scope">
+                <h6 class="text-center">Pas encore d'exemplaires pour ce matériel.</h6>
             </template>
         </b-table>
 
