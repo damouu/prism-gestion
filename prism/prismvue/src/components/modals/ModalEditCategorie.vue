@@ -1,22 +1,22 @@
 <template>
-    <div id="modalAddCategorie">
+    <div id="modalEditCategorie">
 
         <b-modal
-                id="modal-AddCategorie"
-                title="Ajout de catégorie"
-                ref="modal6"
+                id="modal-EditCategorie"
+                title="Edition de catégorie"
+                ref="modal14"
                 scrollable
                 size="lg"
                 centered
-                @ok="handleOkAddCat">
-            <form ref="addCategorie" @submit.stop.prevent="addCategorie">
-                <b-form-group label="Nom *" label-cols-sm="4" label-align-sm="left" label-for="addCategorieNom">
+                @ok="handleOkEditCat">
+            <form ref="editCategorie" @submit.stop.prevent="editCategorie">
+                <b-form-group label="Nom *" label-cols-sm="4" label-align-sm="left" label-for="editCategorieNom">
                     <b-form-input
-                            id="addCategorieNom"
-                            data-vv-name="addCatNom"
+                            id="editCategorieNom"
+                            data-vv-name="editCatNom"
                             v-model="categorie.nom"
                             v-validate="{required:true}"
-                            :state="validateState('addCatNom')"
+                            :state="validateState('editCatNom')"
                             aria-describedby="invalidNom"
                             placeholder="Entrez le nom de catégorie"
                             type="text">
@@ -24,11 +24,11 @@
                     <b-form-invalid-feedback id="invalidNom">Veuillez écrire un nom de catégorie.</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Couleur *" label-cols-sm="4" label-align-sm="left" label-for="addCategorieCouleur">
+                <b-form-group label="Couleur *" label-cols-sm="4" label-align-sm="left" label-for="editCategorieCouleur">
                     <colorPicker
                             id="addCategorieCouleur"
                             v-model="categorie.couleur"
-                            startColor="#ff"
+                            :startColor="categorie.couleur"
                             :disabled="false">
                     </colorPicker>
                 </b-form-group>
@@ -47,7 +47,7 @@
 
     export default {
 
-        name: 'ModalAddCategorie',
+        name: 'ModalEditCategorie',
         components:{
             ColorPicker,
         },
@@ -57,6 +57,10 @@
             }
         },
         mounted() {
+            eventBus.$on('editCategorie', data => {
+                this.categorie = data;
+            });
+            console.log(this.categorie);
         },
         methods: {
             validateState(ref) {
@@ -65,36 +69,36 @@
                 }
                 return null;
             },
-            handleOkAddCat(bvModalEvt) {
+            handleOkEditCat(bvModalEvt) {
                 bvModalEvt.preventDefault();
-                this.addCategorie();
+                this.editCategorie();
             },
-            addCategorie() {
+            editCategorie() {
                 this.$validator.validateAll().then( result => {
                     if (!result)
                     {
                         return;
                     }
                     else {
-                        axios.post('/types', {
-                            'nom': this.categorie.nom,
-                            'couleur': this.categorie.couleur
+                        axios.put('/types/'+this.categorie.id, {
+                            'nom':this.categorie.nom,
+                            'couleur': this.categorie.couleur,
                         })
                             .then(response => {
 
                                 this.$nextTick(() => {
-                                    this.$refs.modal6.hide();
+                                    this.$refs.modal14.hide();
                                 });
 
-                                this.$bvToast.toast(`Catégorie ajoutée avec succès !`, {
-                                    title: `Ajout réussi`,
+                                this.$bvToast.toast(`Catégorie modifiée avec succès !`, {
+                                    title: `Modification réussie`,
                                     toaster: 'b-toaster-bottom-right',
                                     variant: 'success',
                                     solid: true,
                                     appendToast: false
                                 });
                                 this.categorie = [];
-                                eventBus.$emit('addedCategorie');
+                                eventBus.$emit('editedCategorie');
                             })
                             .catch(error => {
                                 eventBus.$emit('error', {

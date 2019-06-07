@@ -52,8 +52,8 @@
                                 <h5><b-badge v-bind:style="{ 'background-color':row.value}">{{row.value}}</b-badge></h5>
                             </template>
                             <template slot="actions" slot-scope="row">
-                                <b-button size="sm" class="mr-1" variant="outline-danger" v-b-modal.modal-DeleteCategorie @click="modalDeleteCategorie(row.item)"><font-awesome-icon :icon="['fas','trash-alt']" /></b-button>
-                                <b-button size="sm" class="mr-1" variant="outline-success" @click="modalDeleteCategorie(row.item)"><font-awesome-icon :icon="['fas','edit']" /></b-button>
+                                <b-button size="sm" class="mr-1" variant="outline-danger" v-b-modal.modal-DelCategorie @click="modalDeleteCategorie(row.item)"><font-awesome-icon :icon="['fas','trash-alt']" /></b-button>
+                                <b-button size="sm" class="mr-1" variant="outline-success" v-b-modal.modal-EditCategorie @click="modalEditCategorie(row.item)"><font-awesome-icon :icon="['fas','edit']" /></b-button>
                             </template>
                         </b-table>
                         <b-pagination
@@ -67,6 +67,7 @@
 
             <ModalAddCategorie />
             <ModalDeleteCategorie />
+            <ModalEditCategorie />
 
         </div>
 
@@ -80,10 +81,12 @@
     import NavigationInventaire from "../components/navigation/NavigationInventaire";
     import ModalAddCategorie from '../components/modals/ModalAddCategorie';
     import ModalDeleteCategorie from "../components/modals/ModalDeleteCategorie";
+    import ModalEditCategorie from "../components/modals/ModalEditCategorie";
 
     export default {
         name: "categories",
         components:{
+            ModalEditCategorie,
             NavigationInventaire,
             ModalAddCategorie,
             ModalDeleteCategorie,
@@ -123,6 +126,16 @@
                 this.categories = [];
                 this.getTypes();
             });
+
+            eventBus.$on('deleteSuccessCategorie', data => {
+                this.categories = [];
+                this.getTypes();
+            });
+
+            eventBus.$on('editedCategorie', data => {
+                this.categories = [];
+                this.getTypes();
+            });
         },
         methods: {
 
@@ -148,8 +161,10 @@
             },
             modalDeleteCategorie(item) {
                 eventBus.$emit('deleteCategorie',item);
+            },
+            modalEditCategorie(item) {
+                eventBus.$emit('editCategorie',item);
             }
-
         }
     }
 

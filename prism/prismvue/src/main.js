@@ -7,6 +7,8 @@ import BootstrapVue from 'bootstrap-vue'
 import VeeValidate from 'vee-validate'
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 
+
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { faSortUp } from '@fortawesome/free-solid-svg-icons'
@@ -20,6 +22,7 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
+
 library.add(faTrashAlt,faSortUp,faSortDown, faAngleLeft, faAngleRight, faEdit);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
