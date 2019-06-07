@@ -15,8 +15,8 @@
                         :plugins="plugins"
                         :event-limit="'true'"
                         :locale="'fr'"
-                        min-time="08:00:00"
-                        max-time="18:00:00"
+                        min-time="07:30:00"
+                        max-time="19:00:00"
                         :header="{
                             left: ' prev,today,next',
                             center:'title',

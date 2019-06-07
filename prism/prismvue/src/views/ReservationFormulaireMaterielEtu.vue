@@ -66,6 +66,14 @@
 
                                     </b-card>
                                     <b-card class="mt-4">
+                                        <b-form-group label="Observations" label-for="observations">
+                                            <b-textarea
+                                                    id="observations"
+                                                    v-model="resa.observations"
+                                            ></b-textarea>
+                                        </b-form-group>
+                                    </b-card>
+                                    <b-card class="mt-4">
                                         <b-card-title>Matériel à emprunter</b-card-title>
 
                                         <b-table
@@ -168,6 +176,8 @@
                     { key: 'reference', sortable:true },
                     { key: 'etat', sortable:true }
                 ],
+
+                resa: [],
             }
         },
         mounted() {
@@ -205,11 +215,6 @@
                         this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     });
             },
-
-            getReservation()
-            {
-
-            }
 
         }
 

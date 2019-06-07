@@ -244,14 +244,6 @@
                     </b-row>
                 </form>
 
-
-
-
-            <b-row v-show="!formulaire">
-                <b-button variant="outline-secondary" @click="back">Revenir en arrière</b-button>
-                <b-button variant="success" @click="validate">Valider</b-button>
-            </b-row>
-
         <ModalAddReservationEtudiant />
 
     </div>
