@@ -94,7 +94,7 @@
                     .then( response => {
                         response.data.agenda.forEach(element => {
                             element.exemplaires.forEach( q => {
-                                this.calendarEvents.push({title: q.reference, start: element.date_depart, end:element.date_retour, id: q.id, type:q.materiel.type.nom})
+                                this.calendarEvents.push({title: q.reference, start: element.date_depart, end:element.date_retour, id: q.id, type:q.materiel.type.nom, color:q.materiel.type.couleur})
                             })
                         })
                     })
