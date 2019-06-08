@@ -1,6 +1,19 @@
 <template>
     <div id="materiel">
-        <div>
+
+
+        <div v-if="loading" class="loading text-center">
+            <b-container>
+                <div class="text-center mt-5">
+                    <b-spinner style="width: 3rem; height: 3rem;" variant="danger" label="Text Centered"></b-spinner>
+                </div>
+            </b-container>
+        </div>
+
+
+
+
+        <div v-else>
 
             <b-container>
                 <b-alert
@@ -132,11 +145,10 @@
         },
         data() {
             return {
+                loading: true,
                 materielId: this.$route.params.id,
                 materiel: [],
                 materielType: [],
-
-                types: [],
                 type: { 'text' : 'text','date' : 'date'},
                 rowsMat: [
                     'id',
@@ -157,7 +169,6 @@
         mounted() {
 
             this.getMateriel();
-            this.getTypes();
 
             eventBus.$on('editedMateriel', data => {
                 this.materiel = [];
@@ -177,23 +188,14 @@
             getMateriel() {
                 axios.get('/materiels/'+ this.materielId )
                     .then( response => {
+
+                        this.loading=false;
+
                         this.materiel = response.data.materiel;
                         this.materielType = { 'value': response.data.materiel.type.id, 'text': response.data.materiel.type.nom };
                     })
                     .catch( error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
-                    });
-            },
-
-            getTypes() {
-                axios.get('/types/' )
-                    .then( response => {
-                        for(let data of response.data.types) {
-                            this.types.push({'value':data.id, 'text':data.nom});
-                        }
-                    })
-                    .catch( error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        this.$router.push({path:'/notfound'});
                     });
             },
 
@@ -201,12 +203,10 @@
                 this.$router.push({path: '/inventaire'});
             },
 
-
             modalEditMateriel() {
                 let data = {
                     'materielId': this.materielId,
                     'materiel': this.materiel,
-                    'types': this.types,
                     'materielType': this.materielType,
                 };
                 eventBus.$emit('editMateriel', data);

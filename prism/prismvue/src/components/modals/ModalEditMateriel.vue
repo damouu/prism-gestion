@@ -92,10 +92,10 @@
             eventBus.$on('editMateriel', data => {
                 this.materielId = data.materielId;
                 this.materiel = data.materiel;
-                this.types = data.types;
                 this.materielModif = JSON.parse(JSON.stringify(data.materiel));
                 this.materielTypeModif = JSON.parse(JSON.stringify(data.materielType.value));
             });
+            this.getTypes();
 
         },
         methods: {
@@ -105,6 +105,18 @@
                     return !this.errors.has(ref);
                 }
                 return null;
+            },
+
+            getTypes() {
+                axios.get('/types/' )
+                    .then( response => {
+                        for(let data of response.data.types) {
+                            this.types.push({'value':data.id, 'text':data.nom});
+                        }
+                    })
+                    .catch( error => {
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                    });
             },
 
             // Clic sur Valider Edit Materiel

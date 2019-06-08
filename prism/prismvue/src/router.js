@@ -12,10 +12,15 @@ import Feuille_Reservation from './views/ReservationFormulaireMaterielEtu'
 import Agenda from './views/AgendaVue'
 import Categories from './views/CategoriesVue'
 
+import NotFound from './views/NotFoundVue'
+
 Vue.use(Router);
 
 export default new Router({
   routes: [
+
+    { path: '*', component: NotFound },
+
     {
       path: '/',
       name: 'Home',
@@ -30,6 +35,7 @@ export default new Router({
       path: '/inventaire/materiel/:id',
       name: 'materiel',
       component: Materiel,
+
     },
     {
       path: '/inventaire/categories',
@@ -71,6 +77,14 @@ export default new Router({
       path: '/agenda',
       name: 'agenda',
       component: Agenda
+    },
+
+
+    {
+      path: 'notfound',
+      name: 'notfound',
+      component: NotFound
     }
+
   ]
 })
