@@ -29,7 +29,6 @@
                                 <h1 class="ml-5">Inventaire - En service</h1>
                             </b-col>
                             <b-col cols="7">
-                                <b-button variant="outline-danger" class="mr-2" v-b-modal.modal-DelCategorie @click="ModalDeleteCategorie">Supprimer une catégorie</b-button>
                                 <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddCategorie>Ajouter une catégorie</b-button>
                                 <b-button variant="success" class="ml-2" v-b-modal.modal-AddMateriel @click="ModalAddMateriel">Ajouter un matériel</b-button>
                             </b-col>
@@ -79,7 +78,6 @@
 
             <ModalAddMateriel />
             <ModalAddCategorie />
-            <ModalDeleteCategorie />
 
         </div>
     </div>
@@ -93,12 +91,10 @@
     import NavigationInventaire from "../components/navigation/NavigationInventaire";
     import ModalAddMateriel from '../components/modals/ModalAddMateriel';
     import ModalAddCategorie from '../components/modals/ModalAddCategorie';
-    import ModalDeleteCategorie from "../components/modals/ModalDeleteCategorie";
 
     export default {
         name: 'InventaireVue',
         components: {
-            ModalDeleteCategorie,
             NavigationInventaire,
             ModalAddMateriel,
             ModalAddCategorie,
@@ -147,7 +143,7 @@
             eventBus.$on('error', data => {
                 this.showAlert(data.error, data.status, data.message);
             });
-            eventBus.$on('deleteSuccessCategorie', data => {
+            eventBus.$on('addedCategorie', data => {
                 this.getAll();
                 this.getTypes();
             });

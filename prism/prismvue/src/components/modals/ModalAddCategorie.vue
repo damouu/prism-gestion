@@ -27,9 +27,10 @@
                 <b-form-group label="Couleur *" label-cols-sm="4" label-align-sm="left" label-for="addCategorieCouleur">
                     <colorPicker
                             id="addCategorieCouleur"
-                            v-model="categorie.couleur"
+                            v-model="color"
                             startColor="#ff"
-                            :disabled="false">
+                            :disabled="false"
+                    >
                     </colorPicker>
                 </b-form-group>
 
@@ -54,6 +55,7 @@
         data() {
             return {
                 categorie: [],
+                color: '',
             }
         },
         mounted() {
@@ -71,14 +73,14 @@
             },
             addCategorie() {
                 this.$validator.validateAll().then( result => {
-                    if (!result)
+                    if (!result || !this.color)
                     {
                         return;
                     }
                     else {
                         axios.post('/types', {
                             'nom': this.categorie.nom,
-                            'couleur': this.categorie.couleur
+                            'couleur': this.color
                         })
                             .then(response => {
 
