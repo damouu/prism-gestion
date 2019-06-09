@@ -39,33 +39,54 @@
 
                         <div v-else>
 
-                            <b-table
-                                    striped hover
-                                     :items="fillReformes"
+                            <b-row class="mt-4">
 
-                                     :fields="fieldsRow"
-                                     :sort-by.sync="sortBy"
-                                     :sort-desc.sync="sortDesc"
+                                <b-col md="7">
+                                    <b-form-group label-cols-sm="3" label="Filtre" class="mb-0">
+                                        <b-input-group>
+                                            <b-form-input v-model="filter" placeholder="Recherche"></b-form-input>
+                                            <b-input-group-append>
+                                                <b-button :disabled="!filter" @click="filter = ''">Annuler</b-button>
+                                            </b-input-group-append>
+                                        </b-input-group>
+                                    </b-form-group>
+                                </b-col>
 
-                                     show-empty
+                                <b-col md="5">
+                                    <b-form-group label-cols-sm="4" label="Par page">
+                                        <b-form-select v-model="perPage" :options="pageOptions"></b-form-select>
+                                    </b-form-group>
+                                </b-col>
 
-                                     selectable
-                                     :select-mode="mode"
-                                     :per-page="perPage"
-                                     :current-page="currentPage"
-                                     selectedVariant="success"
-                                     @row-selected="rowSelected">
+                                <b-table
+                                        striped hover
+                                         :items="fillReformes"
 
-                                <template slot="empty" slot-scope="scope">
-                                    <h6 class="text-center">Pas d'exemplaires en réforme.</h6>
-                                </template>
+                                         :fields="fieldsRow"
+                                         :sort-by.sync="sortBy"
+                                         :sort-desc.sync="sortDesc"
+                                        :filter="filter"
 
-                            </b-table>
-                            <b-pagination
-                                    v-model="currentPage"
-                                    :total-rows="rows"
-                                    :per-page="perPage"
-                            ></b-pagination>
+                                         show-empty
+
+                                         selectable
+                                         :select-mode="mode"
+                                         :per-page="perPage"
+                                         :current-page="currentPage"
+                                         selectedVariant="success"
+                                         @row-selected="rowSelected">
+
+                                    <template slot="empty" slot-scope="scope">
+                                        <h6 class="text-center">Pas d'exemplaires en réforme.</h6>
+                                    </template>
+
+                                </b-table>
+                                <b-pagination
+                                        v-model="currentPage"
+                                        :total-rows="rows"
+                                        :per-page="perPage"
+                                ></b-pagination>
+                            </b-row>
 
                         </div>
 
@@ -108,6 +129,8 @@
 
                 currentPage: 1,
                 perPage: 10,
+                pageOptions: [10, 20, 30],
+                filter: null,
 
                 dismissCountDown:0,
                 dismissSecs:10,

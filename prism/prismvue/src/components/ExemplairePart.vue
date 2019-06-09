@@ -15,32 +15,61 @@
             </div>
 
             <div v-if="!showEx">
-                <b-table
-                        striped hover
-                        :items="exemplaires"
 
-                        :fields="fieldsRow"
-                        :sort-by.sync="sortBy"
-                        :sort-desc.sync="sortDesc"
+                <b-row class="mt-4">
 
-                        show-empty
+                    <b-col md="7">
+                        <b-form-group label-cols-sm="3" label="Filtre" class="mb-0">
+                            <b-input-group>
+                                <b-form-input v-model="filter" placeholder="Recherche"></b-form-input>
+                                <b-input-group-append>
+                                    <b-button :disabled="!filter" @click="filter = ''">Annuler</b-button>
+                                </b-input-group-append>
+                            </b-input-group>
+                        </b-form-group>
+                    </b-col>
 
-                        selectable
-                        :select-mode="mode"
-                        selectedVariant="success"
-                        @row-selected="rowSelected"
+                    <b-col md="5">
+                        <b-form-group label-cols-sm="4" label="Par page">
+                            <b-form-select v-model="perPage" :options="pageOptions"></b-form-select>
+                        </b-form-group>
+                    </b-col>
 
-                        class="mt-4">
-                    <template slot="etat" slot-scope="row">
-                        <b-badge variant="success" v-if="row.value == 'disponible'" >{{row.value}}</b-badge>
-                        <b-badge variant="warning" v-if="row.value == 'réparation'">{{row.value}}</b-badge>
-                        <b-badge variant="danger" v-if="row.value == 'emprunté'">{{row.value}}</b-badge>
-                        <b-badge variant="secondary" v-if="row.value == 'non empruntable'">{{row.value}}</b-badge>
-                    </template>
-                    <template slot="empty" slot-scope="scope">
-                        <h6 class="text-center">Pas encore d'exemplaires pour ce matériel.</h6>
-                    </template>
-                </b-table>
+                    <b-table
+                            striped hover
+                            :items="exemplaires"
+
+                            :fields="fieldsRow"
+                            :sort-by.sync="sortBy"
+                            :sort-desc.sync="sortDesc"
+                            :filter="filter"
+
+                            show-empty
+
+                            selectable
+                            :select-mode="mode"
+                            :per-page="perPage"
+                            :current-page="currentPage"
+                            selectedVariant="success"
+                            @row-selected="rowSelected">
+                        <template slot="etat" slot-scope="row">
+                            <b-badge variant="success" v-if="row.value == 'disponible'" >{{row.value}}</b-badge>
+                            <b-badge variant="warning" v-if="row.value == 'réparation'">{{row.value}}</b-badge>
+                            <b-badge variant="danger" v-if="row.value == 'emprunté'">{{row.value}}</b-badge>
+                            <b-badge variant="secondary" v-if="row.value == 'non empruntable'">{{row.value}}</b-badge>
+                        </template>
+                        <template slot="empty" slot-scope="scope">
+                            <h6 class="text-center">Pas encore d'exemplaires pour ce matériel.</h6>
+                        </template>
+                    </b-table>
+                    <b-pagination
+                            v-model="currentPage"
+                            :total-rows="rows"
+                            :per-page="perPage"
+                    ></b-pagination>
+
+                </b-row>
+
             </div>
 
             <div v-else="showEx">
@@ -230,6 +259,10 @@
                     { key: 'num_ex', sortable:true },
                     { key: 'etat', sortable:true },
                 ],
+                currentPage: 1,
+                perPage: 10,
+                pageOptions: [10, 20, 30],
+                filter: null,
 
                 materielId: false,
                 exemplaires: [],
@@ -243,6 +276,11 @@
                 loading: false,
                 loadingRow: false,
 
+            }
+        },
+        computed: {
+            rows() {
+                return this.exemplaires.length
             }
         },
         mounted() {
