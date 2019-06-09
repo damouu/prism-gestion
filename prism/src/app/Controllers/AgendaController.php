@@ -14,58 +14,12 @@ use Respect\Validation\Validator as v;
 
 class AgendaController extends Controller
 {
-
-    public function getAllE(Request $request, Response $response, $args)
-    {
-
-        $params = [
-            'select' => $request->getQueryParam('select','Tous')
-        ];
-
-
-
-            $agenda = FicheReservation::with('exemplaire')->get();
-            foreach ($agenda as $agen) {
-
-                $delete = array();
-
-                foreach ($agen->exemplaire as $key => $exemplaire) {
-                    if($params['select']!='Tous') {
-                        $materiel = $exemplaire->materiel()->first();
-                        $materiel->type = $materiel->type()->first();
-                        $exemplaire->materiel = $materiel;
-                        if($exemplaire->materiel->type->nom=!$params['select'])
-                        {
-                            array_push($delete, $key);
-                        }
-                    }
-                    else
-                    {
-                        $materiel = $exemplaire->materiel()->first();
-                        $materiel->type = $materiel->type()->first();
-                        $exemplaire->materiel = $materiel;
-                    }
-                }
-                foreach($delete as $row)
-                {
-                    array_splice($agen->exemplaire,$row,1);
-                }
-            }
-        $data = [
-            'type' => "success",
-            'code' => 200,
-            'agenda' => $agenda
-        ];
-
-        return ResponseWriter::ResponseWriter($response, $data);
-
-    }
-
-    public function getAll(Request $request, Response $response, $args)
+        public function getAll(Request $request, Response $response, $args)
     {
         $select = filter_var($request->getQueryParam('select','Tous'));
 
         $agenda = FicheReservation::with('exemplaire')->get();
+
         foreach($agenda as $agen)
         {
             $listeExemplaires = [];
