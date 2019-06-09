@@ -3,7 +3,7 @@
 
         <b-row align-h="between" class="mb-4">
             <b-col>
-                <h1 class="ml-5">Agenda - Emprunts et Retours</h1>
+                <h1 class="ml-5">Agenda - Emprunts et Retours <b-spinner v-if="loading" class="loading" label="loading"></b-spinner></h1>
             </b-col>
         </b-row>
         <b-row>
@@ -60,6 +60,7 @@
                         prev: 'précédent',
                         next: 'suivant',
                     },
+                loading:false,
             }
         },
         mounted(){
@@ -69,6 +70,7 @@
         },
         methods: {
             getEventsEmp(){
+                this.loading=true;
                 axios.get('/agenda')
                     .then( response => {
                         response.data.agenda.forEach(element => {
@@ -79,6 +81,7 @@
                             this.calendarEvents.push({title: 'reservation n°'+element.reservation, start: element.date_depart, end:end, id: element.id, color:"green"});
                             this.calendarEvents.push({title: 'reservation n°'+element.reservation, start:element.date_retour, end:ended, id:element.id, color:"red"});
                         })
+                        this.loading=false;
                     })
                     .catch( error => {
                         console.log(error);

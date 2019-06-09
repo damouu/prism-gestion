@@ -32,35 +32,46 @@
                                 <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddCategorie>Ajouter une catégorie</b-button>
                             </b-col>
                         </b-row>
-                        <b-table
-                                striped hover
-                                :items="categories"
 
-                                :fields="fieldsRow"
-                                :sort-by.sync="sortBy"
-                                :sort-desc.sync="sortDesc"
+                        <div v-if="loading" class="loading text-center mt-5 mb-5">
+                            <b-spinner label="loading" class="text-center"></b-spinner>
+                            <h5>Chargement, veuillez patienter ... </h5>
+                        </div>
 
-                                show-empty
+                        <div v-else>
 
-                                :per-page="perPage"
-                                :current-page="currentPage"
-                                selectedVariant="success">
-                            <template slot="empty" slot-scope="scope">
-                                <h6 class="text-center">Pas de catégories à afficher.</h6>
-                            </template>
-                            <template slot="couleur" slot-scope="row">
-                                <h5><b-badge v-bind:style="{ 'background-color':row.value}">{{row.value}}</b-badge></h5>
-                            </template>
-                            <template slot="actions" slot-scope="row">
-                                <b-button size="sm" class="mr-1" variant="outline-danger" v-b-modal.modal-DelCategorie @click="modalDeleteCategorie(row.item)"><font-awesome-icon :icon="['fas','trash-alt']" /></b-button>
-                                <b-button size="sm" class="mr-1" variant="outline-success" v-b-modal.modal-EditCategorie @click="modalEditCategorie(row.item)"><font-awesome-icon :icon="['fas','edit']" /></b-button>
-                            </template>
-                        </b-table>
-                        <b-pagination
-                                v-model="currentPage"
-                                :total-rows="rows"
-                                :per-page="perPage"
-                        ></b-pagination>
+                            <b-table
+                                    striped hover
+                                    :items="categories"
+
+                                    :fields="fieldsRow"
+                                    :sort-by.sync="sortBy"
+                                    :sort-desc.sync="sortDesc"
+
+                                    show-empty
+
+                                    :per-page="perPage"
+                                    :current-page="currentPage"
+                                    selectedVariant="success">
+                                <template slot="empty" slot-scope="scope">
+                                    <h6 class="text-center">Pas de catégories à afficher.</h6>
+                                </template>
+                                <template slot="couleur" slot-scope="row">
+                                    <h5><b-badge v-bind:style="{ 'background-color':row.value}">{{row.value}}</b-badge></h5>
+                                </template>
+                                <template slot="actions" slot-scope="row">
+                                    <b-button size="sm" class="mr-1" variant="outline-danger" v-b-modal.modal-DelCategorie @click="modalDeleteCategorie(row.item)"><font-awesome-icon :icon="['fas','trash-alt']" /></b-button>
+                                    <b-button size="sm" class="mr-1" variant="outline-success" v-b-modal.modal-EditCategorie @click="modalEditCategorie(row.item)"><font-awesome-icon :icon="['fas','edit']" /></b-button>
+                                </template>
+                            </b-table>
+                            <b-pagination
+                                    v-model="currentPage"
+                                    :total-rows="rows"
+                                    :per-page="perPage"
+                            ></b-pagination>
+
+                        </div>
+
                     </b-col>
                 </b-row>
             </b-container>
@@ -108,6 +119,7 @@
                 alert: [],
                 dismissCountDown:0,
                 dismissSecs:10,
+                loading:false,
             }
         },
         computed: {
@@ -140,10 +152,12 @@
         methods: {
 
             getTypes() {
+                this.loading=true;
                 axios.get('/types')
                     .then(response => {
                         this.categories = [];
                         this.categories = response.data.types;
+                        this.loading=false;
                     })
                     .catch(function (error) {
                         this.showAlert(error.response.statusText,error.response.status,error.response.data.message);

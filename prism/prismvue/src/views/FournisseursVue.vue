@@ -35,32 +35,43 @@
                             </b-col>
                         </b-row>
 
-                        <b-table
-                                 striped hover
-                                 :items="fillFournisseurs"
+                        <div v-if="loading" class="loading text-center mt-5 mb-5">
+                            <b-spinner label="loading" class="text-center"></b-spinner>
+                            <h5>Chargement, veuillez patienter ... </h5>
+                        </div>
 
-                                 :fields="fieldsRow"
-                                 :sort-by.sync="sortBy"
-                                 :sort-desc.sync="sortDesc"
+                        <div v-else>
 
-                                 show-empty
+                            <b-table
+                                    striped hover
+                                    :items="fillFournisseurs"
 
-                                 selectable
-                                 :select-mode="mode"
-                                 :per-page="perPage"
-                                 :current-page="currentPage"
-                                 selectedVariant="success"
-                                 @row-selected="rowSelected">
+                                    :fields="fieldsRow"
+                                    :sort-by.sync="sortBy"
+                                    :sort-desc.sync="sortDesc"
 
-                            <template slot="empty" slot-scope="scope">
-                                <h6 class="text-center">Pas de Fournisseurs à afficher.</h6>
-                            </template>
-                        </b-table>
-                        <b-pagination
-                                v-model="currentPage"
-                                :total-rows="rows"
-                                :per-page="perPage"
-                        ></b-pagination>
+                                    show-empty
+
+                                    selectable
+                                    :select-mode="mode"
+                                    :per-page="perPage"
+                                    :current-page="currentPage"
+                                    selectedVariant="success"
+                                    @row-selected="rowSelected">
+
+                                <template slot="empty" slot-scope="scope">
+                                    <h6 class="text-center">Pas de Fournisseurs à afficher.</h6>
+                                </template>
+                            </b-table>
+                            <b-pagination
+                                    v-model="currentPage"
+                                    :total-rows="rows"
+                                    :per-page="perPage"
+                            ></b-pagination>
+
+                        </div>
+
+
 
                     </b-col>
                 </b-row>
@@ -112,6 +123,8 @@
                 dismissCountDown:0,
                 dismissSecs:10,
 
+                loading:false,
+
             }
         },
         computed: {
@@ -140,13 +153,15 @@
             },
 
             getFournisseurs() {
+                this.loading=true;
                 axios.get('/fournisseurs')
                     .then(response => {
                         this.fournisseurs = response.data.fournisseurs;
                         this.fillTable();
+                        this.loading=false;
                     })
                     .catch( error => {
-
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     })
             },
 

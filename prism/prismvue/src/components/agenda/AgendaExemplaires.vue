@@ -3,7 +3,7 @@
 
         <b-row align-h="between" class="mb-4">
             <b-col>
-                <h1 class="ml-5">Agenda - Exemplaires</h1>
+                <h1 class="ml-5">Agenda - Exemplaires <b-spinner v-if="loading" class="loading" label="loading"></b-spinner></h1>
             </b-col>
         </b-row>
 
@@ -81,22 +81,26 @@
                     customWeek:{ type: 'timeline', duration:{weeks:1}, slotDuration:{days:1}, buttonText:'customWeek'},
                     customDay:{type:'timeGridDay', titleFormat:{ day:'numeric', weekday:'long', month:'short', year:'numeric'}, columnHeaderHtml:{weekday:'long'} , duration:{days:1}, slotDuration:{days:1}, buttonText:'customDay'},
                 },
+                loading:false,
             }
         },
         mounted(){
 
             this.getEventsEx();
-            this.getTypes();
+
         },
         methods: {
             getEventsEx(){
+                this.loading=true;
+                this.getTypes();
                 axios.get('/agenda?select='+this.currentType)
                     .then( response => {
                         response.data.agenda.forEach(element => {
                             element.exemplaires.forEach( q => {
                                 this.calendarEvents.push({title: q.reference, start: element.date_depart, end:element.date_retour, id: q.id, type:q.materiel.type.nom, color:q.materiel.type.couleur})
                             })
-                        })
+                        });
+                        this.loading=false;
                     })
                     .catch( error => {
                         console.log(error);

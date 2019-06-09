@@ -3,7 +3,7 @@
 
         <b-row align-h="between" class="mb-4">
             <b-col>
-                <h1 class="ml-5">Agenda - Réservations</h1>
+                <h1 class="ml-5">Agenda - Réservations <b-spinner v-if="loading" class="loading" label="loading"></b-spinner></h1>
             </b-col>
         </b-row>
         <b-row>
@@ -85,6 +85,7 @@
                     customWeek:{ type: 'timeline', duration:{weeks:1}, slotDuration:{days:1}, buttonText:'customWeek'},
                     customDay:{type:'timeGridDay', titleFormat:{ day:'numeric', weekday:'long', month:'short', year:'numeric'}, columnHeaderHtml:{weekday:'long'} , duration:{days:1}, slotDuration:{days:1}, buttonText:'customDay'},
                 },
+                loading:false,
             }
         },
         mounted(){
@@ -94,13 +95,14 @@
         },
         methods: {
             getEventsResa(){
+                this.loading=true;
                 axios.get('/agenda')
                     .then( response => {
                         response.data.agenda.forEach(element => {
                             let color = this.colors[Math.floor(Math.random() * this.colors.length)];
                             this.calendarEvents.push({title: element.reservation, start: element.date_depart, end:element.date_retour, id: element.id, color: color})
                         })
-
+                        this.loading=false;
                     })
                     .catch( error => {
                         console.log(error);

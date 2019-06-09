@@ -60,7 +60,6 @@
             eventBus.$on('editCategorie', data => {
                 this.categorie = data;
             });
-            console.log(this.categorie);
         },
         methods: {
             validateState(ref) {

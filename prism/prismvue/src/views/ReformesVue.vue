@@ -32,33 +32,42 @@
                             </b-col>
                         </b-row>
 
-                        <b-table
-                                striped hover
-                                 :items="fillReformes"
+                        <div v-if="loading" class="loading text-center mt-5 mb-5">
+                            <b-spinner label="loading" class="text-center"></b-spinner>
+                            <h5>Chargement, veuillez patienter ... </h5>
+                        </div>
 
-                                 :fields="fieldsRow"
-                                 :sort-by.sync="sortBy"
-                                 :sort-desc.sync="sortDesc"
+                        <div v-else>
 
-                                 show-empty
+                            <b-table
+                                    striped hover
+                                     :items="fillReformes"
 
-                                 selectable
-                                 :select-mode="mode"
-                                 :per-page="perPage"
-                                 :current-page="currentPage"
-                                 selectedVariant="success"
-                                 @row-selected="rowSelected">
+                                     :fields="fieldsRow"
+                                     :sort-by.sync="sortBy"
+                                     :sort-desc.sync="sortDesc"
 
-                            <template slot="empty" slot-scope="scope">
-                                <h6 class="text-center">Pas d'exemplaires en réforme.</h6>
-                            </template>
+                                     show-empty
 
-                        </b-table>
-                        <b-pagination
-                                v-model="currentPage"
-                                :total-rows="rows"
-                                :per-page="perPage"
-                        ></b-pagination>
+                                     selectable
+                                     :select-mode="mode"
+                                     :per-page="perPage"
+                                     :current-page="currentPage"
+                                     selectedVariant="success"
+                                     @row-selected="rowSelected">
+
+                                <template slot="empty" slot-scope="scope">
+                                    <h6 class="text-center">Pas d'exemplaires en réforme.</h6>
+                                </template>
+
+                            </b-table>
+                            <b-pagination
+                                    v-model="currentPage"
+                                    :total-rows="rows"
+                                    :per-page="perPage"
+                            ></b-pagination>
+
+                        </div>
 
                     </b-col>
                 </b-row>
@@ -103,6 +112,8 @@
                 dismissCountDown:0,
                 dismissSecs:10,
                 alert: {'show':false,'showMateriel':false},
+
+                loading: false,
             }
         },
         computed: {
@@ -124,19 +135,19 @@
             },
 
             getReformes() {
+                this.loading=true;
                 axios.get('/exemplaires?select=reforme')
                     .then(response => {
                         this.reformes = response.data.reformes;
                         this.fillTable();
+                        this.loading=false;
                     })
                     .catch( error => {
                         this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
-
                     })
             },
 
             fillTable() {
-                this.loaded = 'false';
                 this.fillReformes = [];
                 let listeReforme = JSON.parse(JSON.stringify(this.reformes));
                 listeReforme.forEach(reforme => {
