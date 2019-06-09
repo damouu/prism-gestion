@@ -34,44 +34,53 @@
                             </b-col>
                         </b-row>
 
-                        <b-tabs pills align="center">
-                            <b-tab v-if='currentType == "Tous"' title="Tous" active>
-                            </b-tab>
-                            <b-tab @click="setCurrentType('Tous')" v-else title="Tous">
-                            </b-tab>
-                            <template v-for="type in types" >
-                                <b-tab v-if='currentType == type.id'  :title="type.nom" active>
+                        <div v-if="loading" class="loading text-center mt-5 mb-5">
+                            <b-spinner label="loading" class="text-center"></b-spinner>
+                            <h5>Chargement, veuillez patienter ... </h5>
+                        </div>
+
+                        <div v-else>
+                            <b-tabs pills align="center">
+                                <b-tab v-if='currentType == "Tous"' title="Tous" active>
                                 </b-tab>
-                                <b-tab v-else @click="setCurrentType(type.id)"  :title="type.nom">
+                                <b-tab @click="setCurrentType('Tous')" v-else title="Tous">
                                 </b-tab>
-                            </template>
-                        </b-tabs>
-                        <br/>
-                        <b-table
-                                 striped hover
-                                 :items="fillMateriels"
+                                <template v-for="type in types" >
+                                    <b-tab v-if='currentType == type.id'  :title="type.nom" active>
+                                    </b-tab>
+                                    <b-tab v-else @click="setCurrentType(type.id)"  :title="type.nom">
+                                    </b-tab>
+                                </template>
+                            </b-tabs>
+                            <br/>
+                            <b-table
+                                    striped hover
+                                    :items="fillMateriels"
 
-                                 :fields="fieldsRow"
-                                 :sort-by.sync="sortBy"
-                                 :sort-desc.sync="sortDesc"
+                                    :fields="fieldsRow"
+                                    :sort-by.sync="sortBy"
+                                    :sort-desc.sync="sortDesc"
 
-                                 show-empty
+                                    show-empty
 
-                                 selectable
-                                 :select-mode="mode"
-                                 :per-page="perPage"
-                                 :current-page="currentPage"
-                                 selectedVariant="success"
-                                 @row-selected="rowSelected">
-                            <template slot="empty" slot-scope="scope">
-                                <h6 class="text-center">Pas de matériels à afficher.</h6>
-                            </template>
-                        </b-table>
-                        <b-pagination
-                                v-model="currentPage"
-                                :total-rows="rows"
-                                :per-page="perPage"
-                        ></b-pagination>
+                                    selectable
+                                    :select-mode="mode"
+                                    :per-page="perPage"
+                                    :current-page="currentPage"
+                                    selectedVariant="success"
+                                    @row-selected="rowSelected">
+                                <template slot="empty" slot-scope="scope">
+                                    <h6 class="text-center">Pas de matériels à afficher.</h6>
+                                </template>
+                            </b-table>
+                            <b-pagination
+                                    v-model="currentPage"
+                                    :total-rows="rows"
+                                    :per-page="perPage"
+                            ></b-pagination>
+                        </div>
+
+
                     </b-col>
                 </b-row>
             </b-container>
@@ -122,6 +131,7 @@
                 alert: {'show':false,'showMateriel':false},
                 dismissCountDown:0,
                 dismissSecs:10,
+                loading: false,
             }
         },
         computed: {
@@ -150,10 +160,12 @@
         },
         methods : {
             getAll() {
+                this.loading= 'true';
                 axios.get('/materiels')
                     .then(response => {
                         this.materiels = response.data.materiels;
                         this.fillTable();
+                        this.loading=false;
                     })
                     .catch(function (error) {
                         this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
