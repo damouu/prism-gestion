@@ -150,10 +150,13 @@
         name: "ReservationFomulaireMaterielEtu",
         components:{
             NavigationReservationFeuille
-
         },
         data() {
             return {
+
+                formulaireId: this.$route.params.id,
+                formulaire: [],
+
                 dismissCountDown:0,
                 dismissSecs:10,
                 alert: {'show':false,'showMateriel':false},
@@ -181,7 +184,9 @@
             }
         },
         mounted() {
+            console.log(this.formulaireId);
             this.getTypes();
+            this.getFormulaire();
         },
         methods: {
             showAlert(error, status, message) {
@@ -202,6 +207,17 @@
                         break;
                     }
                 }
+            },
+
+            getFormulaire()
+            {
+                axios.get('/reservations/'+this.formulaireId)
+                    .then( response =>{
+
+                    })
+                    .catch( error =>{
+                        this.$router.push({path:'/notfound'});
+                    });
             },
 
 

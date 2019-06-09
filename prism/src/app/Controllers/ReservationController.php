@@ -95,7 +95,7 @@ class ReservationController extends Controller
     public function getOne(Request $request, Response $response, $args) {
         $id = $args['id'];
         try {
-            $reservation = Reservation::with('exemplaire')->find($id);
+            $reservation = Reservation::find($id);
             if(empty($reservation))
             {
                 $data = ApiErrors::NotFound($request->getUri());
@@ -111,7 +111,6 @@ class ReservationController extends Controller
         }
         catch (\Exception $e)
         {
-            echo "<pre>".$e->getMessage()."</pre>";
             $data = ApiErrors::InternalError();
         }
         return ResponseWriter::ResponseWriter($response, $data);

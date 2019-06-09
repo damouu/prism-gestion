@@ -222,7 +222,7 @@
                         this.loading=false;
                     })
                     .catch( error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        this.$router.push({path:'/notfound'});
                     })
             },
 
