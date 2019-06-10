@@ -38,25 +38,67 @@
                             <b-row>
                                 <b-col cols="6">
                                     <b-card class="mt-4">
-                                        <b-card-title>Dates d'emprunt</b-card-title>
-
+                                        <b-row align-h="between">
+                                            <b-card-title class="ml-2">Dates d'emprunt</b-card-title>
+                                            <b-button @click="test" class="mr-2">Rechercher</b-button>
+                                        </b-row>
                                         <div>
                                             Du:
-                                            <b-row>
-                                                <b-col cols="6">
-                                                    <b-form-input type="date"></b-form-input>
-                                                </b-col>
-                                                <b-col cols="6">
-                                                    <b-form-input type="time"></b-form-input>
-                                                </b-col>
-                                            </b-row>
+                                                <b-form-group>
+                                                    <b-row align-h="between">
+                                                        <b-col cols="6">
+                                                            <b-form-input
+                                                                    id="formulaireDateEmprunt"
+                                                                    v-validate="{required:true, regex:/^\d{4}-\d{2}-\d{2}$/}"
+                                                                    type="date"
+                                                                    data-vv-name="formulaireDateEmprunt"
+                                                                    :state="validateState('formulaireDateEmprunt')"
+                                                                    aria-describedby="invalidDateEmprunt"
+                                                                    v-model="formulaire.date_emprunt"
+                                                                    @click="test"
+                                                            ></b-form-input>
+                                                        </b-col>
+                                                        <b-col cols="6">
+                                                            <b-form-input
+                                                                    id="formulaireHeureEmprunt"
+                                                                    v-validate="{required:true, regex:/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/}"
+                                                                    type="time"
+                                                                    data-vv-name="formulaireHeureEmprunt"
+                                                                    :state="validateState('formulaireHeureEmprunt')"
+                                                                    aria-describedby="invalidHeureEmprunt"
+                                                                    v-model="formulaire.heure_emprunt"
+                                                            ></b-form-input>
+                                                        </b-col>
+
+                                                    </b-row>
+
+                                                    <b-form-invalid-feedback id="invalidDateEmprunt">Veuillez écrire une date valide.</b-form-invalid-feedback>
+                                                    <b-form-invalid-feedback id="invalidHeureEmprunt">Veuillez écrire une heure valide.</b-form-invalid-feedback>
+                                                </b-form-group>
+
                                             au:
                                             <b-row>
                                                 <b-col cols="6">
-                                                    <b-form-input type="date"></b-form-input>
+                                                    <b-form-input
+                                                            id="formulaireDateRetour"
+                                                            type="date"
+                                                            v-validate="{required:true, regex:/^\d{4}-\d{2}-\d{2}$/}"
+                                                            data-vv-name="formulaireDateRetour"
+                                                            :state="validateState('formulaireDateRetour')"
+                                                            aria-describedby="invalidDateRetour"
+                                                            v-model="formulaire.date_retour"
+                                                    ></b-form-input>
                                                 </b-col>
                                                 <b-col cols="6">
-                                                    <b-form-input type="time"></b-form-input>
+                                                    <b-form-input
+                                                            id="formulaireHeureRetour"
+                                                            v-validate="{required:true, regex:/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/}"
+                                                            type="time"
+                                                            data-vv-name="formulaireHeureRetour"
+                                                            :state="validateState('formulaireHeureRetour')"
+                                                            aria-describedby="invalidHeureRetour"
+                                                            v-model="formulaire.heure_retour"
+                                                    ></b-form-input>
                                                 </b-col>
                                             </b-row>
 
@@ -184,7 +226,6 @@
             }
         },
         mounted() {
-            console.log(this.formulaireId);
             this.getTypes();
             this.getFormulaire();
         },
@@ -232,6 +273,29 @@
                     });
             },
 
+            setCurrentType(type){
+                this.currentType = type;
+            },
+
+
+            getExemplaires()
+            {
+                axios.get('/reservations')
+            },
+
+
+            validateState(ref) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                    return !this.errors.has(ref);
+                }
+                return null;
+            },
+
+
+
+            test(){
+                console.log(this.formulaire);
+            }
         }
 
     }
