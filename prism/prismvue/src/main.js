@@ -17,13 +17,14 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
 
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
 
-library.add(faTrashAlt,faSortUp,faSortDown, faAngleLeft, faAngleRight, faEdit);
+library.add(faTrashAlt,faSortUp,faSortDown, faAngleLeft, faAngleRight, faCaretRight, faEdit);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VeeValidate, {

@@ -71,9 +71,9 @@
         methods: {
             getEventsEmp(){
                 this.loading=true;
-                axios.get('/agenda')
+                axios.get('/exemplaires?select=reservation')
                     .then( response => {
-                        response.data.agenda.forEach(element => {
+                        response.data.reservations.forEach(element => {
                             let end = new Date(element.date_depart);
                             end.setHours(end.getHours()+1);
                             let ended = new Date(element.date_retour);

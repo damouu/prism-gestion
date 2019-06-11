@@ -154,11 +154,31 @@
                                         </b-tabs>
 
                                         <b-table
-                                                :items="exemplaires"
+                                                :items="sample"
                                                 striped hover
-                                                :fields="fieldsMateriel"
+                                                :fields="fieldsSample"
                                                 show-empty
                                                 class="mt-4">
+
+                                            <template slot="detail" slot-scope="row">
+                                                <b-button @click="row.toggleDetails" v-if="row.detailsShowing"><font-awesome-icon :icon="['fas','sort-down']" /></b-button>
+                                                <b-button @click="row.toggleDetails" v-if="!row.detailsShowing"><font-awesome-icon :icon="['fas','caret-right']" /></b-button>
+                                            </template>
+
+                                            <template slot="row-details" slot-scope="row">
+                                                <b-card>
+                                                    <b-table
+                                                            striped hover
+                                                            :fields="fieldsExemple"
+                                                            :items="row.item.type"
+                                                            show-empty>
+                                                        <template slot="empty" slot-scope="scope">
+                                                            <h6 class="text-center">Pas d'exemplaires choisis.</h6>
+                                                        </template>
+                                                    </b-table>
+                                                </b-card>
+
+                                            </template>
 
                                             <template slot="empty" slot-scope="scope">
                                                 <h6 class="text-center">Choisissez une date de sortie et une date de retour.</h6>
@@ -222,7 +242,23 @@
                     { key: 'etat', sortable:true }
                 ],
 
+                fieldsSample: [
+                    {key: 'detail',sortable:false},
+                    {key:'constructeur', sortable:true},
+                    {key:'modele', sortable:true},
+                ],
+                fieldsExemple: [
+                    {key: 'id',sortable:true},
+                    {key:'nom', sortable:false},
+                ],
+
                 resa: [],
+
+
+                sample: [
+                    { id:1, constructeur:"Canon", modele:"EOS 400", type: [{id:1,nom:"photo"},{id:2,nom:'test'}], date_creation:"2019-04-16"},
+                    { id:1, constructeur:"SennHeiser", modele:"micro 500", type: {id:1,nom:"son"}, date_creation:"2019-04-16" }
+                ]
             }
         },
         mounted() {
@@ -291,7 +327,16 @@
                 return null;
             },
 
+            selectedRow(row)
+            {
+                console.log(row);
+                if(row.item.selected)
+                    row.item.selected=false;
+                else
+                    row.item.selected=true;
 
+                console.log(row);
+            },
 
             test(){
                 console.log(this.formulaire);
