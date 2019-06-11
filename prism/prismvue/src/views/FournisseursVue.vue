@@ -35,26 +35,64 @@
                             </b-col>
                         </b-row>
 
-                        <b-table v-if="fillFournisseurs.length > 0"
-                                 striped hover
-                                 :items="fillFournisseurs"
+                        <div v-if="loading" class="loading text-center mt-5 mb-5">
+                            <b-spinner label="loading" class="text-center"></b-spinner>
+                            <h5>Chargement, veuillez patienter ... </h5>
+                        </div>
 
-                                 :fields="fieldsRow"
-                                 :sort-by.sync="sortBy"
-                                 :sort-desc.sync="sortDesc"
+                        <div v-else>
 
-                                 selectable
-                                 :select-mode="mode"
-                                 :per-page="perPage"
-                                 :current-page="currentPage"
-                                 selectedVariant="success"
-                                 @row-selected="rowSelected">
-                        </b-table>
-                        <b-pagination
-                                v-model="currentPage"
-                                :total-rows="rows"
-                                :per-page="perPage"
-                        ></b-pagination>
+                            <b-row>
+
+                                <b-col md="5" class="m-auto">
+                                    <b-form-group label-cols-sm="3" label="Filtre" class="mb-0">
+                                        <b-input-group>
+                                            <b-form-input v-model="filter" placeholder="Recherche"></b-form-input>
+                                            <b-input-group-append>
+                                                <b-button :disabled="!filter" @click="filter = ''">Annuler</b-button>
+                                            </b-input-group-append>
+                                        </b-input-group>
+                                    </b-form-group>
+                                </b-col>
+
+                                <b-col md="3" class="m-auto">
+                                    <b-form-group label-cols-sm="3" label="Par page">
+                                        <b-form-select v-model="perPage" :options="pageOptions"></b-form-select>
+                                    </b-form-group>
+                                </b-col>
+
+                                <b-table
+                                        striped hover
+                                        :items="fillFournisseurs"
+
+                                        :fields="fieldsRow"
+                                        :sort-by.sync="sortBy"
+                                        :sort-desc.sync="sortDesc"
+                                        :filter="filter"
+
+                                        show-empty
+
+                                        selectable
+                                        :select-mode="mode"
+                                        :per-page="perPage"
+                                        :current-page="currentPage"
+                                        selectedVariant="success"
+                                        @row-selected="rowSelected">
+
+                                    <template slot="empty" slot-scope="scope">
+                                        <h6 class="text-center">Pas de Fournisseurs à afficher.</h6>
+                                    </template>
+                                </b-table>
+                                <b-pagination
+                                        v-model="currentPage"
+                                        :total-rows="rows"
+                                        :per-page="perPage"
+                                ></b-pagination>
+                            </b-row>
+
+                        </div>
+
+
 
                     </b-col>
                 </b-row>
@@ -101,10 +139,14 @@
 
                 currentPage: 1,
                 perPage: 10,
+                pageOptions: [10, 20, 30],
+                filter: null,
 
                 alert: {'show':false,'showMateriel':false},
                 dismissCountDown:0,
                 dismissSecs:10,
+
+                loading:false,
 
             }
         },
@@ -134,13 +176,15 @@
             },
 
             getFournisseurs() {
+                this.loading=true;
                 axios.get('/fournisseurs')
                     .then(response => {
                         this.fournisseurs = response.data.fournisseurs;
                         this.fillTable();
+                        this.loading=false;
                     })
                     .catch( error => {
-
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     })
             },
 

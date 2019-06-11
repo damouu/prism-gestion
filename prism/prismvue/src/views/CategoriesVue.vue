@@ -1,7 +1,6 @@
 <template>
-    <div id="reformes">
+    <div id="categories">
         <div>
-
             <b-container>
                 <b-alert
                         :show="dismissCountDown"
@@ -25,10 +24,12 @@
                     </b-col>
 
                     <b-col cols="10">
-
                         <b-row align-h="between" class="mb-4">
                             <b-col>
-                                <h1 class="ml-5">Inventaire - Réformés</h1>
+                                <h1 class="ml-5">Catégories</h1>
+                            </b-col>
+                            <b-col cols="7">
+                                <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddCategorie>Ajouter une catégorie</b-button>
                             </b-col>
                         </b-row>
 
@@ -39,9 +40,9 @@
 
                         <div v-else>
 
-                            <b-row class="mt-4">
+                            <b-row>
 
-                                <b-col md="7">
+                                <b-col md="5" class="m-auto">
                                     <b-form-group label-cols-sm="3" label="Filtre" class="mb-0">
                                         <b-input-group>
                                             <b-form-input v-model="filter" placeholder="Recherche"></b-form-input>
@@ -52,34 +53,36 @@
                                     </b-form-group>
                                 </b-col>
 
-                                <b-col md="5">
-                                    <b-form-group label-cols-sm="4" label="Par page">
+                                <b-col md="3" class="m-auto">
+                                    <b-form-group label-cols-sm="3" label="Par page">
                                         <b-form-select v-model="perPage" :options="pageOptions"></b-form-select>
                                     </b-form-group>
                                 </b-col>
 
                                 <b-table
                                         striped hover
-                                         :items="fillReformes"
+                                        :items="categories"
 
-                                         :fields="fieldsRow"
-                                         :sort-by.sync="sortBy"
-                                         :sort-desc.sync="sortDesc"
+                                        :fields="fieldsRow"
+                                        :sort-by.sync="sortBy"
+                                        :sort-desc.sync="sortDesc"
                                         :filter="filter"
 
-                                         show-empty
+                                        show-empty
 
-                                         selectable
-                                         :select-mode="mode"
-                                         :per-page="perPage"
-                                         :current-page="currentPage"
-                                         selectedVariant="success"
-                                         @row-selected="rowSelected">
-
+                                        :per-page="perPage"
+                                        :current-page="currentPage"
+                                        selectedVariant="success">
                                     <template slot="empty" slot-scope="scope">
-                                        <h6 class="text-center">Pas d'exemplaires en réforme.</h6>
+                                        <h6 class="text-center">Pas de catégories à afficher.</h6>
                                     </template>
-
+                                    <template slot="couleur" slot-scope="row">
+                                        <h5><b-badge v-bind:style="{ 'background-color':row.value}">{{row.value}}</b-badge></h5>
+                                    </template>
+                                    <template slot="actions" slot-scope="row">
+                                        <b-button size="sm" class="mr-1" variant="outline-danger" v-b-modal.modal-DelCategorie @click="modalDeleteCategorie(row.item)"><font-awesome-icon :icon="['fas','trash-alt']" /></b-button>
+                                        <b-button size="sm" class="mr-1" variant="outline-success" v-b-modal.modal-EditCategorie @click="modalEditCategorie(row.item)"><font-awesome-icon :icon="['fas','edit']" /></b-button>
+                                    </template>
                                 </b-table>
                                 <b-pagination
                                         v-model="currentPage"
@@ -94,7 +97,12 @@
                 </b-row>
             </b-container>
 
+            <ModalAddCategorie />
+            <ModalDeleteCategorie />
+            <ModalEditCategorie />
+
         </div>
+
     </div>
 </template>
 
@@ -102,81 +110,81 @@
 
     import { eventBus } from "../main";
 
-    import NavigationInventaire from '../components/navigation/NavigationInventaire'
+    import NavigationInventaire from "../components/navigation/NavigationInventaire";
+    import ModalAddCategorie from '../components/modals/ModalAddCategorie';
+    import ModalDeleteCategorie from "../components/modals/ModalDeleteCategorie";
+    import ModalEditCategorie from "../components/modals/ModalEditCategorie";
 
     export default {
-        name: 'reformes',
-        components: {
+        name: "categories",
+        components:{
+            ModalEditCategorie,
             NavigationInventaire,
+            ModalAddCategorie,
+            ModalDeleteCategorie,
         },
-        data () {
+        data(){
             return {
+                categories: [],
 
-                reformes: [],
-                fillReformes: [],
-
-                selected: [],
-                mode: 'single',
-                sortBy: 'id',
+                sortBy : 'id',
                 sortDesc: false,
                 fieldsRow: [
-                    { key: 'reference', sortable:true },
-                    { key: 'type', sortable:true },
-                    { key: 'num_serie', sortable:true },
-                    { key: 'date_achat', sortable:true },
-                    { key: 'date_sortie', sortable:true },
+                    { key: 'nom', sortable:true },
+                    { key: 'couleur', sortable:true },
+                    { key: 'actions', sortable:true },
                 ],
-
                 currentPage: 1,
                 perPage: 10,
                 pageOptions: [10, 20, 30],
                 filter: null,
 
+                alert: [],
                 dismissCountDown:0,
                 dismissSecs:10,
-                alert: {'show':false,'showMateriel':false},
-
-                loading: false,
+                loading:false,
             }
         },
         computed: {
             rows() {
-                return this.fillReformes.length
+                return this.categories.length
             }
         },
-        mounted () {
-            this.getReformes();
+        mounted(){
 
+            this.getTypes();
+            eventBus.$on('error', data => {
+                this.showAlert(data.error, data.status, data.message);
+            });
 
+            eventBus.$on('addedCategorie', data => {
+                this.categories = [];
+                this.getTypes();
+            });
+
+            eventBus.$on('deleteSuccessCategorie', data => {
+                this.categories = [];
+                this.getTypes();
+            });
+
+            eventBus.$on('editedCategorie', data => {
+                this.categories = [];
+                this.getTypes();
+            });
         },
-        methods : {
+        methods: {
 
-            rowSelected(items) {
-                this.selected = items;
-                let idSelected = items[0];
-                this.$router.push({name: 'reforme', params: { id: idSelected.id }});
-            },
-
-            getReformes() {
+            getTypes() {
                 this.loading=true;
-                axios.get('/exemplaires?select=reforme')
+                axios.get('/types')
                     .then(response => {
-                        this.reformes = response.data.reformes;
-                        this.fillTable();
+                        this.categories = [];
+                        this.categories = response.data.types;
                         this.loading=false;
                     })
-                    .catch( error => {
+                    .catch(function (error) {
                         this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
-                    })
-            },
-
-            fillTable() {
-                this.fillReformes = [];
-                let listeReforme = JSON.parse(JSON.stringify(this.reformes));
-                listeReforme.forEach(reforme => {
-                    reforme.type = reforme.materiel.type.nom;
-                    this.fillReformes.push(reforme);
-                });
+                    });
             },
 
             countDownChanged(dismissCountDown) {
@@ -188,8 +196,13 @@
                 this.alert.message = message;
                 this.dismissCountDown = this.dismissSecs;
             },
-
-
+            modalDeleteCategorie(item) {
+                eventBus.$emit('deleteCategorie',item);
+            },
+            modalEditCategorie(item) {
+                eventBus.$emit('editCategorie',item);
+            }
         }
     }
+
 </script>

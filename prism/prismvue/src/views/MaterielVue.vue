@@ -1,5 +1,6 @@
 <template>
     <div id="materiel">
+
         <div>
 
             <b-container>
@@ -33,62 +34,69 @@
                             </b-row>
 
 
+                            <div v-if="loading" class="loading text-center mt-5 mb-5">
+                                <b-spinner label="loading" class="text-center"></b-spinner>
+                                <h5>Chargement, veuillez patienter ... </h5>
+                            </div>
 
-                            <b-row align-h="around" class="mt-4">
+                            <div v-else>
+                                <b-row align-h="around" class="mt-4">
 
+                                    <b-col cols="6">
 
-                                <b-col cols="6">
-
-                                    <b-row align-h="between">
-                                        <h3>Informations</h3>
-                                        <b-col cols="8">
-                                            <b-button variant="primary" class="mr-2" v-b-modal.modal-Materiel @click="modalEditMateriel">Modifier</b-button>
-                                            <b-button variant="outline-danger" class=" ml-2" v-b-modal.modal-DeleteMateriel @click="modalDeleteMateriel">Supprimer matériel</b-button>
-                                        </b-col>
-                                    </b-row>
-
-                                    <b-card class="mt-4">
-                                        <b-row align-h="between" class="my-1">
-                                            <b-col sm="4" class="mt-1">
-                                                <label for="consMat">Constructeur</label>
-                                            </b-col>
-                                            <b-col sm="7" class="mt-1">
-                                                <p id="consMat">{{materiel.constructeur}}</p>
-                                            </b-col>
-                                            <b-col sm="4" class="mt-1">
-                                                <label for="modeleMat">Modele</label>
-                                            </b-col>
-                                            <b-col sm="7" class="mt-1">
-                                                <p id="ModeleMat">{{materiel.modele}}</p>
-                                            </b-col>
-                                            <b-col sm="4" class="mt-1">
-                                                <label for="typeMat">Type</label>
-                                            </b-col>
-                                            <b-col sm="7" class="mt-1">
-                                                <p id="typeMat">{{materielType.text}}</p>
-                                            </b-col>
-                                            <b-col sm="4" class="mt-1">
-                                                <label for="dateCreaMat">Date Creation</label>
-                                            </b-col>
-                                            <b-col sm="7" class="mt-1">
-                                                <p id="dateCreaMat">{{materiel.date_creation}}</p>
-                                            </b-col>
-
-                                            <b-col sm="4" class="mt-1">
-                                                <label for="descriptionMat">Description</label>
-                                            </b-col>
-                                            <b-col sm="7" class="mt-1">
-                                                <p id="descriptionMat">{{materiel.description}}</p>
+                                        <b-row align-h="between">
+                                            <h3>Informations</h3>
+                                            <b-col cols="8">
+                                                <b-button variant="primary" class="mr-2" v-b-modal.modal-Materiel @click="modalEditMateriel">Modifier</b-button>
+                                                <b-button variant="outline-danger" class=" ml-2" v-b-modal.modal-DeleteMateriel @click="modalDeleteMateriel">Supprimer matériel</b-button>
                                             </b-col>
                                         </b-row>
-                                    </b-card>
 
-                                </b-col>
+                                        <b-card class="mt-4">
+                                            <b-row align-h="between" class="my-1">
+                                                <b-col sm="4" class="mt-1">
+                                                    <label for="consMat">Constructeur</label>
+                                                </b-col>
+                                                <b-col sm="7" class="mt-1">
+                                                    <p id="consMat">{{materiel.constructeur}}</p>
+                                                </b-col>
+                                                <b-col sm="4" class="mt-1">
+                                                    <label for="modeleMat">Modele</label>
+                                                </b-col>
+                                                <b-col sm="7" class="mt-1">
+                                                    <p id="ModeleMat">{{materiel.modele}}</p>
+                                                </b-col>
+                                                <b-col sm="4" class="mt-1">
+                                                    <label for="typeMat">Type</label>
+                                                </b-col>
+                                                <b-col sm="7" class="mt-1">
+                                                    <p id="typeMat">{{materielType.text}}</p>
+                                                </b-col>
+                                                <b-col sm="4" class="mt-1">
+                                                    <label for="dateCreaMat">Date Creation</label>
+                                                </b-col>
+                                                <b-col sm="7" class="mt-1">
+                                                    <p id="dateCreaMat">{{materiel.date_creation}}</p>
+                                                </b-col>
 
-                                <b-col cols="6">
-                                    <ExemplairePart />
-                                </b-col>
-                            </b-row>
+                                                <b-col sm="4" class="mt-1">
+                                                    <label for="descriptionMat">Description</label>
+                                                </b-col>
+                                                <b-col sm="7" class="mt-1">
+                                                    <p id="descriptionMat">{{materiel.description}}</p>
+                                                </b-col>
+                                            </b-row>
+                                        </b-card>
+
+                                    </b-col>
+
+                                    <b-col cols="6">
+                                        <ExemplairePart />
+                                    </b-col>
+                                </b-row>
+                            </div>
+
+
                         </b-col>
                     </b-row>
 
@@ -132,11 +140,10 @@
         },
         data() {
             return {
+                loading: true,
                 materielId: this.$route.params.id,
                 materiel: [],
                 materielType: [],
-
-                types: [],
                 type: { 'text' : 'text','date' : 'date'},
                 rowsMat: [
                     'id',
@@ -157,7 +164,6 @@
         mounted() {
 
             this.getMateriel();
-            this.getTypes();
 
             eventBus.$on('editedMateriel', data => {
                 this.materiel = [];
@@ -179,21 +185,10 @@
                     .then( response => {
                         this.materiel = response.data.materiel;
                         this.materielType = { 'value': response.data.materiel.type.id, 'text': response.data.materiel.type.nom };
+                        this.loading=false;
                     })
                     .catch( error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
-                    });
-            },
-
-            getTypes() {
-                axios.get('/types/' )
-                    .then( response => {
-                        for(let data of response.data.types) {
-                            this.types.push({'value':data.id, 'text':data.nom});
-                        }
-                    })
-                    .catch( error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        this.$router.push({path:'/notfound'});
                     });
             },
 
@@ -201,12 +196,10 @@
                 this.$router.push({path: '/inventaire'});
             },
 
-
             modalEditMateriel() {
                 let data = {
                     'materielId': this.materielId,
                     'materiel': this.materiel,
-                    'types': this.types,
                     'materielType': this.materielType,
                 };
                 eventBus.$emit('editMateriel', data);

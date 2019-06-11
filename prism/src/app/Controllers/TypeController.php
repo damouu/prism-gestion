@@ -20,7 +20,7 @@ class TypeController extends Controller
         try
         {
 
-            $type = Type::select('id','nom');
+            $type = Type::select('id','nom','couleur');
             $type = $type->get();
 
             $data = [
@@ -151,7 +151,7 @@ class TypeController extends Controller
 
         $content = $request->getParsedBody();
 
-        if(!isset($content['nom']))
+        if(!isset($content['nom']) || !isset($content['couleur']))
         {
             $data = ApiErrors::BadRequest();
         }
@@ -161,6 +161,7 @@ class TypeController extends Controller
             {
                 $type = new Type();
                 $type->nom = $content['nom'];
+                $type->couleur = $content['couleur'];
 
                 $type->save();
                 $data = [
@@ -188,17 +189,18 @@ class TypeController extends Controller
 
         $type = Type::find($id);
 
-        if(!isset($content['nom']))
+        if(!isset($content['nom']) || !isset($content['couleur']))
         {
             $data = ApiErrors::BadRequest();
         }
-        else if(empty($materiel))
+        else if(empty($type))
         {
             try
             {
                 $type = new Type();
                 $type->id = $id;
                 $type->nom = $content['nom'];
+                $type->couleur = $content['couleur'];
 
                 $type->save();
                 $data = [
@@ -217,8 +219,9 @@ class TypeController extends Controller
             try {
 
                 $type->nom = $content['nom'];
+                $type->couleur = $content['couleur'];
 
-                $materiel->save();
+                $type->save();
 
                 $data = [
                     'type' => "success",

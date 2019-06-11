@@ -46,4 +46,13 @@ class ApiErrors
         ];
         return $data;
     }
+    public static function deletedError()
+    {
+        $data = [
+            'type' => 'error',
+            'code' => 403,
+            'message' => "Impossible de supprimer la ressource: en cours d'utilisation",
+        ];
+        return $data;
+    }
 }

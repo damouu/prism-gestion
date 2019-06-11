@@ -1,5 +1,5 @@
 <template>
-    <div id="reservation">
+    <div id="reservations">
         <div>
             <b-container>
                 <b-alert
@@ -17,26 +17,23 @@
 
                 <b-row class="mr-5 ml-5">
 
+                    <b-col cols="2">
+                        <NavigationReservation/>
+                    </b-col>
+
                     <b-col cols="10">
-                        <b-row align-h="between" class="mb-4">
-                            <b-col>
-                                <h1 class="ml-5"></h1>
-                            </b-col>
-                        </b-row>
-                    </b-col>
 
-                    <b-col cols="6">
-                        <h1>Reservations à venir</h1>
-                        <b-table>
+                        <div v-if="navigation === 'etudiant'">
+                            <ReservationFormulaireEtu />
+                        </div>
 
-                        </b-table>
-                    </b-col>
+                        <div v-else-if="navigation === 'professeur'">
+                            2
+                        </div>
 
-                    <b-col cols="6">
-                        <h1>Emprunts en cours</h1>
-                        <b-table>
-
-                        </b-table>
+                        <div v-else>
+                            3
+                        </div>
                     </b-col>
                 </b-row>
             </b-container>
@@ -45,17 +42,29 @@
 </template>
 
 <script>
+    import NavigationReservation from '../components/navigation/NavigationReservation';
+    import ReservationFormulaireEtu from '../components/ReservationFormulaireEtu';
+    import { eventBus } from "../main";
+
     export default {
         name:"reservation",
+        components:{
+            NavigationReservation,
+            ReservationFormulaireEtu,
+        },
         data() {
             return {
                 alert: {'show':false,'showMateriel':false},
                 dismissCountDown:0,
                 dismissSecs:10,
+
+                navigation: 'etudiant',
             }
         },
         mounted() {
-
+            eventBus.$on('navigation', data => {
+                this.navigation = data.navigation;
+            });
         },
         methods: {
             countDownChanged(dismissCountDown) {

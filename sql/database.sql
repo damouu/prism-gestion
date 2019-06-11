@@ -1,8 +1,9 @@
 -- DROPS
-DROP TABLE IF EXISTS `resa_materiel`;
+DROP TABLE IF EXISTS `reservation_exemplaire`;
 DROP TABLE IF EXISTS `groupe`;
-DROP TABLE IF EXISTS `resa`;
+DROP TABLE IF EXISTS `fiche_resa`;
 DROP TABLE IF EXISTS `reservation`;
+DROP TABLE IF EXISTS `departement`;
 DROP TABLE IF EXISTS `professeur`;
 DROP TABLE IF EXISTS `etudiant`;
 DROP TABLE IF EXISTS `exemplaire`;
@@ -11,9 +12,11 @@ DROP TABLE IF EXISTS `materiel`;
 DROP TABLE IF EXISTS `type`;
 
 
+
 CREATE TABLE IF NOT EXISTS `type` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `nom` varchar(128) NOT NULL,
+    `couleur` varchar(128) NOT NULL,
     `date_suppression` DATE DEFAULT NULL,
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=`utf8`;
@@ -80,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `etudiant` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `nom` varchar(128) NOT NULL,
     `prenom` varchar(128) NOT NULL,
-    `mail` varchar(255) NOT NULL,
+    `mail` varchar(255) DEFAULT NULL,
     `telephone` varchar(20) NOT NULL,
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT Charset=utf8;
@@ -97,55 +100,62 @@ CREATE TABLE IF NOT EXISTS `professeur` (
 CREATE TABLE IF NOT EXISTS `departement` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `nom` varchar(128) NOT NULL,
+    `created_at` date NOT NULL,
+    `deleted_at` date DEFAULT NULL,
+    `updated_at` date DEFAULT NULL,
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
-
 
 CREATE TABLE IF NOT EXISTS `reservation` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `responsable_projet` INT NOT NULL,
     `departement` INT NOT NULL,
     `matiere` varchar(255) NOT NULL,
-    `projet` TEXT DEFAULT NULL,
-    `referent` INT DEFAULT NULL,
+    `annee` varchar(128) NOT NULL,
+    `dep_groupe` varchar(128) NOT NULL,
+    `observation` TEXT DEFAULT NULL,
     `created_at` date NOT NULL,
+    `updated_at` date DEFAULT NULL,
     `deleted_at` date DEFAULT NULL,
     FOREIGN KEY (`departement`) REFERENCES `departement`(`id`),
     FOREIGN KEY (`responsable_projet`) REFERENCES `professeur`(`id`),
-    FOREIGN KEY (`referent`) REFERENCES `etudiant`(`id`),
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `resa` (
+CREATE TABLE IF NOT EXISTS `fiche_resa` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `reservation` INT NOT NULL,
-    `depart` DATETIME NOT NULL,
-    `retour` DATETIME NOT NULL,
+    `date_depart` timestamp NOT NULL,
+    `date_retour` timestamp NOT NULL,
+    `rendu` BOOL DEFAULT 0,
     `observation` TEXT DEFAULT NULL,
     `created_at` date NOT NULL,
+    `updated_at` date DEFAULT NULL,
     `deleted_at` date DEFAULT NULL,
     FOREIGN KEY (`reservation`) REFERENCES `reservation`(`id`),
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
+
 CREATE TABLE IF NOT EXISTS `groupe` (
     `reservation` INT NOT NULL,
     `etudiant` INT NOT NULL,
+    `referent` BOOL DEFAULT 0,
     FOREIGN KEY (`reservation`) REFERENCES `reservation`(`id`),
     FOREIGN KEY (`etudiant`) REFERENCES `etudiant`(`id`),
     PRIMARY KEY (`reservation`, `etudiant`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `resa_materiel` (
-    `id_resa` INT NOT NULL,
-    `id_materiel` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `reservation_exemplaire` (
+    `fiche_reservation` INT NOT NULL,
+    `id_exemplaire` INT NOT NULL,
     `emprunt` BOOL DEFAULT 0,
     `rendu` BOOL DEFAULT 0,
     `incident` TEXT DEFAULT NULL,
-    FOREIGN KEY (`id_resa`) REFERENCES `resa`(`id`),
-    FOREIGN KEY (`id_materiel`) REFERENCES `materiel`(`id`),
-    PRIMARY KEY (`id_resa`,`id_materiel`)
+    FOREIGN KEY (`fiche_reservation`) REFERENCES `fiche_resa`(`id`),
+    FOREIGN KEY (`id_exemplaire`) REFERENCES `exemplaire`(`id`),
+    PRIMARY KEY (`fiche_reservation`,`id_exemplaire`)
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
 -- verifier emprunt depart et retour des tables reservation et resa_materiel

@@ -16,5 +16,17 @@ class Etudiant extends Model
         return $this->belongsTo('PrismGestion\Mdoels\Reservation', 'id');
     }
 
+    public function groupe()
+    {
+        return $this->belongsToMany(
+            'PrismGestion\Models\Etudiant',
+            'groupe',
+            'etudiant',
+            'reservation')
+            ->withPivot(['referent'])->as('groupe');
+
+    }
+
+
 
 }

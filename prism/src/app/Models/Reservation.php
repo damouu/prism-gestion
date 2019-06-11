@@ -11,6 +11,9 @@ class Reservation extends Model
 
     use SoftDeletes;
     protected $table = 'reservation';
+    public $timestamps = true;
+    protected $dateFormat = 'Y-m-d';
+    protected $primaryKey = 'id';
 
 
 
@@ -29,11 +32,15 @@ class Reservation extends Model
         return $this->hasMany('PrimsGestion\Models\Departement', 'id');
     }
 
-    public function resa()
+    public function groupe()
     {
-        return $this->belongsTo('PrismGestion\Models\Resa', 'id');
+        return $this->belongsToMany(
+            'PrismGestion\Models\Etudiant',
+            'groupe',
+            'reservation',
+            'etudiant')
+            ->withPivot(['referent'])->as('groupe');
     }
-
 
 
 }

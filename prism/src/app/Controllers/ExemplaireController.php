@@ -3,8 +3,10 @@
 namespace PrismGestion\Controllers;
 
 use Illuminate\Database\Capsule\Manager as DB;
+use mysql_xdevapi\Exception;
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Exemplaire;
+use PrismGestion\Models\FicheReservation;
 use PrismGestion\Models\Materiel;
 use PrismGestion\Models\Type;
 use PrismGestion\Utils\ResponseWriter;
@@ -465,28 +467,51 @@ class ExemplaireController extends Controller
 
         $id = intval($args['id']);
 
-        $exemplaire = Exemplaire::find($id);
+        $exemplaire = FicheReservation::whereHas('exemplaire',function($q) use ($id) {
+            $q->where('id','=',$id);
+        })->get();
+        $ex = Exemplaire::find($id);
 
-        if(empty($exemplaire))
-        {
-            $data = ApiErrors::NotFound($request->getUri());
-        }
-        else {
-            try{
-                $exemplaire->delete();
-                $exemplaire->save();
+        if(!$exemplaire->isEmpty() || $ex){
+            try
+            {
+                foreach($exemplaire as $verif)
+                {
+                    if(!$verif->emprunt)
+                    {
+                        throw new \Exception('existant');
+                    }
+                    var_dump(json_encode($verif));die;
+                }
+
+                $ex->delete();
 
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'message' => 'l\'exemplaire ' . $exemplaire->id . ' a bien été supprimé.'
+                    'exemplaire' => 'l\exemplaire a bien été supprimé'
                 ];
             }
             catch(\Exception $e)
             {
-                $data = ApiErrors::InternalError();
+                if($e->getMessage()==='existant'){
+                    $data = ApiErrors::deletedError();
+                }
+                else
+                {
+                    $data = [
+                        'type' => "success",
+                        'code' => 200,
+                        'exemplaire' => $e
+                    ];
+                }
             }
         }
+        else
+        {
+            $data = ApiErrors::NotFound($request->getUri());
+        }
+
 
         return ResponseWriter::ResponseWriter($response, $data);
     }
@@ -1108,6 +1133,35 @@ class ExemplaireController extends Controller
         }
 
         return ResponseWriter::ResponseWriter($response, $data);
+    }
+
+    public function getExemplaireReservation(Request $request, Response $response, $args)
+    {
+        $id = $args['id'];
+
+        $exemplaire = Exemplaire::find($id);
+
+        if(empty($exemplaire))
+        {
+            $data = ApiErrors::NotFound($request->getUri());
+        }
+        else
+        {
+            $resa = Exemplaire::with('reservation')->where('id','=',$id)->get();
+           /* $reservations = [];
+            foreach($resa as $row)
+            {
+                array_push($reservations, $row->reservation);
+            }
+*/
+            $data = [
+                'type' => "success",
+                'code' => 200,
+                'exemplaire' => $resa,
+            ];
+        }
+
+        return ResponseWriter::ResponseWriter($response,$data);
     }
 
 }
