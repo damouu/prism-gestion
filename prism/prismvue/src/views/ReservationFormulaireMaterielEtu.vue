@@ -110,7 +110,7 @@
                                         <b-form-group label="Observations" label-for="observations">
                                             <b-textarea
                                                     id="observations"
-                                                    v-model="resa.observations"
+                                                    v-model="formulaire.observations"
                                             ></b-textarea>
                                         </b-form-group>
                                     </b-card>
@@ -193,6 +193,10 @@
                                                                 @row-selected="rowSelected">
                                                             <template slot="empty" slot-scope="scope">
                                                                 <h6 class="text-center">Pas d'exemplaires choisis.</h6>
+                                                            </template>
+                                                            <template slot="disponibilite" slot-scope="row">
+                                                                <b-badge variant="secondary" v-if="row.value != 'disponible'">{{row.value}}</b-badge>
+                                                                <b-badge variant="success" v-if="row.value == 'disponible'">{{row.value}}</b-badge>
                                                             </template>
                                                             <template slot="actions" slot-scope="row" class="text-center">
                                                                 <b-button variant="warning" class="mr-1"><font-awesome-icon :icon="['fas','info-circle']" /></b-button>
@@ -304,9 +308,9 @@
             },
 
             deleteRow(items) {
-                for ( const [key,value] of Object.entries(this.etudiants)){
+                for ( const [key,value] of Object.entries(this.exemplaires)){
                     if(value.id === items.id) {
-                        this.etudiants.splice(key,1);
+                        this.exemplaires.splice(key,1);
                         break;
                     }
                 }
@@ -404,7 +408,7 @@
                                 let date_ret = new Date(fiche.date_retour);
                                 let dateNow = new Date();
                                 if(dateNow >= date_ret){
-                                    if((date_depart<date_ret) || (date_retour>date_dep))
+                                    if(!(date_depart>date_ret) || (date_retour>date_dep))
                                     {
                                         exem.disponibilite = 'indisponible';
                                     }
@@ -419,8 +423,30 @@
 
             rowSelected(items) {
                 this.selected = items;
+                let existe = false;
+                this.exemplaires.forEach(element => {
+                    if(element.id==items[0].id)
+                    {
+                        existe = true;
+                    }
+                });
+                if(!existe && items[0].disponibilite!='emprunté')
+                {
+                    let data;
+                    for(let i = 0; i<this.fillMateriels.length;i++)
+                    {
+                        if(this.fillMateriels[i].id == items[0].id)
+                        {
+                            data = this.fillMateriels[i];
+                            break;
+                        }
+                    }
+                    this.exemplaires.push({id:items[0].id, materiel: data.modele + data.constructeur, type:data.type.nom, reference:items[0].reference});
+                }
+
                 console.log(items);
             },
+
         }
 
     }
