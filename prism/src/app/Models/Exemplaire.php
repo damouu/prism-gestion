@@ -31,10 +31,10 @@ class Exemplaire extends Model
     public function fiche_resa()
     {
         return $this->belongsToMany(
-            'PrismGestion\Models\Reservation',
+            'PrismGestion\Models\FicheReservation',
             'reservation_exemplaire',
-            'fiche_reservation',
-            'id_exemplaire'
+            'id_exemplaire',
+            'fiche_reservation'
         )->withPivot(['emprunt','rendu','incident'])->as('reservation_exemplaire');
     }
 

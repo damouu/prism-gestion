@@ -18,13 +18,15 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarDay } from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
 
-library.add(faTrashAlt,faSortUp,faSortDown, faAngleLeft, faAngleRight, faCaretRight, faEdit);
+library.add(faTrashAlt,faSortUp,faSortDown, faAngleLeft, faAngleRight, faCaretRight, faEdit, faCalendarDay, faInfoCircle);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VeeValidate, {
