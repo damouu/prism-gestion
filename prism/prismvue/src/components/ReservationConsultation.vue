@@ -58,7 +58,7 @@
                 sortBy : 'id',
                 sortDesc: false,
                 fieldsRow: [
-                    { key: 'professeur', sortable:true, label:'Responsable Projet'},
+                    { key: 'responsable_projet', sortable:true},
                     { key: 'departement', sortable:true },
                     { key: 'matiere', sortable:true },
                     { key: 'annee', sortable:true },
@@ -84,8 +84,19 @@
             getReservations(){
                 axios.get('/reservations')
                     .then(response => {
-                        this.reservations = response.data.reservations;
-                        console.log(this.reservations);
+                        this.reservations=[];
+                        console.log(response.data.reservations);
+                        response.data.reservations.forEach(elements => {
+                            this.reservations.push({
+                                id:elements.id,
+                                responsable_projet:elements.professeur.nom+' '+elements.professeur.prenom,
+                                departement: elements.departement.nom,
+                                matiere: elements.matiere,
+                                annee: elements.annee,
+                                dep_groupe: elements.dep_groupe,
+                                created_at: elements.created_at
+                            })
+                        });
                     })
                     .catch(error => {
 
@@ -104,6 +115,7 @@
 
             rowSelected(items) {
                 this.selected = items;
+                console.log(items);
             },
 
 
