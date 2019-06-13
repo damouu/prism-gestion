@@ -1,5 +1,5 @@
 <template>
-    <div id="ReservationFormulaireEtu">
+    <div id="ReservationFormulaireProf">
 
         <b-container>
             <b-alert
@@ -17,7 +17,7 @@
 
         <b-row align-h="between" class="mb-4">
             <b-col>
-                <h1 class="ml-5">Reservation Etudiante</h1>
+                <h1 class="ml-5">Reservation Professeur</h1>
             </b-col>
         </b-row>
 
@@ -28,9 +28,9 @@
                                 <b-card-title>Responsable du projet</b-card-title>
                                 <b-row>
                                     <b-col cols="12">
-                                        <b-form-group label="Nom Prénom" label-for="formEtuResponsable">
+                                        <b-form-group label="Nom Prénom" label-for="formProfResponsable">
                                             <vue-bootstrap-typeahead
-                                                    id="formEtuResponsable"
+                                                    id="formProfResponsable"
                                                     :data="responsables"
                                                     v-model="query"
                                                     :serializer="item => item.nom +' '+item.prenom"
@@ -39,15 +39,15 @@
                                             <template slot="suggestion" slot-scope="{data, htmlText}">
                                                 <div><span class="mr-3" v-html="htmlText"></span></div>
                                             </template>
-
                                         </b-form-group>
                                     </b-col>
 
+
                                     <b-col cols="3">
-                                        <b-form-group label="Nom *" label-for="formEtuResponsableNom">
+                                        <b-form-group label="Nom *" label-for="formProfResponsableNom">
                                             <b-form-input
-                                                    id="formEtuResponsableNom"
-                                                    v-model="formEtu.responsableNom"
+                                                    id="formProfResponsableNom"
+                                                    v-model="formProf.responsableNom"
                                                     v-validate="{required:true, regex:/^[a-zé7àùûêâôëîï\s-]{1}[a-zé7àùûêâôëîï\'-]*[a-zé7àùûêâôëîï]$/i}"
                                                     data-vv-name="responsableNom"
                                                     :state="validateState('responsableNom')"
@@ -60,10 +60,10 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Prénom *" label-for="formEtuResponsablePrenom">
+                                        <b-form-group label="Prénom *" label-for="formProfResponsablePrenom">
                                             <b-form-input
-                                                    id="formEtuResponsablePrenom"
-                                                    v-model="formEtu.responsablePrenom"
+                                                    id="formProfResponsablePrenom"
+                                                    v-model="formProf.responsablePrenom"
                                                     v-validate="{required:true, regex:/^[a-zé7àùûêâôëîï\s-]{1}[a-zé7àùûêâôëîï\'-]*[a-zé7àùûêâôëîï]$/i}"
                                                     data-vv-name="responsablePrenom"
                                                     :state="validateState('responsablePrenom')"
@@ -76,10 +76,10 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Téléphone *" label-for="formEtuResponsableTel">
+                                        <b-form-group label="Téléphone *" label-for="formProfResponsableTel">
                                             <b-form-input
-                                                    id="formEtuResponsableTel"
-                                                    v-model="formEtu.responsableTel"
+                                                    id="formProfResponsableTel"
+                                                    v-model="formProf.responsableTel"
                                                     v-validate="{required:true,max:20, numeric:true}"
                                                     data-vv-name="responsableTel"
                                                     :state="validateState('responsableTel')"
@@ -92,10 +92,10 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Mail *" label-for="formEtuResponsableMail">
+                                        <b-form-group label="Mail *" label-for="formProfResponsableMail">
                                             <b-form-input
-                                                    id="formEtuResponsableMail"
-                                                    v-model="formEtu.responsableMail"
+                                                    id="formProfResponsableMail"
+                                                    v-model="formProf.responsableMail"
                                                     v-validate="{required:true, email:true}"
                                                     data-vv-name="responsableMail"
                                                     :state="validateState('responsableMail')"
@@ -115,10 +115,10 @@
                                     title="Information réservations">
                                 <b-row>
                                     <b-col cols="3">
-                                        <b-form-group label="Département *" label-for="formEtuDepartement">
+                                        <b-form-group label="Département *" label-for="formProfDepartement">
                                             <b-form-select
-                                                    id="formEtuDepartement"
-                                                    v-model="formEtu.departement"
+                                                    id="formProfDepartement"
+                                                    v-model="formProf.departement"
                                                     v-validate="{required:true}"
                                                     data-vv-name="departement"
                                                     :state="validateState('departement')"
@@ -132,10 +132,10 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Matière *" label-for="formEtuMatiere">
+                                        <b-form-group label="Matière *" label-for="formProfMatiere">
                                             <b-form-input
-                                                    id="formEtuMatiere"
-                                                    v-model="formEtu.matiere"
+                                                    id="formProfMatiere"
+                                                    v-model="formProf.matiere"
                                                     v-validate="{required:true}"
                                                     data-vv-name="matiere"
                                                     :state="validateState('matiere')"
@@ -148,10 +148,10 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Année *" label-for="formEtuAnnee">
+                                        <b-form-group label="Année *" label-for="formProfAnnee">
                                             <b-form-input
-                                                    id="formEtuAnnee"
-                                                    v-model="formEtu.annee"
+                                                    id="formProfAnnee"
+                                                    v-model="formProf.annee"
                                                     v-validate="{required:true}"
                                                     data-vv-name="annee"
                                                     :state="validateState('annee')"
@@ -164,10 +164,10 @@
                                     </b-col>
 
                                     <b-col cols="3">
-                                        <b-form-group label="Groupe *" label-for="formEtuGroupe">
+                                        <b-form-group label="Groupe *" label-for="formProfGroupe">
                                             <b-form-input
-                                                    id="formEtuGroupe"
-                                                    v-model="formEtu.dep_groupe"
+                                                    id="formProfGroupe"
+                                                    v-model="formProf.dep_groupe"
                                                     v-validate="{required:true}"
                                                     data-vv-name="groupe"
                                                     :state="validateState('groupe')"
@@ -180,10 +180,10 @@
                                     </b-col>
 
                                     <b-col cols="12">
-                                        <b-form-group label="Observations" label-for="formEtuObservation">
+                                        <b-form-group label="Observations" label-for="formProfObservation">
                                             <b-form-textarea
-                                                    id="formEtuObservation"
-                                                    v-model="formEtu.observation"
+                                                    id="formProfObservation"
+                                                    v-model="formProf.observation"
                                                     placeholder="Ecrivez quelque chose..."
                                                     rows="2"
                                                     max-rows="6"
@@ -196,46 +196,6 @@
                             </b-card>
                         </b-col>
 
-                        <b-col cols="12" class="mt-4">
-                            <b-card>
-                                <b-card-title>Etudiant Référent, Groupe d'élèves  <b-button pill variant="outline-info" v-b-modal.modal-AddResaEtu>Ajouter un élève</b-button></b-card-title>
-
-                                <b-form-group label="Nom et Prénom d'élève" label-for="formEtuEtudiant">
-                                    <vue-bootstrap-typeahead
-                                            id="formEtuEtudiant"
-                                            :data="etudiant"
-                                            v-model="queryEtudiant"
-                                            :serializer="item => item.nom +' '+item.prenom"
-                                            placeholder="Nom et prénom de l'élève"
-                                            @hit="selectRespEleve($event)"/>
-                                    <template slot="suggestion" slot-scope="{data, htmlText}">
-                                        <div><span class="mr-3" v-html="htmlText"></span></div>
-                                    </template>
-
-                                </b-form-group>
-
-                                <b-table
-                                        :items="etudiants"
-                                        striped hover
-                                        :fields="fields"
-                                        show-empty
-                                        class="mt-4">
-
-                                    <template slot="empty" slot-scope="scope">
-                                        <h6 class="text-center">Pas d'étudiants à afficher.</h6>
-                                    </template>
-
-                                    <template slot="actions" slot-scope="row">
-                                        <b-button size="sm" class="mr-1" variant="outline-danger" @click="deleteRow(row.item)"><font-awesome-icon :icon="['fas','trash-alt']" /></b-button>
-                                        <b-button size="sm" v-show="!(row.item.id === etudiants[0].id)" class="mr-1" @click="moveUpRow(row.item)"><font-awesome-icon :icon="['fas','sort-up']" /></b-button>
-                                        <b-button size="sm" v-show="!(row.item.id === etudiants[(etudiants.length)-1].id)" @click="moveDownRow(row.item)"><font-awesome-icon :icon="['fas','sort-down']" /></b-button>
-                                    </template>
-
-                                </b-table>
-
-                            </b-card>
-                        </b-col>
-
                         <span class="text-danger mt-4">* champs obligatoires</span>
 
                         <b-col md="3" offset-md="9">
@@ -243,8 +203,6 @@
                         </b-col>
                     </b-row>
                 </form>
-
-        <ModalAddReservationEtudiant />
 
     </div>
 </template>
@@ -256,12 +214,11 @@
 
     import _ from 'underscore';
     import {eventBus} from "../main";
-    import ModalAddReservationEtudiant from "./modals/ModalAddReservationEtudiant";
+
 
     export default {
-        name: 'ReservationFormulaireEtu',
+        name: 'ReservationFormulaireProf',
         components: {
-            ModalAddReservationEtudiant,
         },
         data() {
             return {
@@ -274,10 +231,8 @@
                 ],
                 etudiants: [],
 
-                formEtu: [],
+                formProf: [],
                 query: '',
-                queryEtudiant: '',
-                etudiant: [],
 
                 departement: [],
                 departements: [],
@@ -301,48 +256,30 @@
             eventBus.$on('error',data => {
                 this.showAlert(data.error, data.status, data.message);
             });
-            eventBus.$on('addedEtu', data => {
-                let $event = data;
-               this.selectRespEleve($event);
-            });
         },
         watch: {
             query: _.debounce(function(newQuery) {
                 this.getResponsables(newQuery);
             },250),
-
-            queryEtudiant: _.debounce(function(newQuery) {
-                this.getEtudiants(newQuery);
-            },250),
         },
         methods: {
 
             next(){
-                if(this.etudiants.length === 0)
-                {
-                    this.$validator.validateAll().then( result => {
-                        if (!result) {
-                            return;
-                        }
-                    });
-                }
-                else {
                     this.$validator.validateAll().then( result => {
                         if (!result) {
                             return;
                         } else
                         {
-
-                            if(!this.formEtu.responsable_projet)
+                            if(!this.formProf.responsable_projet)
                             {
                                 axios.post('/professeurs', {
-                                    'nom': this.formEtu.responsableNom,
-                                    'prenom': this.formEtu.responsablePrenom,
-                                    'mail': this.formEtu.responsableMail,
-                                    'telephone': this.formEtu.responsableTel
+                                    'nom': this.formProf.responsableNom,
+                                    'prenom': this.formProf.responsablePrenom,
+                                    'mail': this.formProf.responsableMail,
+                                    'telephone': this.formProf.responsableTel
                                 })
                                     .then( response => {
-                                        this.formEtu.responsable_projet = response.data.etudiant.id;
+                                        this.formProf.responsable_projet = response.data.etudiant.id;
                                     })
                                     .catch(error => {
                                         console.log(error);
@@ -350,46 +287,43 @@
                             }
                             else
                             {
-                                axios.put('/professeurs/'+this.formEtu.responsable_projet, {
-                                    'nom': this.formEtu.responsableNom,
-                                    'prenom': this.formEtu.responsablePrenom,
-                                    'mail': this.formEtu.responsableMail,
-                                    'telephone': this.formEtu.responsableTel
+                                axios.put('/professeurs/'+this.formProf.responsable_projet, {
+                                    'nom': this.formProf.responsableNom,
+                                    'prenom': this.formProf.responsablePrenom,
+                                    'mail': this.formProf.responsableMail,
+                                    'telephone': this.formProf.responsableTel
                                 })
                                     .then( response => {
-                                        this.formEtu.responsable_projet = response.data.professeur.id;
+                                        this.formProf.responsable_projet = response.data.professeur.id;
                                     })
                                     .catch(error => {
                                         console.log(error);
                                     })
-
                             }
-                            let etu = [];
-                            this.etudiants.forEach(element => {
-                                etu.push(element['id']);
-                            });
+
                             axios.post('/reservations', {
-                                'responsable_projet': this.formEtu.responsable_projet,
-                                'departement': this.formEtu.departement,
-                                'matiere': this.formEtu.matiere,
-                                'annee': this.formEtu.annee,
-                                'dep_groupe': this.formEtu.dep_groupe,
-                                'observation': this.formEtu.observation,
-                                'groupes': etu
+                                'responsable_projet': this.formProf.responsable_projet,
+                                'departement': this.formProf.departement,
+                                'matiere': this.formProf.matiere,
+                                'annee': this.formProf.annee,
+                                'dep_groupe': this.formProf.dep_groupe,
+                                'observation': this.formProf.observation,
                             })
                                 .then( response => {
+                                    console.log(response.data);
                                     this.$router.push({path: '/reservation/'+ response.data.reservation.id +'/feuille'});
                                 })
                                 .catch(error => {
-                                    console.log(error.response);
+                                    console.log('TEST');
+                                    console.log(error);
                                 })
-
-
                         }
-
                     });
-                }
+            },
 
+
+            back(){
+                this.formulaire = true;
             },
 
             validateState(ref) {
@@ -425,41 +359,14 @@
                     })
             },
 
-            getEtudiants(newQuery) {
-                axios.get('/etudiants?query='+newQuery)
-                    .then( response => {
-                        this.etudiant = [];
-                        response.data.etudiants.forEach( element => {
-                            this.etudiant.push(element);
-                        });
-                    })
-                    .catch( error => {
-                        console.log(error.response);
-                    })
-            },
-
             selectResp($event) {
-                this.$set(this.formEtu,'responsableNom',$event['nom']);
-                this.$set(this.formEtu,'responsablePrenom',$event['prenom']);
-                this.$set(this.formEtu,'responsableTel',$event['telephone']);
-                this.$set(this.formEtu,'responsableMail',$event['mail']);
-                this.$set(this.formEtu,'responsable_projet',$event['id']);
+                this.$set(this.formProf,'responsableNom',$event['nom']);
+                this.$set(this.formProf,'responsablePrenom',$event['prenom']);
+                this.$set(this.formProf,'responsableTel',$event['telephone']);
+                this.$set(this.formProf,'responsableMail',$event['mail']);
+                this.$set(this.formProf,'responsable_projet',$event['id']);
             },
 
-            selectRespEleve($event) {
-                let test = false;
-                if(this.etudiants.length >= 1){
-                    this.etudiants.forEach( element => {
-                        if(element.id === $event.id)
-                        {
-                            test = true;
-                        }
-                    });
-                }
-                if(test===false) {
-                    this.etudiants.push($event);
-                }
-            },
 
             showAlert(error, status, message) {
                 this.alert.error = error;
@@ -471,43 +378,6 @@
             countDownChanged(dismissCountDown) {
                 this.dismissCountDown = dismissCountDown;
             },
-
-
-            deleteRow(items) {
-                for ( const [key,value] of Object.entries(this.etudiants)){
-                    if(value.id === items.id) {
-                        this.etudiants.splice(key,1);
-                        break;
-                    }
-                }
-            },
-            moveUpRow(items) {
-                console.log(items);
-                for ( const [key,value] of Object.entries(this.etudiants)){
-                    if(value.id === items.id) {
-                        if(key != 0 ){
-                            let del = this.etudiants.splice(key,1);
-                            let keyM = key-1;
-                            this.etudiants.splice(keyM,0,del[0]);
-                            break;
-                        }
-                    }
-                }
-            },
-            moveDownRow(items) {
-                let max = Object.keys(this.etudiants).length;
-                for ( const [key,value] of Object.entries(this.etudiants)){
-                    if(value.id === items.id) {
-                        if(key != (max-1) ){
-                            let del = this.etudiants.splice(key,1);
-                            let keyM = key+1;
-                            this.etudiants.splice(keyM,0,del[0]);
-                            break;
-                        }
-                    }
-                }
-            },
-
         }
 
     }

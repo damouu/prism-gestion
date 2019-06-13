@@ -28,10 +28,10 @@
                         </div>
 
                         <div v-else-if="navigation === 'professeur'">
-                            2
+                            <ReservationFormulaireProf />
                         </div>
 
-                        <div v-else>
+                        <div v-else-if="navigation === 'reservations'">
                             3
                         </div>
                     </b-col>
@@ -44,6 +44,7 @@
 <script>
     import NavigationReservation from '../components/navigation/NavigationReservation';
     import ReservationFormulaireEtu from '../components/ReservationFormulaireEtu';
+    import ReservationFormulaireProf from '../components/ReservationFormulaireProf';
     import { eventBus } from "../main";
 
     export default {
@@ -51,6 +52,7 @@
         components:{
             NavigationReservation,
             ReservationFormulaireEtu,
+            ReservationFormulaireProf,
         },
         data() {
             return {
@@ -58,7 +60,7 @@
                 dismissCountDown:0,
                 dismissSecs:10,
 
-                navigation: 'etudiant',
+                navigation: 'reservations',
             }
         },
         mounted() {

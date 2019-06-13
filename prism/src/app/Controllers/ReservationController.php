@@ -120,7 +120,14 @@ class ReservationController extends Controller
     {
         $content = $request->getParsedBody();
 
-        $etudiants = $content['groupes'];
+        if(isset($content['groupes']))
+        {
+            $etudiants = $content['groupes'];
+        }
+        else{
+            $etudiants = null;
+        };
+
 
         if(!isset($content['responsable_projet'])
             || !isset($content['departement'])
@@ -155,7 +162,7 @@ class ReservationController extends Controller
                 $reservation->dep_groupe = $content['dep_groupe'];
                 $reservation->observation = $content['observation'];
 
-                if(is_null($content['groupes']))
+                if(is_null($etudiants))
                 {
                     $reservation->save();
                 }
