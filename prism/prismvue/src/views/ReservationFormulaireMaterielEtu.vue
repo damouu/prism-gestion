@@ -200,7 +200,7 @@
                                                             </template>
                                                             <template slot="actions" slot-scope="row" class="text-center">
                                                                 <b-button variant="warning" class="mr-1"><font-awesome-icon :icon="['fas','info-circle']" /></b-button>
-                                                                <b-button variant="success" class="ml-1"><font-awesome-icon :icon="['fas','calendar-day']" /></b-button>
+                                                                <b-button variant="success" @click="agendaRow(row)" v-b-modal.modal-AgendaModal class="ml-1"><font-awesome-icon :icon="['fas','calendar-day']" /></b-button>
                                                             </template>
                                                         </b-table>
                                                     </b-card>

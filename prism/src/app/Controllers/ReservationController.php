@@ -28,7 +28,9 @@ class ReservationController extends Controller
         if($params['select'] === 'all')
         {
             try{
-                $reservation = Reservation::orderBy('created_at','desc')->get();
+                $reservation = Reservation::with('departement')
+                    ->with('professeur')
+                    ->orderBy('created_at','desc')->get();
                 $data = [
                     'type' => "success",
                     'code' => 200,
@@ -37,6 +39,7 @@ class ReservationController extends Controller
             }
             catch(\Exception $e)
             {
+                var_dump($e);die;
                 $data = ApiErrors::InternalError();
             }
 

@@ -1,3 +1,10 @@
+
+<style type="text/css">
+    .modal-xl{
+        min-height: 1000px;
+    }
+</style>
+
 <template>
     <div id="AgendaModal">
         <b-modal
@@ -8,6 +15,7 @@
                 size="xl">
 
             <FullCalendar
+                    ref="test"
                     :events="calendarEvents"
                     themeSystem="bootstrap"
                     :plugins="plugins"
@@ -30,11 +38,7 @@
 </template>
 
 
-<style type="text/css">
-    #modal-AgendaModal{
-        min-height: 900px!important;
-    }
-</style>
+
 
 <script>
     import {eventBus} from "../../main";
@@ -77,10 +81,9 @@
         mounted(){
             eventBus.$on('agenda', data => {
                 console.log(data.item);
-                if(typeof data.item.constructeur !== 'undefined')
-                {
-                    data.item.exemplaire.forEach( elements => {
-                        elements.fiche_resa.forEach( q => {
+                if (typeof data.item.constructeur !== 'undefined') {
+                    data.item.exemplaire.forEach(elements => {
+                        elements.fiche_resa.forEach(q => {
                             this.calendarEvents.push({
                                 title: elements.reference,
                                 start: q.date_depart,
@@ -90,12 +93,22 @@
                         });
 
                     });
+                } else {
 
-                }
-                else {
+                    data.item.forEach(elements => {
+                        elements.fiche_resa.forEach(q => {
+                            this.calendarEvents.push({
+                                title: elements.reference,
+                                start: q.date_depart,
+                                end: q.date_retour,
+                                id: q.id
+                            });
+                        })
 
+                    });
                 }
             });
+
         },
         methods:{
 

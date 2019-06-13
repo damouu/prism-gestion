@@ -12,7 +12,7 @@ class Professeur extends Model
 
     public function reservationProfesseur()
     {
-        return $this->belongsTo('PrismGestion\Models\Reservation', 'id');
+        return $this->belongsTo('PrismGestion\Models\Reservation', 'responsable_projet');
     }
 
 }

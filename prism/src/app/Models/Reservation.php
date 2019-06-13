@@ -19,7 +19,7 @@ class Reservation extends Model
 
     public function professeur()
     {
-        return $this->hasMany('PrismGestion\Models\Professeur', 'id');
+        return $this->belongsTo('PrismGestion\Models\Professeur', 'responsable_projet');
     }
 
     public function etudiant()
@@ -29,7 +29,7 @@ class Reservation extends Model
 
     public function departement()
     {
-        return $this->hasMany('PrimsGestion\Models\Departement', 'id');
+        return $this->belongsTo('PrismGestion\Models\Departement', 'departement');
     }
 
     public function groupe()

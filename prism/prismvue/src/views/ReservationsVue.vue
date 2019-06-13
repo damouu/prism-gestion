@@ -32,7 +32,7 @@
                         </div>
 
                         <div v-else-if="navigation === 'reservations'">
-                            3
+                            <ReservationConsultation />
                         </div>
                     </b-col>
                 </b-row>
@@ -46,10 +46,12 @@
     import ReservationFormulaireEtu from '../components/ReservationFormulaireEtu';
     import ReservationFormulaireProf from '../components/ReservationFormulaireProf';
     import { eventBus } from "../main";
+    import ReservationConsultation from "../components/ReservationConsultation";
 
     export default {
         name:"reservation",
         components:{
+            ReservationConsultation,
             NavigationReservation,
             ReservationFormulaireEtu,
             ReservationFormulaireProf,

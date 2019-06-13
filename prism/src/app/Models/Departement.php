@@ -17,7 +17,7 @@ class Departement extends Model
 
     public function reservation()
     {
-        return $this->belongsTo('PrismGestion\Mdoels\Reservation', 'id');
+        return $this->hasMany('PrismGestion\Models\Reservation', 'departement');
     }
 
 }
