@@ -179,7 +179,7 @@
                                                     <h6 class="text-center">Aucune occurrence trouvée.</h6>
                                                 </template>
                                                 <template slot="agenda" slot-scope="row">
-                                                    <b-button variant="success"><font-awesome-icon :icon="['fas','calendar-day']" /></b-button>
+                                                    <b-button variant="success" @click="agendaRow(row)" v-b-modal.modal-AgendaModal><font-awesome-icon :icon="['fas','calendar-day']" /></b-button>
                                                 </template>
 
                                                 <template slot="row-details" slot-scope="row">
@@ -231,14 +231,19 @@
             </b-row>
         </b-container>
 
+        <AgendaModal />
+
     </div>
 </template>
 
 <script>
+    import {eventBus} from "../main";
     import NavigationReservationFeuille from "../components/navigation/NavigationReservationFeuille";
+    import AgendaModal from "../components/agenda/AgendaModal";
     export default {
         name: "ReservationFomulaireMaterielEtu",
         components:{
+            AgendaModal,
             NavigationReservationFeuille
         },
         data() {
@@ -445,6 +450,10 @@
                 }
 
                 console.log(items);
+            },
+
+            agendaRow(item){
+                eventBus.$emit('agenda', item);
             },
 
         }
