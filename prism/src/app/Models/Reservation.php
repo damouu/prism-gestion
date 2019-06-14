@@ -42,5 +42,12 @@ class Reservation extends Model
             ->withPivot(['referent'])->as('groupe');
     }
 
+    public function fiche_resa(){
+        return $this->hasMany(
+            'PrismGestion\Models\FicheReservation',
+            'reservation'
+        );
+    }
+
 
 }

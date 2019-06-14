@@ -9,6 +9,8 @@ import Fournisseurs from './views/FournisseursVue.vue'
 import Reformes from './views/ReformesVue'
 import Reforme from './views/ReformeVue'
 import Feuille_Reservation from './views/ReservationFormulaireMaterielEtu'
+import ConsultationReservationElement from './views/ReservationConsultationElement'
+
 import Agenda from './views/AgendaVue'
 import Categories from './views/CategoriesVue'
 
@@ -73,6 +75,12 @@ export default new Router({
       name: 'fiche_reservation',
       component: Feuille_Reservation,
     },
+    {
+      path: '/reservation/:id',
+      name: 'consultation_reservation',
+      component: ConsultationReservationElement,
+    },
+
     {
       path: '/agenda',
       name: 'agenda',

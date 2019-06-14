@@ -98,7 +98,15 @@ class ReservationController extends Controller
     public function getOne(Request $request, Response $response, $args) {
         $id = $args['id'];
         try {
-            $reservation = Reservation::find($id);
+            $reservation = Reservation::with('departement')
+                ->with('professeur')
+                ->with('groupe')
+                ->with(['fiche_resa' => function ($q) {
+                    $q->with(['exemplaire' => function ($w){
+                        $w->with('materiel');
+                    }]);
+                }])
+                ->find($id);
             if(empty($reservation))
             {
                 $data = ApiErrors::NotFound($request->getUri());

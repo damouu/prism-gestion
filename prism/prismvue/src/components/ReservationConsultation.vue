@@ -41,6 +41,11 @@
                 <h6 class="text-center">Pas de réservations.</h6>
             </template>
         </b-table>
+        <b-pagination
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+        ></b-pagination>
 
     </div>
 </template>
@@ -80,12 +85,16 @@
         mounted(){
             this.getReservations();
         },
+        computed: {
+            rows() {
+                return this.reservations.length
+            },
+        },
         methods:{
             getReservations(){
                 axios.get('/reservations')
                     .then(response => {
                         this.reservations=[];
-                        console.log(response.data.reservations);
                         response.data.reservations.forEach(elements => {
                             this.reservations.push({
                                 id:elements.id,
@@ -115,7 +124,8 @@
 
             rowSelected(items) {
                 this.selected = items;
-                console.log(items);
+                let idSelected = items[0];
+                this.$router.push({name: 'consultation_reservation', params: { id: idSelected.id }});
             },
 
 

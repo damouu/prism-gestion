@@ -287,12 +287,6 @@
                 fillMateriels:[],
                 resa: [],
                 selected:[],
-
-
-                sample: [
-                    { id:1, constructeur:"Canon", modele:"EOS 400", type: [{id:1,nom:"photo"},{id:2,nom:'test'}], date_creation:"2019-04-16"},
-                    { id:1, constructeur:"SennHeiser", modele:"micro 500", type: {id:1,nom:"son"}, date_creation:"2019-04-16" }
-                ]
             }
         },
         mounted() {
