@@ -20,32 +20,41 @@
             </b-col>
         </b-row>
 
-        <b-table
-                striped hover
-                :items="reservations"
+        <div v-if="loading" class="loading text-center mt-5 mb-5">
+            <b-spinner label="loading" class="text-center"></b-spinner>
+            <h5>Chargement, veuillez patienter ... </h5>
+        </div>
 
-                :fields="fieldsRow"
-                :sort-by.sync="sortBy"
-                :sort-desc.sync="sortDesc"
-                :filter="filter"
+        <div v-else>
+            <b-table
+                    striped hover
+                    :items="reservations"
 
-                show-empty
+                    :fields="fieldsRow"
+                    :sort-by.sync="sortBy"
+                    :sort-desc.sync="sortDesc"
+                    :filter="filter"
 
-                selectable
-                :select-mode="mode"
-                :per-page="perPage"
-                :current-page="currentPage"
-                selectedVariant="success"
-                @row-selected="rowSelected">
-            <template slot="empty" slot-scope="slot">
-                <h6 class="text-center">Pas de réservations.</h6>
-            </template>
-        </b-table>
-        <b-pagination
-                v-model="currentPage"
-                :total-rows="rows"
-                :per-page="perPage"
-        ></b-pagination>
+                    show-empty
+
+                    selectable
+                    :select-mode="mode"
+                    :per-page="perPage"
+                    :current-page="currentPage"
+                    selectedVariant="success"
+                    @row-selected="rowSelected">
+                <template slot="empty" slot-scope="slot">
+                    <h6 class="text-center">Pas de réservations.</h6>
+                </template>
+            </b-table>
+            <b-pagination
+                    v-model="currentPage"
+                    :total-rows="rows"
+                    :per-page="perPage"
+            ></b-pagination>
+        </div>
+
+
 
     </div>
 </template>
@@ -92,6 +101,7 @@
         },
         methods:{
             getReservations(){
+                this.loading=true;
                 axios.get('/reservations')
                     .then(response => {
                         this.reservations=[];
@@ -104,7 +114,8 @@
                                 annee: elements.annee,
                                 dep_groupe: elements.dep_groupe,
                                 created_at: elements.created_at
-                            })
+                            });
+                            this.loading=false;
                         });
                     })
                     .catch(error => {
