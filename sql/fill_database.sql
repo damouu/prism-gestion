@@ -41,8 +41,8 @@ INSERT INTO `reservation` (`responsable_projet`,`departement`,`annee`,`dep_group
 INSERT INTO `groupe` (`reservation`,`etudiant`,`referent`) VALUES (1,1,1);
 INSERT INTO `groupe` (`reservation`,`etudiant`,`referent`) VALUES (1,2,0);
 
-INSERT INTO `fiche_resa` (`id`,`reservation`,`date_depart`,`date_retour`,`rendu`,`observation`,`created_at`) VALUES ('1906-11',1,'2019-06-05 8:00:00','2019-06-10 15:00:00',0,'ceci est une observation1','2019-06-05');
-INSERT INTO `fiche_resa` (`id`,`reservation`,`date_depart`,`date_retour`,`rendu`,`observation`,`created_at`) VALUES ('1906-12',1,'2019-06-06 10:00:00','2019-06-15 18:00:00',0,'ceci est une observation2','2019-06-05');
+INSERT INTO `fiche_resa` (`id`,`reservation`,`date_depart`,`date_retour`,`rendu`,`observation`,`created_at`) VALUES ('1906-11',1,'2019-06-05 8:00:00','2019-06-17 15:00:00',0,'ceci est une observation1','2019-06-05');
+INSERT INTO `fiche_resa` (`id`,`reservation`,`date_depart`,`date_retour`,`rendu`,`observation`,`created_at`) VALUES ('1906-12',1,'2019-06-15 10:00:00','2019-06-25 18:00:00',0,'ceci est une observation2','2019-06-05');
 
 INSERT INTO `reservation_exemplaire` (`fiche_reservation`,`id_exemplaire`,`emprunt`,`rendu`) VALUES ('1906-11',3,1,0);
 INSERT INTO `reservation_exemplaire` (`fiche_reservation`,`id_exemplaire`,`emprunt`,`rendu`) VALUES ('1906-11',4,1,0);

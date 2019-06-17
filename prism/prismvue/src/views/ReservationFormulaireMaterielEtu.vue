@@ -221,6 +221,12 @@
                                 </b-col>
                             </b-row>
 
+                            <b-row align-h="end" class="mt-4">
+                                <b-button class="ml-2 mr-2">Valider et continuer</b-button>
+                                    <b-button class="ml-2 mr-2">Valider</b-button>
+                            </b-row>
+
+
                         </form>
 
 
@@ -248,6 +254,9 @@
         },
         data() {
             return {
+
+                date_dep:null,
+                date_ret: null,
 
                 formulaireId: this.$route.params.id,
                 formulaire: [],
@@ -290,6 +299,7 @@
             }
         },
         mounted() {
+            this.initDates();
             this.getTypes();
             this.getFormulaire();
             this.getAll();
@@ -356,6 +366,12 @@
 
             },
 
+            initDates(){
+                this.date_dep = new Date().toLocaleString("fr-FR",{timezone:'Europe/Paris'});
+                this.date_ret = new Date(); // +1
+
+            },
+
 
             getAll()
             {
@@ -363,15 +379,16 @@
                     .then( response => {
                         this.resa = response.data.materiels;
                         this.fillMateriels = JSON.parse(JSON.stringify(this.resa));
-                        let date_dep = new Date();
-                        let date_ret = new Date(date_dep.getDate()+1);
+
                         this.fillMateriels.forEach( exem => {
                             exem.exemplaire.forEach( fiche => {
                                 fiche.fiche_resa.forEach( el=> {
+
                                     if(el.date_depart>date_ret && el.date_retour<date_dep)
                                     {
                                         fiche.disponibilite = 'disponible';
                                     }
+
                                 });
                                 if(fiche.disponibilite!='disponible'){
                                     fiche.disponibilite='emprunté';

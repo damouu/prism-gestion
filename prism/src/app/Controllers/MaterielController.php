@@ -2,6 +2,7 @@
 
 namespace PrismGestion\Controllers;
 
+use DateTime;
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Exemplaire;
 use PrismGestion\Models\Materiel;
@@ -57,13 +58,14 @@ class MaterielController extends Controller
         else if($params['select']==='reservation')
         {
 
-
             try
             {
-
+                $date = new DateTime();
                 $materiel = Materiel::with('type')
-                    ->with(['exemplaire' => function ($q) {
-                        $q->with('fiche_resa');
+                    ->with(['exemplaire' => function ($q) use ($date) {
+                        $q->whereHas('fiche_resa', function ($w) use ($date){
+                            $w->where('date_depart','>=',$date)->orWhere('date_retour','>=',$date);
+                        });
                 }])->get();
 
 

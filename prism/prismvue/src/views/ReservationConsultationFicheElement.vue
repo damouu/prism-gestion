@@ -23,7 +23,7 @@
 
 
                 <b-col cols="2">
-                    <NavigationReservationFeuille />
+                    <NavigationReservation />
                 </b-col>
 
                 <b-col cols="10">
@@ -207,12 +207,12 @@
 <script>
 
     import {eventBus} from "../main";
-    import NavigationReservationFeuille from "../components/navigation/NavigationReservationFeuille";
+    import NavigationReservation from "../components/navigation/NavigationReservation";
 
     export default {
         name:"ReservationConsultationElement",
         components:{
-            NavigationReservationFeuille,
+            NavigationReservation,
         },
         data(){
             return {
@@ -290,7 +290,7 @@
                                     }
                                 });
                             if(existe==false){
-                                //this.$router.push({path:'/notfound'});
+                                this.$router.push({path:'/notfound'});
                             }
                             this.selectFiche(this.fiches[0]);
                             this.fiche_resa = this.fiches[0];
@@ -309,12 +309,11 @@
                         this.loading=false;
                     })
                     .catch(error => {
-                        //this.$router.push({path:'/notfound'});
+                        this.$router.push({path:'/notfound'});
                     })
             },
 
             selectFiche(values){
-                console.log(values);
                 this.fillMateriels=[];
                 this.fiche_resa=values;
                 let present=false;

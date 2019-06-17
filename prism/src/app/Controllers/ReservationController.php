@@ -39,7 +39,6 @@ class ReservationController extends Controller
             }
             catch(\Exception $e)
             {
-                var_dump($e);die;
                 $data = ApiErrors::InternalError();
             }
 
@@ -55,7 +54,6 @@ class ReservationController extends Controller
             }
             catch(\Exception $e)
             {
-                var_dump($e);die;
                 $data = ApiErrors::InternalError();
             }
         }
