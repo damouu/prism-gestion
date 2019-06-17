@@ -34,6 +34,10 @@
                         <div v-else-if="navigation === 'reservations'">
                             <ReservationConsultation />
                         </div>
+
+                        <div v-else-if="navigation === 'fiches'">
+                            <ReservationConsultationFiches />
+                        </div>
                     </b-col>
                 </b-row>
             </b-container>
@@ -47,11 +51,13 @@
     import ReservationFormulaireProf from '../components/ReservationFormulaireProf';
     import { eventBus } from "../main";
     import ReservationConsultation from "../components/ReservationConsultation";
+    import ReservationConsultationFiches from '../components/ReservationConsultationFiches';
 
     export default {
         name:"reservation",
         components:{
             ReservationConsultation,
+            ReservationConsultationFiches,
             NavigationReservation,
             ReservationFormulaireEtu,
             ReservationFormulaireProf,

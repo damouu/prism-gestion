@@ -10,6 +10,7 @@ import Reformes from './views/ReformesVue'
 import Reforme from './views/ReformeVue'
 import Feuille_Reservation from './views/ReservationFormulaireMaterielEtu'
 import ConsultationReservationElement from './views/ReservationConsultationElement'
+import ConsultationReservationFicheElement from './views/ReservationConsultationFicheElement'
 
 import Agenda from './views/AgendaVue'
 import Categories from './views/CategoriesVue'
@@ -79,6 +80,11 @@ export default new Router({
       path: '/reservation/:id',
       name: 'consultation_reservation',
       component: ConsultationReservationElement,
+    },
+    {
+      path: '/reservation/:idresa/feuille/:idfeuille',
+      name: 'consultation_reservation_fiche',
+      component: ConsultationReservationFicheElement,
     },
 
     {

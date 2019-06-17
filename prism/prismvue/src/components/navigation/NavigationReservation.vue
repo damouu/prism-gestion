@@ -4,6 +4,7 @@
             <b-nav-item @click="navEtu">Reservation etudiante</b-nav-item>
             <b-nav-item @click="navProf">Reservation autre</b-nav-item>
             <b-nav-item @click="navResa">Consulter les réservations</b-nav-item>
+            <b-nav-item @click="navFiches">Consulter les fiches reservation</b-nav-item>
         </b-nav>
     </div>
 </template>
@@ -31,9 +32,11 @@
             {
                 eventBus.$emit('navigation', {'navigation':'professeur'});
             },
-            navResa()
-            {
-                eventBus.$emit('navigation', {'navigation':'reservations'});
+            navResa() {
+                eventBus.$emit('navigation', {'navigation': 'reservations'});
+            },
+            navFiches(){
+                eventBus.$emit('navigation', { 'navigation': 'fiches'});
             }
         }
 

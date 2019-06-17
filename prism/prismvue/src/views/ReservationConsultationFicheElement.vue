@@ -217,7 +217,8 @@
         data(){
             return {
                 loading:true,
-                reservationId: this.$route.params.id,
+                reservationId: this.$route.params.idresa,
+                ficheId: this.$route.params.idfeuille,
                 reservation: [],
                 fiche_resa:[],
                 fiches:[],
@@ -281,9 +282,18 @@
                         this.professeur = response.data.reservation.professeur;
                         if(response.data.reservation.fiche_resa.length != 0 )
                         {
-                            this.fiches = response.data.reservation.fiche_resa;
-                            this.selectFiche(this.fiches['0']);
-                            this.fiche_resa = response.data.reservation.fiche_resa[0];
+                            let existe=false;
+                            response.data.reservation.fiche_resa.forEach(element => {
+                                    if(element.id===this.ficheId){
+                                        existe=true;
+                                        this.fiches.push(element);
+                                    }
+                                });
+                            if(existe==false){
+                                //this.$router.push({path:'/notfound'});
+                            }
+                            this.selectFiche(this.fiches[0]);
+                            this.fiche_resa = this.fiches[0];
                         }
                         else {
                             this.fiches=null;
@@ -299,11 +309,12 @@
                         this.loading=false;
                     })
                     .catch(error => {
-                        this.$router.push({path:'/notfound'});
+                        //this.$router.push({path:'/notfound'});
                     })
             },
 
             selectFiche(values){
+                console.log(values);
                 this.fillMateriels=[];
                 this.fiche_resa=values;
                 let present=false;

@@ -16,7 +16,7 @@
 
         <b-row align-h="between" class="mb-4">
             <b-col>
-                <h1 class="ml-5">Consultation réservations</h1>
+                <h1 class="ml-5">Consultation fiches réservation</h1>
             </b-col>
         </b-row>
 
@@ -90,12 +90,11 @@
                 sortBy : 'id',
                 sortDesc: false,
                 fieldsRow: [
-                    { key: 'responsable_projet', sortable:true},
-                    { key: 'departement', sortable:true },
-                    { key: 'matiere', sortable:true },
-                    { key: 'annee', sortable:true },
-                    { key: 'dep_groupe', sortable:true },
-                    { key: 'created_at', sortable:true, label:'Date Creation' }
+                    { key: 'id', sortable:true},
+                    { key: 'date_depart', sortable:true },
+                    { key: 'date_retour', sortable:true },
+                    { key: 'created_at', sortable:true, label: 'Date création' },
+                    { key: 'rendu', sortable:true },
                 ],
                 currentPage: 1,
                 perPage: 10,
@@ -120,21 +119,15 @@
         methods:{
             getReservations(){
                 this.loading=true;
-                axios.get('/reservations')
+                axios.get('/reservations/?select=fiches')
                     .then(response => {
-                        this.reservations=[];
+                        console.log(response.data.reservations);
                         response.data.reservations.forEach(elements => {
-                            this.reservations.push({
-                                id:elements.id,
-                                responsable_projet:elements.professeur.nom+' '+elements.professeur.prenom,
-                                departement: elements.departement.nom,
-                                matiere: elements.matiere,
-                                annee: elements.annee,
-                                dep_groupe: elements.dep_groupe,
-                                created_at: elements.created_at
+                            elements.fiche_resa.forEach(element=>{
+                                this.reservations.push(element);
                             });
-                            this.loading=false;
                         });
+                        this.loading=false;
                     })
                     .catch(error => {
                         this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
@@ -154,7 +147,7 @@
             rowSelected(items) {
                 this.selected = items;
                 let idSelected = items[0];
-                this.$router.push({name: 'consultation_reservation', params: { id: idSelected.id }});
+                this.$router.push({name: 'consultation_reservation_fiche', params: { idresa: idSelected.reservation, idfeuille: idSelected.id }});
             },
 
 

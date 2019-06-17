@@ -44,53 +44,23 @@ class ReservationController extends Controller
             }
 
         }
-        else if($params['select'] === 'past')
-        {
-            $dateT = new Datetime();
+        else if($params['select']==='fiches'){
             try{
-                $reservation = Reservation::where('date_retour','<=',$dateT)->orderBy('created_at','desc')->get();
+                $reservation = Reservation::with('fiche_resa')->get();
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'reservations' => $reservation,
+                    'reservations' => $reservation
                 ];
             }
             catch(\Exception $e)
             {
+                var_dump($e);die;
                 $data = ApiErrors::InternalError();
             }
         }
-        else if($params['select'] === 'ongoing')
-        {
-            $dateT = new Datetime();
-            try{
-                $reservation = Reservation::where('date_retour','>=',$dateT)->where('date_depart','<=',$dateT)->orderBy('created_at','desc')->get();
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'reservations' => $reservation,
-                ];
-            }
-            catch(\Exception $e)
-            {
-                $data = ApiErrors::InternalError();
-            }
-        }
-        else if($params['select'] === 'future')
-        {
-            $dateT = new Datetime();
-            try{
-                $reservation = Reservation::where('date_depart','>',$dateT)->orderBy('created_at','desc')->get();
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'reservations' => $reservation,
-                ];
-            }
-            catch(\Exception $e)
-            {
-                $data = ApiErrors::InternalError();
-            }
+        else {
+            $data = ApiErrors::NotFound($request->getUri());
         }
         return ResponseWriter::ResponseWriter($response, $data);
     }
