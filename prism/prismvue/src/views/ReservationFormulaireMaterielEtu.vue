@@ -249,6 +249,24 @@
         </b-container>
 
         <AgendaModal />
+        <b-modal id="bv-modal-feuilleNext" hide-footer :no-close-on-backdrop="true">
+            <template slot="modal-title">
+                Réservation n°{{formulaireId}}, ajout de feuille
+            </template>
+            <div class="d-block text-center">
+                <h3>Numéro de feuille de réservation: {{num_feuille}}</h3>
+            </div>
+            <b-button class="mt-3" size="lg" block @click="nextFeuille()">Fermer et passer à la feuille réservation suivante</b-button>
+        </b-modal>
+        <b-modal id="bv-modal-feuilleEnd" hide-footer :no-close-on-backdrop="true">
+            <template slot="modal-title">
+                Réservation n°{{formulaireId}}, ajout de feuille
+            </template>
+            <div class="d-block text-center">
+                <h3>Numéro de feuille de réservation: {{num_feuille}}</h3>
+            </div>
+            <b-button class="mt-3" block @click="nextFeuille()">Fermer</b-button>
+        </b-modal>
 
     </div>
 </template>
@@ -267,6 +285,7 @@
             return {
                 formulaireId: this.$route.params.id,
                 formulaire: [],
+                num_feuille:null,
 
                 dismissCountDown:0,
                 dismissSecs:10,
@@ -504,12 +523,35 @@
             },
 
             validateNext(){
-                console.log('test');
+                this.$bvModal.show('bv-modal-feuilleNext');
+                /*
+                axios.post('/', {
+                    reservation: this.formulaireId,
+                    date_depart: this.formulaire.date_emprunt+' '+this.heure_emprunt,
+                    date_retour: this.formulaire.date_retour+' '+this.heure_retour,
+                    rendu:0,
+                    observation: this.formulaire.observation
+                })
+                    .then( response => {
+                        this.num_feuille = response.data; //COMPLETER ICI LE NUMERO DE FEUILLE DE RESA
+                        this.$bvModal.show('bv-modal-feuille');
+                    })
+                    .catch( error => {
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                    })
+
+                 */
+            },
+            nextFeuille(){
+                this.$router.push({path: '/reservation/'+ this.formulaireId +'/feuille'});
+            },
+
+            nextEnd(){
+                this.$router.push({path: '/reservation/'});
             },
 
             validate(){
-                console.log('test2');
-
+                this.$bvModal.show('bv-modal-feuilleEnd');
             },
 
         }
