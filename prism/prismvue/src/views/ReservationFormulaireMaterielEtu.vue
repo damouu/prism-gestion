@@ -34,7 +34,10 @@
                     <b-card>
                         <b-card-title>Feuille reservation</b-card-title>
                         <form>
-
+                            <b-row align-h="end" class="mt-2">
+                                <b-button variant="primary" size="lg" class="ml-2 mr-2" @click="validateNext()">Valider et continuer</b-button>
+                                <b-button variant="primary" size="lg" class="ml-2 mr-2" @click="validate()">Valider</b-button>
+                            </b-row>
                             <b-row>
                                 <b-col cols="6">
                                     <b-card class="mt-4">
@@ -110,6 +113,7 @@
                                         <b-form-group label="Observations" label-for="observations">
                                             <b-textarea
                                                     id="observations"
+                                                    lang="fr"
                                                     v-model="formulaire.observations"
                                             ></b-textarea>
                                         </b-form-group>
@@ -195,8 +199,21 @@
                                                                 <h6 class="text-center">Pas d'exemplaires choisis.</h6>
                                                             </template>
                                                             <template slot="disponibilite" slot-scope="row">
-                                                                <b-badge variant="secondary" v-if="row.value != 'disponible'">{{row.value}}</b-badge>
-                                                                <b-badge variant="success" v-if="row.value == 'disponible'">{{row.value}}</b-badge>
+                                                                <div v-if="row.value.disp">
+                                                                    <h3><b-badge variant="success">Disponible</b-badge></h3>
+                                                                </div>
+                                                                <div v-else-if="!row.value.disp">
+                                                                    <div v-if="row.value.etat==='réparation'">
+                                                                        <h3><b-badge variant="warning">Réparation</b-badge></h3>
+                                                                    </div>
+                                                                    <div v-else-if="row.value.etat==='non empruntable'">
+                                                                        <h3><b-badge variant="secondary">Non empruntable</b-badge></h3>
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        <h3><b-badge variant="danger">Emprunté</b-badge></h3>
+                                                                    </div>
+
+                                                                </div>
                                                             </template>
                                                             <template slot="actions" slot-scope="row" class="text-center">
                                                                 <b-button variant="warning" class="mr-1"><font-awesome-icon :icon="['fas','info-circle']" /></b-button>
@@ -220,12 +237,6 @@
                                     </b-card>
                                 </b-col>
                             </b-row>
-
-                            <b-row align-h="end" class="mt-4">
-                                <b-button class="ml-2 mr-2">Valider et continuer</b-button>
-                                    <b-button class="ml-2 mr-2">Valider</b-button>
-                            </b-row>
-
 
                         </form>
 
@@ -254,10 +265,6 @@
         },
         data() {
             return {
-
-                date_dep:null,
-                date_ret: null,
-
                 formulaireId: this.$route.params.id,
                 formulaire: [],
 
@@ -358,6 +365,7 @@
                         if(element.type.id === type)
                         {
                             this.fillMateriels.push(element);
+                            this.checkDate();
                         }
                     });
 
@@ -367,9 +375,23 @@
             },
 
             initDates(){
-                this.date_dep = new Date().toLocaleString("fr-FR",{timezone:'Europe/Paris'});
-                this.date_ret = new Date(); // +1
-
+                let date_dep = new Date();
+                date_dep.setDate(date_dep.getDate()+2);
+                date_dep = date_dep.toLocaleString("fr-FR",{timezone:'Europe/Paris'});
+                let date_ret = new Date();
+                date_ret.setDate(date_ret.getDate()+2);
+                date_ret.setHours(date_ret.getHours()+1);
+                date_ret = date_ret.toLocaleString("fr-FR",{timezone:'Europe/Paris'});
+                date_ret = date_ret.split(' à ');
+                date_ret[0] = date_ret[0].split('/');
+                date_ret[1] = date_ret[1].split(':');
+                date_dep = date_dep.split(' à ');
+                date_dep[0] = date_dep[0].split('/');
+                date_dep[1] = date_dep[1].split(':');
+                this.formulaire.date_retour= date_ret[0][2]+'-'+date_ret[0][1]+'-'+date_ret[0][0];
+                this.formulaire.heure_retour= date_ret[1][0]+':'+date_ret[1][1];
+                this.formulaire.date_emprunt= date_dep[0][2]+'-'+date_dep[0][1]+'-'+date_dep[0][0];
+                this.formulaire.heure_emprunt= date_dep[1][0]+':'+date_dep[1][1];
             },
 
 
@@ -379,23 +401,7 @@
                     .then( response => {
                         this.resa = response.data.materiels;
                         this.fillMateriels = JSON.parse(JSON.stringify(this.resa));
-
-                        this.fillMateriels.forEach( exem => {
-                            exem.exemplaire.forEach( fiche => {
-                                fiche.fiche_resa.forEach( el=> {
-
-                                    if(el.date_depart>date_ret && el.date_retour<date_dep)
-                                    {
-                                        fiche.disponibilite = 'disponible';
-                                    }
-
-                                });
-                                if(fiche.disponibilite!='disponible'){
-                                    fiche.disponibilite='emprunté';
-                                }
-                            });
-                        });
-
+                        this.checkDate();
                     });
             },
 
@@ -408,33 +414,63 @@
             },
 
             checkDate(){
-                let dateNow = new Date();
-                let date_depart = new Date(this.formulaire.date_emprunt+' '+this.formulaire.heure_emprunt);
-                let date_retour = new Date(this.formulaire.date_retour+' '+this.formulaire.heure_retour);
-                if((dateNow > date_depart) || (dateNow > date_retour))
-                {
-                    alert('nope');
-                }
-                else {
-                    this.fillMateriels.forEach( mat => {
-                        mat.exemplaire.forEach( exem => {
-                            exem.disponibilite='disponible';
-                            exem.fiche_resa.forEach( fiche => {
-                                let date_dep = new Date(fiche.date_depart);
-                                let date_ret = new Date(fiche.date_retour);
-                                let dateNow = new Date();
-                                if(dateNow >= date_ret){
-                                    if(!(date_depart>date_ret) || (date_retour>date_dep))
-                                    {
-                                        exem.disponibilite = 'indisponible';
+
+                let form_depart = new Date(this.formulaire.date_emprunt+' '+this.formulaire.heure_emprunt);
+                let form_retour = new Date(this.formulaire.date_retour+' '+this.formulaire.heure_retour);
+
+
+                if (this.formulaire.date_emprunt && this.formulaire.heure_emprunt && this.formulaire.date_retour && this.formulaire.heure_retour){
+
+                    console.log(this.fillMateriels);
+                    this.fillMateriels.forEach( first => {
+                        first.exemplaire.forEach( second => {
+                            if(second.fiche_resa.length>0){
+                                second.fiche_resa.forEach( triple => {
+                                    let fill_depart = new Date(triple.date_depart);
+                                    let fill_retour = new Date(triple.date_retour);
+
+                                    if(form_depart <= fill_retour || form_retour <= fill_depart || second.etat==='réparation' || second.etat==='non empruntable' ){
+
+                                        if(second.etat==='non empruntable'){
+                                            console.log(1);
+                                            second.disponibilite = {'disp':false, 'etat': 'non empruntable'};
+                                        }
+                                        else if (second.etat === 'réparation'){
+                                            second.disponibilite = {'disp':false, 'etat': 'réparation'};
+                                        }
+                                        else {
+                                            second.disponibilite =  {'disp': false, 'etat': 'emprunté'};
+                                        }
+                                    }
+                                    else{
+                                        second.disponibilite = {'disp':true, 'etat': 'disponible'};
+                                    }
+                                })
+                            }else
+                            {
+                                if(second.etat != 'disponible'){
+                                    if(second.etat==='non empruntable'){
+                                        console.log(2);
+                                        second.disponibilite = {'disp': false, 'etat': 'non empruntable'};
+                                    }
+                                    else if (second.etat ==='réparation'){
+                                        second.disponibilite = {'disp': false, 'etat': 'réparation'};
+                                    }
+                                    else {
+                                        second.disponibilite = {'disp': false, 'etat': 'emprunté'};
                                     }
                                 }
+                                else{
+                                    second.disponibilite = {'disp': true, 'etat': second.etat};
+                                }
 
-                            });
+                            }
+
                         })
-                    });
-                    console.log(this.fillMateriels);
-                };
+                    })
+
+
+                }
             },
 
             rowSelected(items) {
@@ -446,7 +482,7 @@
                         existe = true;
                     }
                 });
-                if(!existe && items[0].disponibilite!='emprunté')
+                if(!existe && (items[0].disponibilite.etat!='emprunté' && items[0].disponibilite.etat!='réparation'))
                 {
                     let data;
                     for(let i = 0; i<this.fillMateriels.length;i++)
@@ -465,6 +501,15 @@
 
             agendaRow(item){
                 eventBus.$emit('agenda', item);
+            },
+
+            validateNext(){
+                console.log('test');
+            },
+
+            validate(){
+                console.log('test2');
+
             },
 
         }

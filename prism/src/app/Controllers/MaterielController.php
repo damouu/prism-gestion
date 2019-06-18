@@ -63,12 +63,8 @@ class MaterielController extends Controller
                 $date = new DateTime();
                 $materiel = Materiel::with('type')
                     ->with(['exemplaire' => function ($q) use ($date) {
-                        $q->whereHas('fiche_resa', function ($w) use ($date){
-                            $w->where('date_depart','>=',$date)->orWhere('date_retour','>=',$date);
-                        });
+                        $q->with('fiche_resa');
                 }])->get();
-
-
 
                 if($materiel->isEmpty())
                 {
