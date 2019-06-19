@@ -92,17 +92,17 @@
                     <b-form-invalid-feedback id="invalidUrl">Vous devez entrer un URL valide</b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group label="Date d'achat *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireDateAchat">
-                    <b-form-input
+                    <VueCtkDateTimePicker
                             id="addExemplaireDateAchat"
-                            data-vv-name="addExDateAchat"
-                            v-model="postExemplaire.date_achat"
-                            v-validate="{required:true, regex:/^\d{4}-\d{2}-\d{2}$/}"
-                            :state="validateState('addExDateAchat')"
-                            aria-describedby="invalidDateAchat"
-                            type="date" min="0000-00-00" required>
-                    </b-form-input>
+                            dateFormat="YYYY-MM-DD"
+                            onlyDate
+                            minDate="0000-00-00"
+                            v-model="postExemplaire.date_achat">
+                    </VueCtkDateTimePicker>
                     <b-form-invalid-feedback id="invalidDateAchat">Vous devez entrer une date au format DD/MM/AAAA valide.</b-form-invalid-feedback>
                 </b-form-group>
+
+
 
                 <b-form-group label="Etat *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireEtat">
                     <b-form-select
@@ -234,6 +234,8 @@
                         return;
                     }
                     else {
+                        let date = this.postExemplaire.date_achat.split(' ');
+                        console.log(date['0']);
                         axios.post('/exemplaires',
                             {
                                 "materiel": this.materielId,
@@ -246,7 +248,7 @@
                                 "financement": this.postExemplaire.financement,
                                 "bon_commande": this.postExemplaire.bon_commande,
                                 "immobilisation": this.postExemplaire.immobilisation,
-                                "date_achat": this.postExemplaire.date_achat,
+                                "date_achat": date['0'],
                                 "stockage": this.postExemplaire.stockage,
                                 "url": this.postExemplaire.url
                             })
