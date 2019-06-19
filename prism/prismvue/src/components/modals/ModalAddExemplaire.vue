@@ -96,10 +96,10 @@
                             id="addExemplaireDateAchat"
                             data-vv-name="addExDateAchat"
                             v-model="postExemplaire.date_achat"
-                            v-validate="'required:true|date_format:yyyy-MM-dd'"
+                            v-validate="{required:true, regex:/^\d{4}-\d{2}-\d{2}$/}"
                             :state="validateState('addExDateAchat')"
                             aria-describedby="invalidDateAchat"
-                            type="date" required>
+                            type="date" min="0000-00-00" required>
                     </b-form-input>
                     <b-form-invalid-feedback id="invalidDateAchat">Vous devez entrer une date au format DD/MM/AAAA valide.</b-form-invalid-feedback>
                 </b-form-group>
