@@ -524,23 +524,23 @@
 
             validateNext(){
                 this.$bvModal.show('bv-modal-feuilleNext');
-                /*
-                axios.post('/', {
-                    reservation: this.formulaireId,
-                    date_depart: this.formulaire.date_emprunt+' '+this.heure_emprunt,
-                    date_retour: this.formulaire.date_retour+' '+this.heure_retour,
-                    rendu:0,
-                    observation: this.formulaire.observation
+                axios.post('/reservations/'+ this.formulaireId +'/feuilles', {
+                    'date_depart':  this.formulaire.date_emprunt+' '+this.formulaire.heure_emprunt,
+                    'date_retour': this.formulaire.date_retour+' '+this.formulaire.heure_retour,
+                    'rendu':0,
+                    'observation': this.formulaire.observations,
+                    'exemplaires': this.exemplaires
                 })
                     .then( response => {
-                        this.num_feuille = response.data; //COMPLETER ICI LE NUMERO DE FEUILLE DE RESA
-                        this.$bvModal.show('bv-modal-feuille');
+                        console.log(response.data);
+                        this.num_feuille = response.data.fiche_reservation.id;
+                        //this.$bvModal.show('bv-modal-feuille');
                     })
                     .catch( error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        console.log(error.response);
+                        //this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     })
 
-                 */
             },
             nextFeuille(){
                 this.$router.push({path: '/reservation/'+ this.formulaireId +'/feuille'});

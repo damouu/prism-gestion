@@ -37,6 +37,9 @@ $app->get('/agenda[/]', 'AgendaController:getAll');
 
 $app->group('', function() {
 
+    $this->post('/reservations/{id}/feuilles[/]','ReservationController:postOneFeuille');
+    $this->get('/reservations/{id}/feuilles[/]','ReservationController:getOneFeuille');
+
     $this->get('/reservations/{id}[/]','ReservationController:getOne');
 
     $this->get('/departements/{id}[/]', 'DepartementController:getOne');

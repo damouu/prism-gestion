@@ -7,6 +7,7 @@ use DateTime;
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Etudiant;
 use PrismGestion\Models\Exemplaire;
+use PrismGestion\Models\FicheReservation;
 use PrismGestion\Models\Reservation;
 use PrismGestion\Utils\ResponseWriter;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -181,6 +182,69 @@ class ReservationController extends Controller
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
+
+    public function getOneFeuille(Request $request, Response $response, $args){
+
+    }
+
+
+    public function postOneFeuille(Request $request, Response $response, $args){
+
+        $id = (int)trim($args['id']);
+        $content = $request->getParsedBody();
+
+        try{
+
+            if(!isset($content['date_depart']) || !isset($content['date_retour']) || !isset($content['rendu']) || !isset($content['observation']) || !isset($content['exemplaires'])){
+                $data = ApiErrors::BadRequest();
+            }
+            else {
+                $reservation = Reservation::with('fiche_resa')->find($id);
+                $test = $reservation->fiche_resa()->count();
+                $date = date('ym');
+                $idfeuille = $date.'-'.$id.($test+1);
+
+                $fiche_resa = new FicheReservation();
+                $fiche_resa->id = $idfeuille;
+                $fiche_resa->reservation = $id;
+                $fiche_resa->date_depart = trim($content['date_depart']).':00';
+                $fiche_resa->date_retour = trim($content['date_retour']).':00';
+                $fiche_resa->observation = trim($content['observation']);
+                $fiche_resa->rendu = $content['rendu'];
+
+
+
+
+
+                foreach($content['exemplaires'] as $row){
+
+                    $exemplaire = Exemplaire::find($row['id']);
+                    $exemplaire->fiche_resa()->save($fiche_resa, ['emprunt'=>0, 'rendu'=>0]);
+                }
+
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'fiche_reservation' => $fiche_resa,
+                ];
+
+            }
+
+
+        }
+        catch(\Exception $e){
+            $data = [
+                'type' => "error",
+                'code' => 500,
+                'reservation' => $e,
+            ];
+            //$data = ApiErrors::InternalError();
+        }
+
+        return ResponseWriter::ResponseWriter($response, $data);
+
+
+    }
 
 
 
