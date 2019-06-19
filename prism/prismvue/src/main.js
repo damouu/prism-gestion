@@ -6,8 +6,10 @@ import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 import VeeValidate from 'vee-validate'
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker'
 
 
+import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -35,6 +37,7 @@ Vue.use(VeeValidate, {
 });
 
 Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead);
+Vue.component('VueCtkDateTimePicker',VueCtkDateTimePicker);
 
 export const eventBus = new Vue();
 

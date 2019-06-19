@@ -50,26 +50,14 @@
                                                 <b-form-group>
                                                     <b-row align-h="between">
                                                         <b-col cols="6">
-                                                            <b-form-input
-                                                                    id="formulaireDateEmprunt"
-                                                                    v-validate="{required:true, regex:/^\d{4}-\d{2}-\d{2}$/}"
-                                                                    type="date"
-                                                                    data-vv-name="formulaireDateEmprunt"
-                                                                    :state="validateState('formulaireDateEmprunt')"
-                                                                    aria-describedby="invalidDateEmprunt"
-                                                                    v-model="formulaire.date_emprunt"
-                                                            ></b-form-input>
-                                                        </b-col>
-                                                        <b-col cols="6">
-                                                            <b-form-input
-                                                                    id="formulaireHeureEmprunt"
-                                                                    v-validate="{required:true, regex:/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/}"
-                                                                    type="time"
-                                                                    data-vv-name="formulaireHeureEmprunt"
-                                                                    :state="validateState('formulaireHeureEmprunt')"
-                                                                    aria-describedby="invalidHeureEmprunt"
-                                                                    v-model="formulaire.heure_emprunt"
-                                                            ></b-form-input>
+
+                                                            <VueCtkDateTimePicker
+                                                                    id="DateTimePickerDepart"
+                                                                    v-model="date_depart"
+                                                                    minDate="0000-00-00"
+                                                                    maxDate="2100-00-00"
+                                                                    format="YYYY-MM-DD HH:mm"
+                                                            ></VueCtkDateTimePicker>
                                                         </b-col>
 
                                                     </b-row>
@@ -81,26 +69,13 @@
                                             au:
                                             <b-row>
                                                 <b-col cols="6">
-                                                    <b-form-input
-                                                            id="formulaireDateRetour"
-                                                            type="date"
-                                                            v-validate="{required:true, regex:/^\d{4}-\d{2}-\d{2}$/}"
-                                                            data-vv-name="formulaireDateRetour"
-                                                            :state="validateState('formulaireDateRetour')"
-                                                            aria-describedby="invalidDateRetour"
-                                                            v-model="formulaire.date_retour"
-                                                    ></b-form-input>
-                                                </b-col>
-                                                <b-col cols="6">
-                                                    <b-form-input
-                                                            id="formulaireHeureRetour"
-                                                            v-validate="{required:true, regex:/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/}"
-                                                            type="time"
-                                                            data-vv-name="formulaireHeureRetour"
-                                                            :state="validateState('formulaireHeureRetour')"
-                                                            aria-describedby="invalidHeureRetour"
-                                                            v-model="formulaire.heure_retour"
-                                                    ></b-form-input>
+                                                    <VueCtkDateTimePicker
+                                                            id="DateTimePickerRetour"
+                                                            v-model="date_retour"
+                                                            minDate="0000-00-00"
+                                                            maxDate="2100-00-00"
+                                                            format="YYYY-MM-DD HH:mm"
+                                                    ></VueCtkDateTimePicker>
                                                 </b-col>
                                             </b-row>
 
@@ -249,7 +224,7 @@
         </b-container>
 
         <AgendaModal />
-        <b-modal id="bv-modal-feuilleNext" hide-footer :no-close-on-backdrop="true">
+        <b-modal id="bv-modal-feuilleNext" ref="modalNext" hide-footer :no-close-on-backdrop="true">
             <template slot="modal-title">
                 Réservation n°{{formulaireId}}, ajout de feuille
             </template>
@@ -258,14 +233,14 @@
             </div>
             <b-button class="mt-3" size="lg" block @click="nextFeuille()">Fermer et passer à la feuille réservation suivante</b-button>
         </b-modal>
-        <b-modal id="bv-modal-feuilleEnd" hide-footer :no-close-on-backdrop="true">
+        <b-modal id="bv-modal-feuilleEnd" ref="modalEnd" hide-footer :no-close-on-backdrop="true">
             <template slot="modal-title">
                 Réservation n°{{formulaireId}}, ajout de feuille
             </template>
             <div class="d-block text-center">
                 <h3>Numéro de feuille de réservation: {{num_feuille}}</h3>
             </div>
-            <b-button class="mt-3" block @click="nextFeuille()">Fermer</b-button>
+            <b-button class="mt-3" block @click="nextEnd()">Fermer</b-button>
         </b-modal>
 
     </div>
@@ -286,6 +261,8 @@
                 formulaireId: this.$route.params.id,
                 formulaire: [],
                 num_feuille:null,
+                date_depart:null,
+                date_retour:null,
 
                 dismissCountDown:0,
                 dismissSecs:10,
@@ -407,10 +384,8 @@
                 date_dep = date_dep.split(' à ');
                 date_dep[0] = date_dep[0].split('/');
                 date_dep[1] = date_dep[1].split(':');
-                this.formulaire.date_retour= date_ret[0][2]+'-'+date_ret[0][1]+'-'+date_ret[0][0];
-                this.formulaire.heure_retour= date_ret[1][0]+':'+date_ret[1][1];
-                this.formulaire.date_emprunt= date_dep[0][2]+'-'+date_dep[0][1]+'-'+date_dep[0][0];
-                this.formulaire.heure_emprunt= date_dep[1][0]+':'+date_dep[1][1];
+                this.date_retour= date_ret[0][2]+'-'+date_ret[0][1]+'-'+date_ret[0][0]+' '+date_ret[1][0]+':'+date_ret[1][1];
+                this.date_depart= date_dep[0][2]+'-'+date_dep[0][1]+'-'+date_dep[0][0]+' '+date_dep[1][0]+':'+date_dep[1][1];
             },
 
 
@@ -434,61 +409,63 @@
 
             checkDate(){
 
-                let form_depart = new Date(this.formulaire.date_emprunt+' '+this.formulaire.heure_emprunt);
-                let form_retour = new Date(this.formulaire.date_retour+' '+this.formulaire.heure_retour);
 
 
-                if (this.formulaire.date_emprunt && this.formulaire.heure_emprunt && this.formulaire.date_retour && this.formulaire.heure_retour){
+                if (this.date_depart && this.date_retour){
 
-                    console.log(this.fillMateriels);
-                    this.fillMateriels.forEach( first => {
-                        first.exemplaire.forEach( second => {
-                            if(second.fiche_resa.length>0){
-                                second.fiche_resa.forEach( triple => {
-                                    let fill_depart = new Date(triple.date_depart);
-                                    let fill_retour = new Date(triple.date_retour);
+                    let form_depart = new Date(this.date_depart);
+                    let form_retour = new Date(this.date_retour);
+                    if(form_retour<=form_depart){
+                        alert('veuillez refaire votre choix de dates');
+                    }
+                    else{
+                        this.fillMateriels.forEach( first => {
+                            first.exemplaire.forEach( second => {
+                                if(second.fiche_resa.length>0){
+                                    second.fiche_resa.forEach( triple => {
+                                        let fill_depart = new Date(triple.date_depart);
+                                        let fill_retour = new Date(triple.date_retour);
 
-                                    if(form_depart <= fill_retour || form_retour <= fill_depart || second.etat==='réparation' || second.etat==='non empruntable' ){
+                                        if(form_depart <= fill_retour || form_retour <= fill_depart || second.etat==='réparation' || second.etat==='non empruntable' ){
 
-                                        if(second.etat==='non empruntable'){
-                                            console.log(1);
-                                            second.disponibilite = {'disp':false, 'etat': 'non empruntable'};
+                                            if(second.etat==='non empruntable'){
+                                                console.log(1);
+                                                second.disponibilite = {'disp':false, 'etat': 'non empruntable'};
+                                            }
+                                            else if (second.etat === 'réparation'){
+                                                second.disponibilite = {'disp':false, 'etat': 'réparation'};
+                                            }
+                                            else {
+                                                second.disponibilite =  {'disp': false, 'etat': 'emprunté'};
+                                            }
                                         }
-                                        else if (second.etat === 'réparation'){
-                                            second.disponibilite = {'disp':false, 'etat': 'réparation'};
+                                        else{
+                                            second.disponibilite = {'disp':true, 'etat': 'disponible'};
+                                        }
+                                    })
+                                }else
+                                {
+                                    if(second.etat != 'disponible'){
+                                        if(second.etat==='non empruntable'){
+                                            console.log(2);
+                                            second.disponibilite = {'disp': false, 'etat': 'non empruntable'};
+                                        }
+                                        else if (second.etat ==='réparation'){
+                                            second.disponibilite = {'disp': false, 'etat': 'réparation'};
                                         }
                                         else {
-                                            second.disponibilite =  {'disp': false, 'etat': 'emprunté'};
+                                            second.disponibilite = {'disp': false, 'etat': 'emprunté'};
                                         }
                                     }
                                     else{
-                                        second.disponibilite = {'disp':true, 'etat': 'disponible'};
+                                        second.disponibilite = {'disp': true, 'etat': second.etat};
                                     }
-                                })
-                            }else
-                            {
-                                if(second.etat != 'disponible'){
-                                    if(second.etat==='non empruntable'){
-                                        console.log(2);
-                                        second.disponibilite = {'disp': false, 'etat': 'non empruntable'};
-                                    }
-                                    else if (second.etat ==='réparation'){
-                                        second.disponibilite = {'disp': false, 'etat': 'réparation'};
-                                    }
-                                    else {
-                                        second.disponibilite = {'disp': false, 'etat': 'emprunté'};
-                                    }
-                                }
-                                else{
-                                    second.disponibilite = {'disp': true, 'etat': second.etat};
+
                                 }
 
-                            }
-
+                            })
                         })
-                    })
-
-
+                    }
                 }
             },
 
@@ -525,33 +502,53 @@
             validateNext(){
                 this.$bvModal.show('bv-modal-feuilleNext');
                 axios.post('/reservations/'+ this.formulaireId +'/feuilles', {
-                    'date_depart':  this.formulaire.date_emprunt+' '+this.formulaire.heure_emprunt,
-                    'date_retour': this.formulaire.date_retour+' '+this.formulaire.heure_retour,
+                    'date_depart':  this.date_depart,
+                    'date_retour': this.date_retour,
                     'rendu':0,
                     'observation': this.formulaire.observations,
                     'exemplaires': this.exemplaires
                 })
                     .then( response => {
-                        console.log(response.data);
                         this.num_feuille = response.data.fiche_reservation.id;
-                        //this.$bvModal.show('bv-modal-feuille');
+                        this.$bvModal.show('bv-modal-feuille');
                     })
                     .catch( error => {
-                        console.log(error.response);
-                        //this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     })
 
             },
             nextFeuille(){
-                this.$router.push({path: '/reservation/'+ this.formulaireId +'/feuille'});
+                this.$nextTick(() => {
+                    this.$refs.modalNext.hide();
+                });
+                this.$router.go();
             },
 
             nextEnd(){
+                this.$nextTick(() => {
+                    this.$refs.modalEnd.hide();
+                });
+
                 this.$router.push({path: '/reservation/'});
             },
 
             validate(){
-                this.$bvModal.show('bv-modal-feuilleEnd');
+
+                this.$bvModal.show('bv-modal-feuilleNext');
+                axios.post('/reservations/'+ this.formulaireId +'/feuilles', {
+                    'date_depart':  this.date_depart,
+                    'date_retour': this.date_retour,
+                    'rendu':0,
+                    'observation': this.formulaire.observations,
+                    'exemplaires': this.exemplaires
+                })
+                    .then( response => {
+                        this.num_feuille = response.data.fiche_reservation.id;
+                        this.$bvModal.show('bv-modal-feuilleEnd');
+                    })
+                    .catch( error => {
+                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                    })
             },
 
         }
