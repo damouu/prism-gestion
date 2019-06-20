@@ -206,7 +206,6 @@
 
 <script>
 
-    import {eventBus} from "../main";
     import NavigationReservation from "../components/navigation/NavigationReservation";
 
     export default {

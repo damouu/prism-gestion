@@ -23,12 +23,12 @@
 
 
                 <b-col cols="2">
-                    <NavigationReservationFeuille />
+                    <NavigationReservation />
                 </b-col>
 
                 <b-col cols="10">
                     <b-row>
-                        <b-button variant="outline-secondary" @click="backReservations">‹ retour</b-button>
+                        <b-button variant="outline-secondary" to="/reservation">‹ retour</b-button>
                         <h1 class="ml-5">Reservation n° {{reservationId}}</h1>
                     </b-row>
 
@@ -206,13 +206,13 @@
 
 <script>
 
-    import {eventBus} from "../main";
-    import NavigationReservationFeuille from "../components/navigation/NavigationReservationFeuille";
+
+    import NavigationReservation from "../components/navigation/NavigationReservation";
 
     export default {
         name:"ReservationConsultationElement",
         components:{
-            NavigationReservationFeuille,
+            NavigationReservation,
         },
         data(){
             return {

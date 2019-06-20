@@ -22,7 +22,7 @@
 
 
                 <b-col cols="2">
-                    <NavigationReservationFeuille />
+                    <NavigationReservation />
                 </b-col>
 
                 <b-col cols="10">
@@ -246,13 +246,13 @@
 
 <script>
     import {eventBus} from "../main";
-    import NavigationReservationFeuille from "../components/navigation/NavigationReservationFeuille";
+    import NavigationReservation from "../components/navigation/NavigationReservation";
     import AgendaModal from "../components/agenda/AgendaModal";
     export default {
         name: "ReservationFomulaireMaterielEtu",
         components:{
             AgendaModal,
-            NavigationReservationFeuille
+            NavigationReservation
         },
         data() {
             return {
@@ -538,7 +538,7 @@
                     this.$refs.modalEnd.hide();
                 });
 
-                this.$router.push({path: '/reservation/'});
+                this.$router.push({name: 'consultation_reservation', params:{id:this.formulaireId}});
             },
 
             validate(){
