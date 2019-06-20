@@ -25,7 +25,6 @@
                         <li>Page Home</li>
                         <li>loading screen everywhere</li>
                         <li>position erreur showAlert</li>
-                        <li>Modifier menus de reservation</li>
                         <li>Agenda select type: not working</li>
 
                     </ul>

@@ -41,7 +41,10 @@
                     <div v-else>
                         <b-row align-h="between">
                             <b-col cols="6" class="mt-4">
-                                <h3>Informations réservation</h3>
+                                <b-row>
+                                    <h3>Informations réservation</h3>
+                                    <b-button @click="addFicheResa()" class="ml-5" variant="success">Ajouter une feuille</b-button>
+                                </b-row>
                                 <b-card class="mt-4">
                                     <b-card-title>Professeur Référent</b-card-title>
                                     <b-row align-h="between" class="my-1">
@@ -344,6 +347,10 @@
                         }
                    });
                 });
+
+            },
+            addFicheResa(){
+                this.$router.push({name:'fiche_reservation', params:{id:this.reservationId}})
             }
         }
     }
