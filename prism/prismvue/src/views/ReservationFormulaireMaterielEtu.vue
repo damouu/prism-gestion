@@ -72,8 +72,6 @@
                                                     <VueCtkDateTimePicker
                                                             id="DateTimePickerRetour"
                                                             v-model="date_retour"
-                                                            minDate="0000-00-00"
-                                                            maxDate="2100-00-00"
                                                             format="YYYY-MM-DD HH:mm"
                                                     ></VueCtkDateTimePicker>
                                                 </b-col>
@@ -409,8 +407,6 @@
 
             checkDate(){
 
-
-
                 if (this.date_depart && this.date_retour){
 
                     let form_depart = new Date(this.date_depart);
@@ -429,7 +425,6 @@
                                         if(form_depart <= fill_retour || form_retour <= fill_depart || second.etat==='réparation' || second.etat==='non empruntable' ){
 
                                             if(second.etat==='non empruntable'){
-                                                console.log(1);
                                                 second.disponibilite = {'disp':false, 'etat': 'non empruntable'};
                                             }
                                             else if (second.etat === 'réparation'){
@@ -447,7 +442,6 @@
                                 {
                                     if(second.etat != 'disponible'){
                                         if(second.etat==='non empruntable'){
-                                            console.log(2);
                                             second.disponibilite = {'disp': false, 'etat': 'non empruntable'};
                                         }
                                         else if (second.etat ==='réparation'){
@@ -472,27 +466,40 @@
             rowSelected(items) {
                 this.selected = items;
                 let existe = false;
-                this.exemplaires.forEach(element => {
-                    if(element.id==items[0].id)
-                    {
-                        existe = true;
-                    }
-                });
-                if(!existe && (items[0].disponibilite.etat!='emprunté' && items[0].disponibilite.etat!='réparation'))
-                {
-                    let data;
-                    for(let i = 0; i<this.fillMateriels.length;i++)
-                    {
-                        if(this.fillMateriels[i].id == items[0].id)
+                let data;
+                try{
+                    this.exemplaires.forEach(element => {
+                        if(element.id==items[0].id)
                         {
-                            data = this.fillMateriels[i];
-                            break;
+                            existe = true;
                         }
+                    });
+                    if(items[0].fiche_resa.length===0 && !existe && (items[0].disponibilite.etat!='emprunté' && items[0].disponibilite.etat!='réparation') ) {
+                        for (let i = 0; i < this.fillMateriels.length; i++) {
+                            if (this.fillMateriels[i].id == items[0].materiel) {
+                                data = this.fillMateriels[i];
+                                break;
+                            }
+                        }
+                        this.exemplaires.push({id:items[0].id, materiel: data.modele + data.constructeur, type:data.type.nom, reference:items[0].reference});
                     }
-                    this.exemplaires.push({id:items[0].id, materiel: data.modele + data.constructeur, type:data.type.nom, reference:items[0].reference});
+                    else if(!existe && (items[0].disponibilite.etat!='emprunté' && items[0].disponibilite.etat!='réparation'))
+                    {
+
+                        for(let i = 0; i<this.fillMateriels.length;i++)
+                        {
+                            if(this.fillMateriels[i].id == items[0].id)
+                            {
+                                data = this.fillMateriels[i];
+                                break;
+                            }
+                        }
+                        this.exemplaires.push({id:items[0].id, materiel: data.modele + data.constructeur, type:data.type.nom, reference:items[0].reference});
+                    }
+                }
+                catch(error){
                 }
 
-                console.log(items);
             },
 
             agendaRow(item){
@@ -500,21 +507,23 @@
             },
 
             validateNext(){
-                this.$bvModal.show('bv-modal-feuilleNext');
-                axios.post('/reservations/'+ this.formulaireId +'/feuilles', {
-                    'date_depart':  this.date_depart,
-                    'date_retour': this.date_retour,
-                    'rendu':0,
-                    'observation': this.formulaire.observations,
-                    'exemplaires': this.exemplaires
-                })
-                    .then( response => {
-                        this.num_feuille = response.data.fiche_reservation.id;
-                        this.$bvModal.show('bv-modal-feuille');
+                if(this.exemplaire && this.date_depart && this.date_retour){
+                    this.$bvModal.show('bv-modal-feuilleNext');
+                    axios.post('/reservations/'+ this.formulaireId +'/feuilles', {
+                        'date_depart':  this.date_depart,
+                        'date_retour': this.date_retour,
+                        'rendu':0,
+                        'observation': this.formulaire.observations,
+                        'exemplaires': this.exemplaires
                     })
-                    .catch( error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
-                    })
+                        .then( response => {
+                            this.num_feuille = response.data.fiche_reservation.id;
+                            this.$bvModal.show('bv-modal-feuille');
+                        })
+                        .catch( error => {
+                            this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        })
+                }
 
             },
             nextFeuille(){
@@ -534,21 +543,23 @@
 
             validate(){
 
-                this.$bvModal.show('bv-modal-feuilleNext');
-                axios.post('/reservations/'+ this.formulaireId +'/feuilles', {
-                    'date_depart':  this.date_depart,
-                    'date_retour': this.date_retour,
-                    'rendu':0,
-                    'observation': this.formulaire.observations,
-                    'exemplaires': this.exemplaires
-                })
-                    .then( response => {
-                        this.num_feuille = response.data.fiche_reservation.id;
-                        this.$bvModal.show('bv-modal-feuilleEnd');
+                if(this.exemplaire && this.date_depart && this.date_retour){
+                    axios.post('/reservations/'+ this.formulaireId +'/feuilles', {
+                        'date_depart':  this.date_depart,
+                        'date_retour': this.date_retour,
+                        'rendu':0,
+                        'observation': this.formulaire.observations,
+                        'exemplaires': this.exemplaires
                     })
-                    .catch( error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
-                    })
+                        .then( response => {
+                            this.num_feuille = response.data.fiche_reservation.id;
+                            this.$bvModal.show('bv-modal-feuilleEnd');
+                        })
+                        .catch( error => {
+                            this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        })
+                }
+
             },
 
         }

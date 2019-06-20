@@ -17,6 +17,21 @@
 
                 <b-row class="mr-5 ml-5">
 
+                    <ul>TO DO LIST PRISM APP
+                        <li>Bug reservation -> non empruntable, objet jamas emprunté</li>
+                        <li>Modifier API: RESTFUL</li>
+                        <li>Agenda: click -> info modal</li>
+                        <li>Reservation: agenda + infos items</li>
+                        <li>Page Emprunt</li>
+                        <li>Page Home</li>
+                        <li>loading screen everywhere</li>
+                        <li>position erreur showAlert</li>
+                        <li>Modifier menus de reservation</li>
+                        <li>date inconnue: ajouter bouton 9999-12-31</li>
+                        <li>Agenda select type: not working</li>
+
+                    </ul>
+
                     <b-col cols="10">
                         <b-row align-h="between" class="mb-4">
                             <b-col>
