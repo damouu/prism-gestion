@@ -92,13 +92,31 @@
                     <b-form-invalid-feedback id="invalidUrl">Vous devez entrer un URL valide</b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group label="Date d'achat *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireDateAchat">
-                    <VueCtkDateTimePicker
-                            id="addExemplaireDateAchat"
-                            dateFormat="YYYY-MM-DD"
-                            onlyDate
-                            minDate="0000-00-00"
-                            v-model="postExemplaire.date_achat">
-                    </VueCtkDateTimePicker>
+                    <b-row v-show="date_achat!=='9999-12-31 11:59 pm'">
+                        <b-col cols="6">
+                            <VueCtkDateTimePicker
+                                    id="addExemplaireDateAchat"
+                                    :dateFormat="'YYYY-MM-DD'"
+                                    onlyDate
+                                    formatted="ll"
+                                    noLabel
+                                    v-model="date_achat"
+                                    aria-describedby="invalidDateAchat">
+                            </VueCtkDateTimePicker>
+                        </b-col>
+                        <b-col cols="6">
+                            <b-button @click="inconnue()">Date inconnue</b-button>
+                        </b-col>
+                    </b-row>
+                    <b-row v-show="date_achat==='9999-12-31 11:59 pm'">
+                        <b-col cols="6">
+                            <p>{{date_achat}}</p>
+                        </b-col>
+                        <b-col cols="6">
+                            <b-button @click="connue()">Date connue</b-button>
+                        </b-col>
+                    </b-row>
+
                     <b-form-invalid-feedback id="invalidDateAchat">Vous devez entrer une date au format DD/MM/AAAA valide.</b-form-invalid-feedback>
                 </b-form-group>
 
@@ -199,6 +217,7 @@
                 materielId: false,
                 postExemplaire: [],
                 fournisseurs: [],
+                date_achat:null,
             }
         },
         mounted() {
@@ -225,16 +244,28 @@
                 bvModalEvt.preventDefault();
                 this.addExemplaire();
             },
+            inconnue(){
+                this.date_achat= "9999-12-31 11:59 pm";
+                this.$nextTick(()=>{
+                    this.date_achat= "9999-12-31 11:59 pm";
+                });
+            },
+            connue(){
+                this.date_achat= null;
+                this.$nextTick(()=>{
+                    this.date_achat= null;
+                });
+            },
 
             // Ajout exemplaire
             addExemplaire() {
                 this.$validator.validateAll().then( result => {
-                    if (!result)
+                    if (!result && (this.date_achat===null || this.date_achat===undefined))
                     {
                         return;
                     }
                     else {
-                        let date = this.postExemplaire.date_achat.split(' ');
+                        let date = this.date_achat.split(' ');
                         console.log(date['0']);
                         axios.post('/exemplaires',
                             {
