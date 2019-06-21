@@ -149,10 +149,11 @@
                                 dep_groupe: elements.dep_groupe,
                                 created_at: elements.created_at
                             });
-                            this.loading=false;
                         });
+                        this.loading=false;
                     })
                     .catch(error => {
+                        this.loading=false;
                         this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     })
             },
