@@ -96,9 +96,9 @@
         methods: {
             getEventsResa(){
                 this.loading=true;
-                axios.get('/agenda')
+                axios.get('/exemplaires?select=reservation')
                     .then( response => {
-                        response.data.agenda.forEach(element => {
+                        response.data.reservations.forEach(element => {
                             let color = this.colors[Math.floor(Math.random() * this.colors.length)];
                             this.calendarEvents.push({title: element.reservation, start: element.date_depart, end:element.date_retour, id: element.id, color: color})
                         })

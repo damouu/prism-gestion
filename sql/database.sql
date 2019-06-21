@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
 
 
 CREATE TABLE IF NOT EXISTS `fiche_resa` (
-    `id` INT NOT NULL AUTO_INCREMENT,
+    `id` varchar(128) NOT NULL,
     `reservation` INT NOT NULL,
     `date_depart` timestamp NOT NULL,
     `date_retour` timestamp NOT NULL,
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `groupe` (
 )Engine=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `reservation_exemplaire` (
-    `fiche_reservation` INT NOT NULL,
+    `fiche_reservation` varchar(128) NOT NULL,
     `id_exemplaire` INT NOT NULL,
     `emprunt` BOOL DEFAULT 0,
     `rendu` BOOL DEFAULT 0,

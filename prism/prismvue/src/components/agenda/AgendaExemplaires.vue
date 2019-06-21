@@ -61,7 +61,7 @@
         },
         data() {
             return {
-                types : [],
+                types:[],
                 currentType: 'Tous',
                 calendarEvents: [],
                 plugins: [
@@ -93,9 +93,9 @@
             getEventsEx(){
                 this.loading=true;
                 this.getTypes();
-                axios.get('/agenda?select='+this.currentType)
+                axios.get('/exemplaires?select=reservation&?query='+this.currentType)
                     .then( response => {
-                        response.data.agenda.forEach(element => {
+                        response.data.reservations.forEach(element => {
                             element.exemplaires.forEach( q => {
                                 this.calendarEvents.push({title: q.reference, start: element.date_depart, end:element.date_retour, id: q.id, type:q.materiel.type.nom, color:q.materiel.type.couleur})
                             })

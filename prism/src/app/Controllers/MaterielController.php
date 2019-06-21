@@ -2,6 +2,7 @@
 
 namespace PrismGestion\Controllers;
 
+use DateTime;
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Exemplaire;
 use PrismGestion\Models\Materiel;
@@ -15,38 +16,81 @@ class MaterielController extends Controller
 
     public function getAll(Request $request, Response $response, $args)
     {
-        try
+        $params= [
+            'select' => filter_var($request->getParam('select', 'Tous')),
+        ];
+
+        if($params['select']==='Tous')
         {
+            try
+            {
 
-            $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','type','materiel.date_creation')
-                ->join('type', 'materiel.type','=','type.id')
-                ->with(['type' => function ($q) {
-                    $q->select('type.id','type.nom');
-                }]);
+                $materiel = Materiel::select('materiel.id','materiel.constructeur','materiel.modele','type','materiel.date_creation')
+                    ->join('type', 'materiel.type','=','type.id')
+                    ->with(['type' => function ($q) {
+                        $q->select('type.id','type.nom');
+                    }]);
 
-            $materiel = $materiel->get();
+                $materiel = $materiel->get();
 
-            if($materiel->isEmpty())
+                if($materiel->isEmpty())
+                {
+                    $data = ApiErrors::NotFound($request->getUri());
+                }
+                else
+                {
+                    foreach($materiel as $row){
+                        $row->nb_ex = Exemplaire::where('materiel','=',$row->id)->count();
+                    }
+                    $data = [
+                        'type' => "success",
+                        'code' => 200,
+                        'materiels' => $materiel,
+                    ];
+                }
+
+            }
+            catch(\Exception $e)
             {
                 $data = ApiErrors::NotFound($request->getUri());
             }
-            else
-            {
-                foreach($materiel as $row){
-                    $row->nb_ex = Exemplaire::where('materiel','=',$row->id)->count();
-                }
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'materiels' => $materiel,
-                ];
-            }
-
         }
-        catch(\Exception $e)
+        else if($params['select']==='reservation')
+        {
+
+            try
+            {
+                $date = new DateTime();
+                $materiel = Materiel::with('type')
+                    ->with(['exemplaire' => function ($q) use ($date) {
+                        $q->with('fiche_resa');
+                }])->get();
+
+                if($materiel->isEmpty())
+                {
+                    $data = ApiErrors::NotFound($request->getUri());
+                }
+                else
+                {
+                    $data = [
+                        'type' => "success",
+                        'code' => 200,
+                        'materiels' => $materiel,
+                    ];
+                }
+
+            }
+            catch(\Exception $e)
+            {
+                $data = ApiErrors::NotFound($request->getUri());
+            }
+        }
+        else
         {
             $data = ApiErrors::NotFound($request->getUri());
         }
+
+
 
         return ResponseWriter::ResponseWriter($response, $data);
     }

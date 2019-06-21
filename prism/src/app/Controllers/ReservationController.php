@@ -7,6 +7,7 @@ use DateTime;
 use PrismGestion\Errors\ApiErrors;
 use PrismGestion\Models\Etudiant;
 use PrismGestion\Models\Exemplaire;
+use PrismGestion\Models\FicheReservation;
 use PrismGestion\Models\Reservation;
 use PrismGestion\Utils\ResponseWriter;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -28,7 +29,9 @@ class ReservationController extends Controller
         if($params['select'] === 'all')
         {
             try{
-                $reservation = Reservation::orderBy('created_at','desc')->get();
+                $reservation = Reservation::with('departement')
+                    ->with('professeur')
+                    ->orderBy('created_at','desc')->get();
                 $data = [
                     'type' => "success",
                     'code' => 200,
@@ -41,15 +44,13 @@ class ReservationController extends Controller
             }
 
         }
-        else if($params['select'] === 'past')
-        {
-            $dateT = new Datetime();
+        else if($params['select']==='fiches'){
             try{
-                $reservation = Reservation::where('date_retour','<=',$dateT)->orderBy('created_at','desc')->get();
+                $reservation = Reservation::with('fiche_resa')->get();
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'reservations' => $reservation,
+                    'reservations' => $reservation
                 ];
             }
             catch(\Exception $e)
@@ -57,37 +58,8 @@ class ReservationController extends Controller
                 $data = ApiErrors::InternalError();
             }
         }
-        else if($params['select'] === 'ongoing')
-        {
-            $dateT = new Datetime();
-            try{
-                $reservation = Reservation::where('date_retour','>=',$dateT)->where('date_depart','<=',$dateT)->orderBy('created_at','desc')->get();
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'reservations' => $reservation,
-                ];
-            }
-            catch(\Exception $e)
-            {
-                $data = ApiErrors::InternalError();
-            }
-        }
-        else if($params['select'] === 'future')
-        {
-            $dateT = new Datetime();
-            try{
-                $reservation = Reservation::where('date_depart','>',$dateT)->orderBy('created_at','desc')->get();
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'reservations' => $reservation,
-                ];
-            }
-            catch(\Exception $e)
-            {
-                $data = ApiErrors::InternalError();
-            }
+        else {
+            $data = ApiErrors::NotFound($request->getUri());
         }
         return ResponseWriter::ResponseWriter($response, $data);
     }
@@ -95,7 +67,15 @@ class ReservationController extends Controller
     public function getOne(Request $request, Response $response, $args) {
         $id = $args['id'];
         try {
-            $reservation = Reservation::find($id);
+            $reservation = Reservation::with('departement')
+                ->with('professeur')
+                ->with('groupe')
+                ->with(['fiche_resa' => function ($q) {
+                    $q->with(['exemplaire' => function ($w){
+                        $w->with('materiel');
+                    }]);
+                }])
+                ->find($id);
             if(empty($reservation))
             {
                 $data = ApiErrors::NotFound($request->getUri());
@@ -120,7 +100,14 @@ class ReservationController extends Controller
     {
         $content = $request->getParsedBody();
 
-        $etudiants = $content['groupes'];
+        if(isset($content['groupes']))
+        {
+            $etudiants = $content['groupes'];
+        }
+        else{
+            $etudiants = null;
+        };
+
 
         if(!isset($content['responsable_projet'])
             || !isset($content['departement'])
@@ -155,7 +142,7 @@ class ReservationController extends Controller
                 $reservation->dep_groupe = $content['dep_groupe'];
                 $reservation->observation = $content['observation'];
 
-                if(is_null($content['groupes']))
+                if(is_null($etudiants))
                 {
                     $reservation->save();
                 }
@@ -195,6 +182,69 @@ class ReservationController extends Controller
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
+
+    public function getOneFeuille(Request $request, Response $response, $args){
+
+    }
+
+
+    public function postOneFeuille(Request $request, Response $response, $args){
+
+        $id = (int)trim($args['id']);
+        $content = $request->getParsedBody();
+
+        try{
+
+            if(!isset($content['date_depart']) || !isset($content['date_retour']) || !isset($content['rendu']) || !isset($content['observation']) || !isset($content['exemplaires'])){
+                $data = ApiErrors::BadRequest();
+            }
+            else {
+                $reservation = Reservation::with('fiche_resa')->find($id);
+                $test = $reservation->fiche_resa()->count();
+                $date = date('ym');
+                $idfeuille = $date.'-'.$id.($test+1);
+
+                $fiche_resa = new FicheReservation();
+                $fiche_resa->id = $idfeuille;
+                $fiche_resa->reservation = $id;
+                $fiche_resa->date_depart = trim($content['date_depart']).':00';
+                $fiche_resa->date_retour = trim($content['date_retour']).':00';
+                $fiche_resa->observation = trim($content['observation']);
+                $fiche_resa->rendu = $content['rendu'];
+
+
+
+
+
+                foreach($content['exemplaires'] as $row){
+
+                    $exemplaire = Exemplaire::find($row['id']);
+                    $exemplaire->fiche_resa()->save($fiche_resa, ['emprunt'=>0, 'rendu'=>0]);
+                }
+
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'fiche_reservation' => $fiche_resa,
+                ];
+
+            }
+
+
+        }
+        catch(\Exception $e){
+            $data = [
+                'type' => "error",
+                'code' => 500,
+                'reservation' => $e,
+            ];
+            //$data = ApiErrors::InternalError();
+        }
+
+        return ResponseWriter::ResponseWriter($response, $data);
+
+
+    }
 
 
 

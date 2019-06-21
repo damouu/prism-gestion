@@ -345,7 +345,12 @@
                 doc.text('Réforme de matériel',105,60,'center');
 
                 doc.setFontSize(16);
-                doc.text('Fiche Immobilisation n°'+this.reforme.immobilisation,20,80,'left');
+                if(this.reforme.immobilisation){
+                    doc.text('Fiche Immobilisation n°'+this.reforme.immobilisation,20,80,'left');
+                }else{
+                    doc.text('Aucune fiche d\'immobilisation',20,80,'left');
+                }
+
 
                 //encadré materiel
                 let y = 100;
@@ -364,7 +369,11 @@
                 y = 150;
                 doc.rect(20,y-7,170,10);
                 doc.text('Exemplaire',105,y,'center');
-                doc.text('Référence UL:',30,y+13,'left');
+                if(!this.reforme.immobilisation){
+                    doc.text('Référence PRISM:',30,y+13,'left');
+                }else{
+                    doc.text('Référence UL:',30,y+13,'left');
+                }
                 doc.text(this.reforme.reference,90,y+13,'left');
                 doc.text('Numéro de série:',30,y+21,'left');
                 doc.text(this.reforme.num_serie,90,y+21,'left');
@@ -373,9 +382,17 @@
                 doc.text('Prix TTC:',30,y+37,'left');
                 doc.text(this.reforme.prix_ttc + ' €',90,y+37,'left');
                 doc.text('Bon de commande:',30,y+45,'left');
-                doc.text(this.reforme.bon_commande,90,y+45,'left');
+                if(this.reforme.bon_commande){
+                    doc.text(this.reforme.bon_commande,90,y+45,'left');
+                }else{
+                    doc.text('aucun',90,y+45,'left');
+                }
                 doc.text('Financement:',30,y+53,'left');
-                doc.text(this.reforme.financement,90,y+53,'left');
+                if(this.reforme.financement){
+                    doc.text(this.reforme.financement,90,y+53,'left');
+                }else{
+                    doc.text('aucun',90,y+53,'left');
+                }
                 doc.text('Date d\'achat:',30,y+61,'left');
                 doc.text(this.reforme.date_achat,90,y+61,'left');
                 doc.text('Date de sortie:',30,y+69,'left');

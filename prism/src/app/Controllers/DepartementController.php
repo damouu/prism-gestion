@@ -17,7 +17,7 @@ class DepartementController extends Controller {
 
 
     public function getAll(Request $request, Response $response, $args) {
-        $departement = Departement::get();
+        $departement = Departement::with('reservation')->get();
         $data = [
             'type' => "success",
             'code' => 200,

@@ -120,7 +120,8 @@ class ExemplaireController extends Controller
     {
 
         $params = [
-            'select' => $request->getQueryParam('select','service')
+            'select' => $request->getQueryParam('select','service'),
+            'query' => $request->getQueryParam('query','Tous')
         ];
 
         try
@@ -147,6 +148,40 @@ class ExemplaireController extends Controller
                     'type' => "success",
                     'code' => 200,
                     'reformes' => $exemplaire
+                ];
+            }
+            else if($params['select'] === 'reservation')
+            {
+                $agenda = FicheReservation::with('exemplaire')->get();
+
+                foreach($agenda as $agen)
+                {
+                    $listeExemplaires = [];
+                    foreach($agen->exemplaire as $exemplaire) {
+                        if($params['query'] == 'Tous'){
+                            $enabled = true;
+                        } else {
+                            $enabled = false;
+                        }
+
+                        $materiel = $exemplaire->materiel()->first();
+                        $materiel->type = $materiel->type()->first();
+                        if($materiel->type->id == $params['query']) {
+                            $enabled = true;
+                        }
+                        $exemplaire->materiel = $materiel;
+                        if($enabled){
+                            $listeExemplaires[] = $exemplaire;
+                        }
+                    }
+                    unset($agen->exemplaire);
+                    $agen->exemplaires = $listeExemplaires;
+                }
+
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'reservations' => $agenda
                 ];
             }
             else {

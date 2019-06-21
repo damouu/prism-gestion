@@ -14,6 +14,7 @@ class FicheReservation extends Model
     public $timestamps = true;
     protected $dateFormat = 'Y-m-d';
     protected $primaryKey = 'id';
+    public $incrementing = false;
 
 
     public function exemplaire()
