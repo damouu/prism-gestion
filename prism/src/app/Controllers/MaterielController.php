@@ -35,7 +35,11 @@ class MaterielController extends Controller
 
                 if($materiel->isEmpty())
                 {
-                    $data = ApiErrors::NotFound($request->getUri());
+                    $data = [
+                        'type' => "success",
+                        'code' => 200,
+                        'materiels' => [],
+                    ];
                 }
                 else
                 {

@@ -187,14 +187,15 @@
         },
         methods : {
             getAll() {
-                this.loading= 'true';
+                this.loading=true;
                 axios.get('/materiels')
                     .then(response => {
                         this.materiels = response.data.materiels;
                         this.fillTable();
                         this.loading=false;
                     })
-                    .catch(function (error) {
+                    .catch(error => {
+                        this.loading=false;
                         this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
                     });
             },
