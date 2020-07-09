@@ -5,7 +5,7 @@
             <b-row class="mr-5 ml-5">
 
                 <b-col cols="2">
-                    <NavigationReservation />
+                    <NavigationReservation/>
                 </b-col>
 
                 <b-col cols="10">
@@ -68,7 +68,9 @@
                                                             placeholder="Nom du responsable"
                                                             type="text">
                                                     </b-form-input>
-                                                    <b-form-invalid-feedback id="invalidResponsableNom">Veuillez entrer un nom valide</b-form-invalid-feedback>
+                                                    <b-form-invalid-feedback id="invalidResponsableNom">Veuillez entrer
+                                                        un nom valide
+                                                    </b-form-invalid-feedback>
                                                 </b-form-group>
                                             </b-col>
 
@@ -84,7 +86,9 @@
                                                             placeholder="Prénom du responsable"
                                                             type="text">
                                                     </b-form-input>
-                                                    <b-form-invalid-feedback id="invalidResponsablePrenom">Veuillez entrer un prénom valide</b-form-invalid-feedback>
+                                                    <b-form-invalid-feedback id="invalidResponsablePrenom">Veuillez
+                                                        entrer un prénom valide
+                                                    </b-form-invalid-feedback>
                                                 </b-form-group>
                                             </b-col>
 
@@ -100,7 +104,9 @@
                                                             placeholder="Téléphone du responsable"
                                                             type="text">
                                                     </b-form-input>
-                                                    <b-form-invalid-feedback id="invalidResponsableTel">Veuillez entrer un numero de telephone valide</b-form-invalid-feedback>
+                                                    <b-form-invalid-feedback id="invalidResponsableTel">Veuillez entrer
+                                                        un numero de telephone valide
+                                                    </b-form-invalid-feedback>
                                                 </b-form-group>
                                             </b-col>
 
@@ -116,14 +122,16 @@
                                                             placeholder="mail du responsable"
                                                             type="text">
                                                     </b-form-input>
-                                                    <b-form-invalid-feedback id="invalidResponsableMail">Veuillez entrer un mail valide</b-form-invalid-feedback>
+                                                    <b-form-invalid-feedback id="invalidResponsableMail">Veuillez entrer
+                                                        un mail valide
+                                                    </b-form-invalid-feedback>
                                                 </b-form-group>
                                             </b-col>
                                         </b-row>
                                     </b-card>
                                 </b-col>
 
-                                <b-col cols="12"  class="mt-4">
+                                <b-col cols="12" class="mt-4">
                                     <b-card
                                             title="Information réservations">
                                         <b-row>
@@ -136,10 +144,13 @@
                                                             data-vv-name="departement"
                                                             :state="validateState('departement')"
                                                             aria-describedby="invalidDepartement">
-                                                        <option v-for="option in departement" v-bind:value="option.value">
+                                                        <option v-for="option in departement"
+                                                                v-bind:value="option.value">
                                                             {{ option.text }}
                                                         </option>
-                                                        <b-form-invalid-feedback id="invalidDepartemnt">Choisissez un département</b-form-invalid-feedback>
+                                                        <b-form-invalid-feedback id="invalidDepartemnt">Choisissez un
+                                                            département
+                                                        </b-form-invalid-feedback>
                                                     </b-form-select>
                                                 </b-form-group>
                                             </b-col>
@@ -156,7 +167,9 @@
                                                             placeholder="Matière"
                                                             type="text">
                                                     </b-form-input>
-                                                    <b-form-invalid-feedback id="invalidMatiere">Veuillez choisir une matiere</b-form-invalid-feedback>
+                                                    <b-form-invalid-feedback id="invalidMatiere">Veuillez choisir une
+                                                        matiere
+                                                    </b-form-invalid-feedback>
                                                 </b-form-group>
                                             </b-col>
 
@@ -172,7 +185,9 @@
                                                             placeholder="Annee"
                                                             type="text">
                                                     </b-form-input>
-                                                    <b-form-invalid-feedback id="invalidAnnee">Veuillez écrire l'année étudiante</b-form-invalid-feedback>
+                                                    <b-form-invalid-feedback id="invalidAnnee">Veuillez écrire l'année
+                                                        étudiante
+                                                    </b-form-invalid-feedback>
                                                 </b-form-group>
                                             </b-col>
 
@@ -188,7 +203,9 @@
                                                             placeholder="Groupe"
                                                             type="text">
                                                     </b-form-input>
-                                                    <b-form-invalid-feedback id="invalidGroupe">Veuillez écrire le groupe de classe</b-form-invalid-feedback>
+                                                    <b-form-invalid-feedback id="invalidGroupe">Veuillez écrire le
+                                                        groupe de classe
+                                                    </b-form-invalid-feedback>
                                                 </b-form-group>
                                             </b-col>
 
@@ -211,7 +228,11 @@
 
                                 <b-col cols="12" class="mt-4">
                                     <b-card>
-                                        <b-card-title>Etudiant Référent, Groupe d'élèves  <b-button pill variant="outline-info" v-b-modal.modal-AddResaEtu>Ajouter un élève</b-button></b-card-title>
+                                        <b-card-title>Etudiant Référent, Groupe d'élèves
+                                            <b-button pill variant="outline-info" v-b-modal.modal-AddResaEtu>Ajouter un
+                                                élève
+                                            </b-button>
+                                        </b-card-title>
 
                                         <b-form-group label="Nom et Prénom d'élève" label-for="formEtuEtudiant">
                                             <vue-bootstrap-typeahead
@@ -239,9 +260,19 @@
                                             </template>
 
                                             <template slot="actions" slot-scope="row">
-                                                <b-button size="sm" class="mr-1" variant="outline-danger" @click="deleteRow(row.item)"><font-awesome-icon :icon="['fas','trash-alt']" /></b-button>
-                                                <b-button size="sm" v-show="!(row.item.id === etudiants[0].id)" class="mr-1" @click="moveUpRow(row.item)"><font-awesome-icon :icon="['fas','sort-up']" /></b-button>
-                                                <b-button size="sm" v-show="!(row.item.id === etudiants[(etudiants.length)-1].id)" @click="moveDownRow(row.item)"><font-awesome-icon :icon="['fas','sort-down']" /></b-button>
+                                                <b-button size="sm" class="mr-1" variant="outline-danger"
+                                                          @click="deleteRow(row.item)">
+                                                    <font-awesome-icon :icon="['fas','trash-alt']"/>
+                                                </b-button>
+                                                <b-button size="sm" v-show="!(row.item.id === etudiants[0].id)"
+                                                          class="mr-1" @click="moveUpRow(row.item)">
+                                                    <font-awesome-icon :icon="['fas','sort-up']"/>
+                                                </b-button>
+                                                <b-button size="sm"
+                                                          v-show="!(row.item.id === etudiants[(etudiants.length)-1].id)"
+                                                          @click="moveDownRow(row.item)">
+                                                    <font-awesome-icon :icon="['fas','sort-down']"/>
+                                                </b-button>
                                             </template>
 
                                         </b-table>
@@ -252,12 +283,14 @@
                                 <span class="text-danger mt-4">* champs obligatoires</span>
 
                                 <b-col md="3" offset-md="9">
-                                    <b-button variant="outline-success" class="mt-4 mb-5" @click="next">Passer à la réservation</b-button>
+                                    <b-button variant="outline-success" class="mt-4 mb-5" @click="next">Passer à la
+                                        réservation
+                                    </b-button>
                                 </b-col>
                             </b-row>
                         </form>
 
-                        <ModalAddReservationEtudiant />
+                        <ModalAddReservationEtudiant/>
                     </div>
 
                 </b-col>
@@ -275,19 +308,19 @@
 
 
     export default {
-        name:"ReservationConsultation",
-        components:{
+        name: "ReservationConsultation",
+        components: {
             NavigationReservation,
             ModalAddReservationEtudiant
         },
         data() {
             return {
                 fields: [
-                    { key: 'nom', sortable:false },
-                    { key: 'prenom', sortable:false },
-                    { key: 'mail', sortable:false },
-                    { key: 'telephone', sortable:false },
-                    { key: 'actions', sortable:false },
+                    {key: 'nom', sortable: false},
+                    {key: 'prenom', sortable: false},
+                    {key: 'mail', sortable: false},
+                    {key: 'telephone', sortable: false},
+                    {key: 'actions', sortable: false},
                 ],
                 etudiants: [],
 
@@ -302,20 +335,20 @@
                 selectedResponsable: null,
                 chosenResponsable: '',
 
-                sortBy : 'id',
+                sortBy: 'id',
                 sortDesc: false,
                 mode: 'single',
                 selected: [],
 
-                dismissCountDown:0,
-                dismissSecs:10,
-                alert: {'show':false,'showMateriel':false},
+                dismissCountDown: 0,
+                dismissSecs: 10,
+                alert: {'show': false, 'showMateriel': false},
             }
         },
         mounted() {
             this.getDepartements();
             this.getResponsables();
-            eventBus.$on('error',data => {
+            eventBus.$on('error', data => {
                 this.showAlert(data.error, data.status, data.message);
             });
             eventBus.$on('addedEtu', data => {
@@ -324,56 +357,50 @@
             });
         },
         watch: {
-            query: _.debounce(function(newQuery) {
+            query: _.debounce(function (newQuery) {
                 this.getResponsables(newQuery);
-            },250),
+            }, 250),
 
-            queryEtudiant: _.debounce(function(newQuery) {
+            queryEtudiant: _.debounce(function (newQuery) {
                 this.getEtudiants(newQuery);
-            },250),
+            }, 250),
         },
         methods: {
 
-            next(){
-                if(this.etudiants.length === 0)
-                {
-                    this.$validator.validateAll().then( result => {
+            next() {
+                if (this.etudiants.length === 0) {
+                    this.$validator.validateAll().then(result => {
                         if (!result) {
                             return;
                         }
                     });
-                }
-                else {
-                    this.$validator.validateAll().then( result => {
+                } else {
+                    this.$validator.validateAll().then(result => {
                         if (!result) {
                             return;
-                        } else
-                        {
+                        } else {
 
-                            if(!this.formEtu.responsable_projet)
-                            {
+                            if (!this.formEtu.responsable_projet) {
                                 axios.post('/professeurs', {
                                     'nom': this.formEtu.responsableNom,
                                     'prenom': this.formEtu.responsablePrenom,
                                     'mail': this.formEtu.responsableMail,
                                     'telephone': this.formEtu.responsableTel
                                 })
-                                    .then( response => {
+                                    .then(response => {
                                         this.formEtu.responsable_projet = response.data.etudiant.id;
                                     })
                                     .catch(error => {
                                         console.log(error);
                                     })
-                            }
-                            else
-                            {
-                                axios.put('/professeurs/'+this.formEtu.responsable_projet, {
+                            } else {
+                                axios.put('/professeurs/' + this.formEtu.responsable_projet, {
                                     'nom': this.formEtu.responsableNom,
                                     'prenom': this.formEtu.responsablePrenom,
                                     'mail': this.formEtu.responsableMail,
                                     'telephone': this.formEtu.responsableTel
                                 })
-                                    .then( response => {
+                                    .then(response => {
                                         this.formEtu.responsable_projet = response.data.professeur.id;
                                     })
                                     .catch(error => {
@@ -394,8 +421,8 @@
                                 'observation': this.formEtu.observation,
                                 'groupes': etu
                             })
-                                .then( response => {
-                                    this.$router.push({path: '/reservation/'+ response.data.reservation.id +'/feuille'});
+                                .then(response => {
+                                    this.$router.push({path: '/reservation/' + response.data.reservation.id + '/feuille'});
                                 })
                                 .catch(error => {
                                     console.log(error.response);
@@ -410,18 +437,18 @@
             },
 
             validateState(ref) {
-                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
             },
 
-            getDepartements(){
-                axios.get('/departements')
-                    .then( response => {
+            getDepartements() {
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/departements/')
+                    .then(response => {
                         this.departements = response.data.departements;
                         this.departements.forEach(element => {
-                            this.departement.push({'value':element.id, 'text': element.nom});
+                            this.departement.push({'value': element.id, 'text': element.nom});
                         });
                     })
                     .catch(error => {
@@ -430,50 +457,49 @@
             },
 
             getResponsables(newQuery) {
-                axios.get('/professeurs?query='+newQuery)
-                    .then( response => {
-                        this.responsables=[];
-                        response.data.professeurs.forEach( element =>  {
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/professeurs?query=' + newQuery)
+                    .then(response => {
+                        this.responsables = [];
+                        response.data.professeurs.forEach(element => {
                             this.responsables.push(element);
                         });
                     })
-                    .catch( error => {
+                    .catch(error => {
                         console.log(error.response);
                     })
             },
 
             getEtudiants(newQuery) {
-                axios.get('/etudiants?query='+newQuery)
-                    .then( response => {
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/etudiants?query=' + newQuery)
+                    .then(response => {
                         this.etudiant = [];
-                        response.data.etudiants.forEach( element => {
+                        response.data.etudiants.forEach(element => {
                             this.etudiant.push(element);
                         });
                     })
-                    .catch( error => {
+                    .catch(error => {
                         console.log(error.response);
                     })
             },
 
             selectResp($event) {
-                this.$set(this.formEtu,'responsableNom',$event['nom']);
-                this.$set(this.formEtu,'responsablePrenom',$event['prenom']);
-                this.$set(this.formEtu,'responsableTel',$event['telephone']);
-                this.$set(this.formEtu,'responsableMail',$event['mail']);
-                this.$set(this.formEtu,'responsable_projet',$event['id']);
+                this.$set(this.formEtu, 'responsableNom', $event['nom']);
+                this.$set(this.formEtu, 'responsablePrenom', $event['prenom']);
+                this.$set(this.formEtu, 'responsableTel', $event['telephone']);
+                this.$set(this.formEtu, 'responsableMail', $event['mail']);
+                this.$set(this.formEtu, 'responsable_projet', $event['id']);
             },
 
             selectRespEleve($event) {
                 let test = false;
-                if(this.etudiants.length >= 1){
-                    this.etudiants.forEach( element => {
-                        if(element.id === $event.id)
-                        {
+                if (this.etudiants.length >= 1) {
+                    this.etudiants.forEach(element => {
+                        if (element.id === $event.id) {
                             test = true;
                         }
                     });
                 }
-                if(test===false) {
+                if (test === false) {
                     this.etudiants.push($event);
                 }
             },
@@ -491,21 +517,21 @@
 
 
             deleteRow(items) {
-                for ( const [key,value] of Object.entries(this.etudiants)){
-                    if(value.id === items.id) {
-                        this.etudiants.splice(key,1);
+                for (const [key, value] of Object.entries(this.etudiants)) {
+                    if (value.id === items.id) {
+                        this.etudiants.splice(key, 1);
                         break;
                     }
                 }
             },
             moveUpRow(items) {
                 console.log(items);
-                for ( const [key,value] of Object.entries(this.etudiants)){
-                    if(value.id === items.id) {
-                        if(key != 0 ){
-                            let del = this.etudiants.splice(key,1);
-                            let keyM = key-1;
-                            this.etudiants.splice(keyM,0,del[0]);
+                for (const [key, value] of Object.entries(this.etudiants)) {
+                    if (value.id === items.id) {
+                        if (key != 0) {
+                            let del = this.etudiants.splice(key, 1);
+                            let keyM = key - 1;
+                            this.etudiants.splice(keyM, 0, del[0]);
                             break;
                         }
                     }
@@ -513,12 +539,12 @@
             },
             moveDownRow(items) {
                 let max = Object.keys(this.etudiants).length;
-                for ( const [key,value] of Object.entries(this.etudiants)){
-                    if(value.id === items.id) {
-                        if(key != (max-1) ){
-                            let del = this.etudiants.splice(key,1);
-                            let keyM = key+1;
-                            this.etudiants.splice(keyM,0,del[0]);
+                for (const [key, value] of Object.entries(this.etudiants)) {
+                    if (value.id === items.id) {
+                        if (key != (max - 1)) {
+                            let del = this.etudiants.splice(key, 1);
+                            let keyM = key + 1;
+                            this.etudiants.splice(keyM, 0, del[0]);
                             break;
                         }
                     }

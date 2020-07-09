@@ -21,7 +21,7 @@
                 <b-row class="mr-5 ml-5">
 
                     <b-col cols="2">
-                        <NavigationInventaire />
+                        <NavigationInventaire/>
                     </b-col>
 
                     <b-col cols="10">
@@ -39,7 +39,9 @@
                             <b-row align-h="between" class="mt-4">
                                 <h3>Informations</h3>
                                 <b-col cols="4">
-                                    <b-button class="mrs-2" variant="primary" v-b-modal.modal-EditFournisseur @click="modalEditFournisseur">Modifier</b-button>
+                                    <b-button class="mrs-2" variant="primary" v-b-modal.modal-EditFournisseur
+                                              @click="modalEditFournisseur">Modifier
+                                    </b-button>
                                 </b-col>
                             </b-row>
 
@@ -145,16 +147,12 @@
                         </div>
 
 
-
-
-                    <ModalEditFournisseur />
-
+                        <ModalEditFournisseur/>
 
 
                     </b-col>
                 </b-row>
             </b-container>
-
 
 
         </div>
@@ -163,29 +161,29 @@
 
 <script>
 
-    import { eventBus } from "../main";
+    import {eventBus} from "../main";
 
     import NavigationInventaire from "../components/navigation/NavigationInventaire";
     import ModalEditFournisseur from "../components/modals/ModalEditFournisseur";
 
     export default {
-        name:"fournisseur",
+        name: "fournisseur",
         components: {
             NavigationInventaire,
             ModalEditFournisseur,
         },
-        data (){
+        data() {
             return {
-                dismissCountDown:0,
-                dismissSecs:10,
-                alert: {'show':false,'showMateriel':false},
+                dismissCountDown: 0,
+                dismissSecs: 10,
+                alert: {'show': false, 'showMateriel': false},
 
                 fournisseurId: this.$route.params.id,
                 fournisseur: [],
                 loading: false,
             }
         },
-        mounted () {
+        mounted() {
             this.getFournisseur();
 
             eventBus.$on('editedFournisseur', data => {
@@ -215,18 +213,18 @@
             },
 
             getFournisseur() {
-                this.loading=true;
-                axios.get('/fournisseurs/'+this.fournisseurId)
-                    .then( response => {
+                this.loading = true;
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/fournisseurs/' + this.fournisseurId)
+                    .then(response => {
                         this.fournisseur = response.data.fournisseur;
-                        this.loading=false;
+                        this.loading = false;
                     })
-                    .catch( error => {
-                        this.$router.push({path:'/notfound'});
+                    .catch(error => {
+                        this.$router.push({path: '/notfound'});
                     })
             },
 
-            modalEditFournisseur () {
+            modalEditFournisseur() {
                 eventBus.$emit('editFournisseur', {'fournisseur': this.fournisseur})
             },
 

@@ -21,10 +21,12 @@
                             placeholder="Entrez le nom de catégorie"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidNom">Veuillez écrire un nom de catégorie.</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidNom">Veuillez écrire un nom de catégorie.
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Couleur *" label-cols-sm="4" label-align-sm="left" label-for="editCategorieCouleur">
+                <b-form-group label="Couleur *" label-cols-sm="4" label-align-sm="left"
+                              label-for="editCategorieCouleur">
                     <colorPicker
                             id="addCategorieCouleur"
                             v-model="categorie.couleur"
@@ -42,13 +44,13 @@
 </template>
 
 <script>
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
     import ColorPicker from 'vue-color-picker-wheel';
 
     export default {
 
         name: 'ModalEditCategorie',
-        components:{
+        components: {
             ColorPicker,
         },
         data() {
@@ -63,7 +65,7 @@
         },
         methods: {
             validateState(ref) {
-                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
@@ -73,14 +75,12 @@
                 this.editCategorie();
             },
             editCategorie() {
-                this.$validator.validateAll().then( result => {
-                    if (!result)
-                    {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
                         return;
-                    }
-                    else {
-                        axios.put('/types/'+this.categorie.id, {
-                            'nom':this.categorie.nom,
+                    } else {
+                        axios.put('https://iutnc-resamat.univ-lorraine.fr/api/types/' + this.categorie.id, {
+                            'nom': this.categorie.nom,
                             'couleur': this.categorie.couleur,
                         })
                             .then(response => {

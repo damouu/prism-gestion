@@ -5,7 +5,7 @@
             <b-row class="mr-5 ml-5">
 
                 <b-col cols="2">
-                    <NavigationReservation />
+                    <NavigationReservation/>
                 </b-col>
 
                 <b-col cols="10">
@@ -92,39 +92,39 @@
     import NavigationReservation from '../components/navigation/NavigationReservation'
 
     export default {
-        name:"ReservationConsultation",
-        components:{
+        name: "ReservationConsultation",
+        components: {
             NavigationReservation
         },
-        data(){
+        data() {
             return {
                 reservations: [],
 
 
                 mode: 'single',
                 selected: [],
-                sortBy : 'id',
+                sortBy: 'id',
                 sortDesc: false,
                 fieldsRow: [
-                    { key: 'id', sortable:true},
-                    { key: 'date_depart', sortable:true },
-                    { key: 'date_retour', sortable:true },
-                    { key: 'created_at', sortable:true, label: 'Date création' },
-                    { key: 'rendu', sortable:true },
+                    {key: 'id', sortable: true},
+                    {key: 'date_depart', sortable: true},
+                    {key: 'date_retour', sortable: true},
+                    {key: 'created_at', sortable: true, label: 'Date création'},
+                    {key: 'rendu', sortable: true},
                 ],
                 currentPage: 1,
                 perPage: 10,
                 pageOptions: [10, 20, 30],
                 filter: null,
 
-                alert: {'show':false,'showMateriel':false},
-                dismissCountDown:0,
-                dismissSecs:10,
+                alert: {'show': false, 'showMateriel': false},
+                dismissCountDown: 0,
+                dismissSecs: 10,
                 loading: false,
 
             }
         },
-        mounted(){
+        mounted() {
             this.getReservations();
         },
         computed: {
@@ -132,21 +132,21 @@
                 return this.reservations.length
             },
         },
-        methods:{
-            getReservations(){
-                this.loading=true;
-                axios.get('/reservations/?select=fiches')
+        methods: {
+            getReservations() {
+                this.loading = true;
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/reservations/?select=fiches')
                     .then(response => {
                         console.log(response.data.reservations);
                         response.data.reservations.forEach(elements => {
-                            elements.fiche_resa.forEach(element=>{
+                            elements.fiche_resa.forEach(element => {
                                 this.reservations.push(element);
                             });
                         });
-                        this.loading=false;
+                        this.loading = false;
                     })
                     .catch(error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        this.showAlert(error.response.statusText, error.response.status, error.response.data.message);
                     })
             },
 
@@ -163,7 +163,10 @@
             rowSelected(items) {
                 this.selected = items;
                 let idSelected = items[0];
-                this.$router.push({name: 'consultation_reservation_fiche', params: { idresa: idSelected.reservation, idfeuille: idSelected.id }});
+                this.$router.push({
+                    name: 'consultation_reservation_fiche',
+                    params: {idresa: idSelected.reservation, idfeuille: idSelected.id}
+                });
             },
 
 

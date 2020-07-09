@@ -17,10 +17,9 @@ class TypeController extends Controller
     public function getAll(Request $request, Response $response, $args)
     {
 
-        try
-        {
+        try {
 
-            $type = Type::select('id','nom','couleur');
+            $type = Type::select('id', 'nom', 'couleur');
             $type = $type->get();
 
             $data = [
@@ -29,9 +28,7 @@ class TypeController extends Controller
                 'types' => $type
             ];
 
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             $data = ApiErrors::NotFound($request->getUri());
         }
 
@@ -43,30 +40,23 @@ class TypeController extends Controller
 
         $id = intval($args['id']);
 
-        if(!is_null($id) )
-        {
-            try
-            {
+        if (!is_null($id)) {
+            try {
                 $type = Type::find($id);
 
-                if(empty($type)){
+                if (empty($type)) {
                     $data = ApiErrors::NotFound($request->getUri());
-                }
-                else {
+                } else {
                     $data = [
                         'type' => "success",
                         'code' => 200,
                         'types' => $type
                     ];
                 }
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::NotFound($request->getUri());
             }
-        }
-        else
-        {
+        } else {
             $data = ApiErrors::BadRequest();
         }
 
@@ -78,16 +68,12 @@ class TypeController extends Controller
     {
         $id = $args['id'];
 
-        try
-        {
-            $type = Type::where('type.id','=',$id)->with('materiels');
+        try {
+            $type = Type::where('type.id', '=', $id)->with('materiels');
 
-            if(empty($type))
-            {
+            if (empty($type)) {
                 $data = ApiErrors::NotFound($request->getUri());
-            }
-            else
-            {
+            } else {
                 $type = $type->first();
                 $elementCounter = $type->materiels->count();
 
@@ -100,9 +86,7 @@ class TypeController extends Controller
                     'types' => $type
                 ];
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             $data = ApiErrors::NotFound($request->getUri());
         }
 
@@ -114,30 +98,24 @@ class TypeController extends Controller
 
         $id = intval($args['id']);
 
-        try
-        {
-            $type = Type::where('id','=',$id)->with('materiels')->first();
+        try {
+            $type = Type::where('id', '=', $id)->with('materiels')->first();
 
-            if($type->materiels->isEmpty())
-            {
+            if ($type->materiels->isEmpty()) {
                 $type->delete();
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'message' => 'le type '. $type->id . ' a bien été supprimé.'
+                    'message' => 'le type ' . $type->id . ' a bien été supprimé.'
                 ];
-            }
-            else
-            {
+            } else {
                 $data = [
                     'type' => 'error',
                     'code' => 403,
                     'message' => 'Le type n\'a pas été supprimé: Des matériels sont encore liés.'
                 ];
             }
-        }
-        catch(\Exception$e)
-        {
+        } catch (\Exception$e) {
             $data = ApiErrors::NotFound($request->getUri());
         }
 
@@ -145,20 +123,15 @@ class TypeController extends Controller
     }
 
 
-
     public function post(Request $request, Response $response, $args)
     {
 
         $content = $request->getParsedBody();
 
-        if(!isset($content['nom']) || !isset($content['couleur']))
-        {
+        if (!isset($content['nom']) || !isset($content['couleur'])) {
             $data = ApiErrors::BadRequest();
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 $type = new Type();
                 $type->nom = $content['nom'];
                 $type->couleur = $content['couleur'];
@@ -169,16 +142,13 @@ class TypeController extends Controller
                     'code' => 201,
                     'types' => $type
                 ];
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::InternalError();
             }
         }
 
         return ResponseWriter::ResponseWriter($response, $data);
     }
-
 
 
     public function put(Request $request, Response $response, $args)
@@ -189,14 +159,10 @@ class TypeController extends Controller
 
         $type = Type::find($id);
 
-        if(!isset($content['nom']) || !isset($content['couleur']))
-        {
+        if (!isset($content['nom']) || !isset($content['couleur'])) {
             $data = ApiErrors::BadRequest();
-        }
-        else if(empty($type))
-        {
-            try
-            {
+        } else if (empty($type)) {
+            try {
                 $type = new Type();
                 $type->id = $id;
                 $type->nom = $content['nom'];
@@ -208,14 +174,10 @@ class TypeController extends Controller
                     'code' => 201,
                     'types' => $type
                 ];
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::InternalError();
             }
-        }
-        else
-        {
+        } else {
             try {
 
                 $type->nom = $content['nom'];

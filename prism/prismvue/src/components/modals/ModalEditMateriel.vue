@@ -9,7 +9,7 @@
                 centered
                 size="lg"
                 @ok="handleOkModif">
-            <form ref="modifMateriel"@submit.stop.prevent="modifMateriel" >
+            <form ref="modifMateriel" @submit.stop.prevent="modifMateriel">
                 <b-form-group label="Constructeur *" label-for="consMatMod" label-cols-sm="4" label-align-sm="left">
                     <b-form-input
                             id="consMatMod"
@@ -70,10 +70,9 @@
 </template>
 
 
-
 <script>
 
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
         name: 'ModalEditMateriel',
@@ -101,21 +100,21 @@
         methods: {
 
             validateState(ref) {
-                if (this.veeFields[ref]&&(this.veeFields[ref].dirty||this.veeFields[ref].validated)) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
             },
 
             getTypes() {
-                axios.get('/types/' )
-                    .then( response => {
-                        for(let data of response.data.types) {
-                            this.types.push({'value':data.id, 'text':data.nom});
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/types/')
+                    .then(response => {
+                        for (let data of response.data.types) {
+                            this.types.push({'value': data.id, 'text': data.nom});
                         }
                     })
-                    .catch( error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                    .catch(error => {
+                        this.showAlert(error.response.statusText, error.response.status, error.response.data.message);
                     });
             },
 
@@ -127,23 +126,20 @@
 
             // Modification Materiel
             modifMateriel() {
-                this.$validator.validateAll().then( result => {
-                    if(!result)
-                    {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
                         return;
-                    }
-                    else
-                    {
-                        axios.put('/materiels/'+this.materielId,{
+                    } else {
+                        axios.put('https://iutnc-resamat.univ-lorraine.fr/api/materiels/' + this.materielId, {
                             "constructeur": this.materielModif.constructeur,
                             "modele": this.materielModif.modele,
                             "type": this.materielTypeModif,
                             "description": this.materielModif.description
                         })
-                            .then( response => {
+                            .then(response => {
                                 this.materiel = response.data.materiel;
-                                this.materielType = { 'value': this.materiel.type.id, 'text': this.materiel.type.nom };
-                                this.$nextTick( () =>  {
+                                this.materielType = {'value': this.materiel.type.id, 'text': this.materiel.type.nom};
+                                this.$nextTick(() => {
                                     this.$refs.modal1.hide();
                                 });
 
@@ -152,15 +148,15 @@
                                 this.$bvToast.toast(`Matériel modifié avec succès !`, {
                                     title: `Modification réussie`,
                                     toaster: 'b-toaster-bottom-right',
-                                    solid:true,
-                                    variant:'success',
+                                    solid: true,
+                                    variant: 'success',
                                     appendToast: false
                                 });
 
                                 this.materielModif = [];
                                 this.materielTypeModif = [];
                             })
-                            .catch( error => {
+                            .catch(error => {
                                 eventBus.$emit('error', {
                                     'error': error.response.statusText,
                                     'status': error.response.status,

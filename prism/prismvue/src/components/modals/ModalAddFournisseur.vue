@@ -22,10 +22,12 @@
                             placeholder="Nom du fournisseur"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidNom">Veuillez écrire un nom de fournisseur</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidNom">Veuillez écrire un nom de fournisseur
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Adresse *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurAdresse">
+                <b-form-group label="Adresse *" label-cols-sm="4" label-align-sm="left"
+                              label-for="addFournisseurAdresse">
                     <b-form-input
                             id="addFournisseurAdresse"
                             data-vv-name="addFourAdresse"
@@ -53,7 +55,8 @@
                     <b-form-invalid-feedback id="invalidVille">Veuillez écrire une ville</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Code postal *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurCodePostal">
+                <b-form-group label="Code postal *" label-cols-sm="4" label-align-sm="left"
+                              label-for="addFournisseurCodePostal">
                     <b-form-input
                             id="addFournisseurCodePostal"
                             data-vv-name="addFourCodePostal"
@@ -64,7 +67,8 @@
                             placeholder="Code postal Fournisseur"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidCodePostal">Veuillez écrire un code postal</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidCodePostal">Veuillez écrire un code postal
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <b-form-group label="Mail *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurMail">
@@ -78,7 +82,8 @@
                             placeholder="adresse mail du fournisseur"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidMail">Veuillez écrire une adresse mail correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidMail">Veuillez écrire une adresse mail correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <b-form-group label="Telephone *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurTel">
@@ -92,10 +97,12 @@
                             placeholder="Numéro de téléphone du fournisseur"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidTel">Veuillez écrire un numéro de téléphone correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidTel">Veuillez écrire un numéro de téléphone correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Site Web" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurSiteWeb">
+                <b-form-group label="Site Web" label-cols-sm="4" label-align-sm="left"
+                              label-for="addFournisseurSiteWeb">
                     <b-form-input
                             id="addFournisseurSiteWeb"
                             data-vv-name="addFourSiteWeb"
@@ -106,11 +113,13 @@
                             placeholder="site web du fournisseur"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidSiteWeb">Veuillez écrire un site web correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidSiteWeb">Veuillez écrire un site web correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
 
-                <b-form-group label="Nom Commercial" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurNomCom">
+                <b-form-group label="Nom Commercial" label-cols-sm="4" label-align-sm="left"
+                              label-for="addFournisseurNomCom">
                     <b-form-input
                             id="addFournisseurNomCom"
                             data-vv-name="addFourNomCom"
@@ -124,7 +133,8 @@
                     <b-form-invalid-feedback id="invalidNomCom">Veuillez écrire un nom correct</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Prénom Commercial" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurPrenomCom">
+                <b-form-group label="Prénom Commercial" label-cols-sm="4" label-align-sm="left"
+                              label-for="addFournisseurPrenomCom">
                     <b-form-input
                             id="addFournisseurPrenomCom"
                             data-vv-name="addFourPrenomCom"
@@ -135,10 +145,12 @@
                             placeholder="Prénom du commercial"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidPrenomCom">Veuillez écrire un prénom correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidPrenomCom">Veuillez écrire un prénom correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Mail Commercial" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurMailCom">
+                <b-form-group label="Mail Commercial" label-cols-sm="4" label-align-sm="left"
+                              label-for="addFournisseurMailCom">
                     <b-form-input
                             id="addFournisseurMailCom"
                             data-vv-name="addFourMailCom"
@@ -149,10 +161,12 @@
                             placeholder="adresse mail du Commercial"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidMailCom">Veuillez écrire une adresse mail correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidMailCom">Veuillez écrire une adresse mail correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Telephone Commercial" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurTelCom">
+                <b-form-group label="Telephone Commercial" label-cols-sm="4" label-align-sm="left"
+                              label-for="addFournisseurTelCom">
                     <b-form-input
                             id="addFournisseurTelCom"
                             data-vv-name="addFourTelCom"
@@ -163,7 +177,8 @@
                             placeholder="Numéro de téléphone du Commercial"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidTelCom">Veuillez écrire un numéro de téléphone correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidTelCom">Veuillez écrire un numéro de téléphone correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
             </form>
@@ -174,7 +189,7 @@
 </template>
 
 <script>
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
 
@@ -188,7 +203,7 @@
         },
         methods: {
             validateState(ref) {
-                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
@@ -198,13 +213,11 @@
                 this.addFournisseur();
             },
             addFournisseur() {
-                this.$validator.validateAll().then( result => {
-                    if (!result)
-                    {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
                         return;
-                    }
-                    else {
-                        axios.post('/fournisseurs', {
+                    } else {
+                        axios.post('https://iutnc-resamat.univ-lorraine.fr/api/fournisseurs/', {
                             'nom': this.fournisseur.nom,
                             'adresse': this.fournisseur.adresse,
                             'ville': this.fournisseur.ville,

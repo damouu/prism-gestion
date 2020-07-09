@@ -3,7 +3,9 @@
 
         <b-row align-h="between" class="mb-4">
             <b-col>
-                <h1 class="ml-5">Agenda - Emprunts et Retours <b-spinner v-if="loading" class="loading" label="loading"></b-spinner></h1>
+                <h1 class="ml-5">Agenda - Emprunts et Retours
+                    <b-spinner v-if="loading" class="loading" label="loading"></b-spinner>
+                </h1>
             </b-col>
         </b-row>
         <b-row>
@@ -33,9 +35,12 @@
                 id="bv-modal-eventClick"
                 hide-footer
                 refs="bv-modal-eventClick"
-        centered scrollable>
+                centered scrollable>
             <template slot="modal-header" slot-scope="">
-                <h5>Information sur la feuille reservation n°<router-link :to="{path:'/reservation/'+modalClick.reservation}" target="_blank">{{modalClick.id}}</router-link></h5>
+                <h5>Information sur la feuille reservation n°
+                    <router-link :to="{path:'/reservation/'+modalClick.reservation}" target="_blank">{{modalClick.id}}
+                    </router-link>
+                </h5>
             </template>
             <div>
                 <div>
@@ -55,8 +60,12 @@
                             show-empty
                     >
                         <template slot="detail" slot-scope="row">
-                            <b-button variant="info" @click="row.toggleDetails" v-if="row.detailsShowing"><font-awesome-icon :icon="['fas','sort-down']" /></b-button>
-                            <b-button variant="info" @click="row.toggleDetails" v-if="!row.detailsShowing"><font-awesome-icon :icon="['fas','caret-right']" /></b-button>
+                            <b-button variant="info" @click="row.toggleDetails" v-if="row.detailsShowing">
+                                <font-awesome-icon :icon="['fas','sort-down']"/>
+                            </b-button>
+                            <b-button variant="info" @click="row.toggleDetails" v-if="!row.detailsShowing">
+                                <font-awesome-icon :icon="['fas','caret-right']"/>
+                            </b-button>
                         </template>
                         <template slot="row-details" slot-scope="row">
                             <b-card>
@@ -70,7 +79,6 @@
                         </template>
                     </b-table>
                 </div>
-
 
 
             </div>
@@ -89,7 +97,7 @@
     import timeline from '@fullcalendar/timeline';
 
     export default {
-        name:"AgendaEmprunts",
+        name: "AgendaEmprunts",
         components: {
             FullCalendar,
         },
@@ -109,88 +117,106 @@
                         prev: 'précédent',
                         next: 'suivant',
                     },
-                loading:false,
-                modalClick:[],
+                loading: false,
+                modalClick: [],
 
                 fieldsMateriel: [
-                    {key:'detail',sortable:false},
-                    {key:'constructeur', sortable:true},
-                    {key:'modele', sortable:true},
+                    {key: 'detail', sortable: false},
+                    {key: 'constructeur', sortable: true},
+                    {key: 'modele', sortable: true},
                 ],
                 fieldsExemplaire: [
-                    {key:'reference', sortable:true},
-                    {key:'num_ex', sortable:true},
-                    {key:'num_serie', sortable:true},
+                    {key: 'reference', sortable: true},
+                    {key: 'num_ex', sortable: true},
+                    {key: 'num_serie', sortable: true},
                 ],
             }
         },
-        mounted(){
+        mounted() {
 
             this.getEventsEmp();
 
         },
         methods: {
-            getEventsEmp(){
-                this.loading=true;
-                axios.get('/exemplaires?select=reservation')
-                    .then( response => {
+            getEventsEmp() {
+                this.loading = true;
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/exemplaires?select=reservation')
+                    .then(response => {
                         response.data.reservations.forEach(element => {
                             let end = new Date(element.date_depart);
-                            end.setHours(end.getHours()+1);
+                            end.setHours(end.getHours() + 1);
                             let ended = new Date(element.date_retour);
-                            ended.setHours(end.getHours()+1);
+                            ended.setHours(end.getHours() + 1);
 
                             this.calendarEvents.push({
                                 title: element.id,
                                 start: element.date_depart,
-                                end:end, color:"green",
-                                otherDatas:{
-                                    debut_resa:element.date_depart,
-                                    fin_resa:element.date_retour,
-                                    id: element.id, exemplaires:element.exemplaires,
+                                end: end, color: "green",
+                                otherDatas: {
+                                    debut_resa: element.date_depart,
+                                    fin_resa: element.date_retour,
+                                    id: element.id, exemplaires: element.exemplaires,
                                     observation: element.observation,
-                                    reservation:element.reservation
+                                    reservation: element.reservation
                                 }
                             });
 
-                            this.calendarEvents.push({title: element.id, start:element.date_retour, end:ended, color:"red", otherDatas:{debut_resa:element.date_depart,fin_resa:element.date_retour,id: element.id, exemplaires:element.exemplaires, observation: element.observation, reservation:element.reservation}});
+                            this.calendarEvents.push({
+                                title: element.id,
+                                start: element.date_retour,
+                                end: ended,
+                                color: "red",
+                                otherDatas: {
+                                    debut_resa: element.date_depart,
+                                    fin_resa: element.date_retour,
+                                    id: element.id,
+                                    exemplaires: element.exemplaires,
+                                    observation: element.observation,
+                                    reservation: element.reservation
+                                }
+                            });
                         })
-                        this.loading=false;
+                        this.loading = false;
                     })
-                    .catch( error => {
+                    .catch(error => {
                         console.log(error);
                     })
             },
             handleDateClick(arg) {
 
-                this.modalClick= {
+                this.modalClick = {
                     observation: arg.event._def.extendedProps.otherDatas.observation,
                     materiels: arg.event._def.extendedProps.otherDatas.exemplaires,
                     id: arg.event._def.extendedProps.otherDatas.id,
-                    debut_resa:arg.event._def.extendedProps.otherDatas.debut_resa,
-                    fin_resa:arg.event._def.extendedProps.otherDatas.fin_resa,
-                    reservation:arg.event._def.extendedProps.otherDatas.reservation,
+                    debut_resa: arg.event._def.extendedProps.otherDatas.debut_resa,
+                    fin_resa: arg.event._def.extendedProps.otherDatas.fin_resa,
+                    reservation: arg.event._def.extendedProps.otherDatas.reservation,
                 };
                 let materiel = [];
                 this.modalClick.materiels.forEach(element => {
-                    if(materiel!=undefined){
+                    if (materiel != undefined) {
                         let exist = false;
                         materiel.forEach(test => {
-                            if(test.id===element.materiel.id){
-                                exist=true;
+                            if (test.id === element.materiel.id) {
+                                exist = true;
                             }
                         });
-                        if(exist!==true){
+                        if (exist !== true) {
                             materiel.push(element.materiel);
                         }
                     }
                 });
 
-                materiel.forEach(element=>{
-                    element.exemplaires=[];
-                    this.modalClick.materiels.forEach( value => {
-                        if(value.materiel.id===element.id){
-                            element.exemplaires.push({id:value.id,num_ex:value.num_ex, reference:value.reference, num_serie:value.num_serie});
+                materiel.forEach(element => {
+                    element.exemplaires = [];
+                    this.modalClick.materiels.forEach(value => {
+                        if (value.materiel.id === element.id) {
+                            element.exemplaires.push({
+                                id: value.id,
+                                num_ex: value.num_ex,
+                                reference: value.reference,
+                                num_serie: value.num_serie
+                            });
                         }
                     })
                 });

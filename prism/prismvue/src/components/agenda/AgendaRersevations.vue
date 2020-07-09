@@ -3,7 +3,9 @@
 
         <b-row align-h="between" class="mb-4">
             <b-col>
-                <h1 class="ml-5">Agenda - Réservations <b-spinner v-if="loading" class="loading" label="loading"></b-spinner></h1>
+                <h1 class="ml-5">Agenda - Réservations
+                    <b-spinner v-if="loading" class="loading" label="loading"></b-spinner>
+                </h1>
             </b-col>
         </b-row>
         <b-row>
@@ -42,7 +44,7 @@
     import timeline from '@fullcalendar/timeline';
 
     export default {
-        name:"AgendaReservation",
+        name: "AgendaReservation",
         components: {
             FullCalendar,
         },
@@ -82,29 +84,47 @@
                         next: 'suivant',
                     },
                 views: {
-                    customWeek:{ type: 'timeline', duration:{weeks:1}, slotDuration:{days:1}, buttonText:'customWeek'},
-                    customDay:{type:'timeGridDay', titleFormat:{ day:'numeric', weekday:'long', month:'short', year:'numeric'}, columnHeaderHtml:{weekday:'long'} , duration:{days:1}, slotDuration:{days:1}, buttonText:'customDay'},
+                    customWeek: {
+                        type: 'timeline',
+                        duration: {weeks: 1},
+                        slotDuration: {days: 1},
+                        buttonText: 'customWeek'
+                    },
+                    customDay: {
+                        type: 'timeGridDay',
+                        titleFormat: {day: 'numeric', weekday: 'long', month: 'short', year: 'numeric'},
+                        columnHeaderHtml: {weekday: 'long'},
+                        duration: {days: 1},
+                        slotDuration: {days: 1},
+                        buttonText: 'customDay'
+                    },
                 },
-                loading:false,
+                loading: false,
             }
         },
-        mounted(){
+        mounted() {
 
             this.getEventsResa();
 
         },
         methods: {
-            getEventsResa(){
-                this.loading=true;
-                axios.get('/exemplaires?select=reservation')
-                    .then( response => {
+            getEventsResa() {
+                this.loading = true;
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/exemplaires?select=reservation')
+                    .then(response => {
                         response.data.reservations.forEach(element => {
                             let color = this.colors[Math.floor(Math.random() * this.colors.length)];
-                            this.calendarEvents.push({title: element.reservation, start: element.date_depart, end:element.date_retour, id: element.id, color: color})
+                            this.calendarEvents.push({
+                                title: element.reservation,
+                                start: element.date_depart,
+                                end: element.date_retour,
+                                id: element.id,
+                                color: color
+                            })
                         })
-                        this.loading=false;
+                        this.loading = false;
                     })
-                    .catch( error => {
+                    .catch(error => {
                         console.log(error);
                     })
             },

@@ -21,7 +21,8 @@
                             placeholder="Entrez le nom de catégorie"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidNom">Veuillez écrire un nom de catégorie.</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidNom">Veuillez écrire un nom de catégorie.
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <b-form-group label="Couleur *" label-cols-sm="4" label-align-sm="left" label-for="addCategorieCouleur">
@@ -43,13 +44,13 @@
 </template>
 
 <script>
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
     import ColorPicker from 'vue-color-picker-wheel';
 
     export default {
 
         name: 'ModalAddCategorie',
-        components:{
+        components: {
             ColorPicker,
         },
         data() {
@@ -62,7 +63,7 @@
         },
         methods: {
             validateState(ref) {
-                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
@@ -72,13 +73,11 @@
                 this.addCategorie();
             },
             addCategorie() {
-                this.$validator.validateAll().then( result => {
-                    if (!result || !this.color)
-                    {
+                this.$validator.validateAll().then(result => {
+                    if (!result || !this.color) {
                         return;
-                    }
-                    else {
-                        axios.post('/types', {
+                    } else {
+                        axios.post('https://iutnc-resamat.univ-lorraine.fr/api/types/', {
                             'nom': this.categorie.nom,
                             'couleur': this.color
                         })

@@ -10,7 +10,9 @@
             <div v-show="!showEx">
                 <b-row align-h="between">
                     <h3>Exemplaires : {{ exemplaires.length }}</h3>
-                    <b-button variant="success" v-b-modal.modal-AddExemplaire @click="modalAddExemplaire">Ajouter un exemplaire</b-button>
+                    <b-button variant="success" v-b-modal.modal-AddExemplaire @click="modalAddExemplaire">Ajouter un
+                        exemplaire
+                    </b-button>
                 </b-row>
             </div>
 
@@ -53,7 +55,7 @@
                             selectedVariant="success"
                             @row-selected="rowSelected">
                         <template slot="etat" slot-scope="row">
-                            <b-badge variant="success" v-if="row.value == 'disponible'" >{{row.value}}</b-badge>
+                            <b-badge variant="success" v-if="row.value == 'disponible'">{{row.value}}</b-badge>
                             <b-badge variant="warning" v-if="row.value == 'réparation'">{{row.value}}</b-badge>
                             <b-badge variant="danger" v-if="row.value == 'emprunté'">{{row.value}}</b-badge>
                             <b-badge variant="secondary" v-if="row.value == 'non empruntable'">{{row.value}}</b-badge>
@@ -75,8 +77,11 @@
             <div v-else="showEx">
                 <b-row align-h="around">
                     <b-button variant="outline-secondary" @click="backExemplaires">‹ retour</b-button>
-                    <b-button variant="primary" v-b-modal.modal-EditExemplaire @click="modalEditExemplaire">Modifier</b-button>
-                    <b-button variant="outline-danger" v-b-modal.modal-DelExemplaire @click="modalDeleteExemplaire">Supprimer</b-button>
+                    <b-button variant="primary" v-b-modal.modal-EditExemplaire @click="modalEditExemplaire">Modifier
+                    </b-button>
+                    <b-button variant="outline-danger" v-b-modal.modal-DelExemplaire @click="modalDeleteExemplaire">
+                        Supprimer
+                    </b-button>
                 </b-row>
 
                 <div v-if="loadingRow" class="loading text-center mt-5 mb-5">
@@ -85,8 +90,14 @@
                 </div>
                 <div v-else="!loadingRow">
 
-                    <b-card  class="mt-4">
-                        <b-card-title>Exemplaire    <b-badge v-if="selected.etat === 'disponible'" variant="success">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'emprunté'" variant="danger">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'réparation'" variant="warning">{{selected.etat}}</b-badge><b-badge v-if="selected.etat === 'non empruntable'" variant="secondary">{{selected.etat}}</b-badge></b-card-title>
+                    <b-card class="mt-4">
+                        <b-card-title>Exemplaire
+                            <b-badge v-if="selected.etat === 'disponible'" variant="success">{{selected.etat}}</b-badge>
+                            <b-badge v-if="selected.etat === 'emprunté'" variant="danger">{{selected.etat}}</b-badge>
+                            <b-badge v-if="selected.etat === 'réparation'" variant="warning">{{selected.etat}}</b-badge>
+                            <b-badge v-if="selected.etat === 'non empruntable'" variant="secondary">{{selected.etat}}
+                            </b-badge>
+                        </b-card-title>
                         <b-row align-h="between">
                             <b-col sm="4">
                                 <label for="refExemplaire">Référence</label>
@@ -122,7 +133,8 @@
                                 <label for="urlExemplaire">URL</label>
                             </b-col>
                             <b-col sm="7">
-                                <p id="urlExemplaire"><a v-bind:href="selected.url" target="_blank">{{ selected.url }}</a></p>
+                                <p id="urlExemplaire"><a v-bind:href="selected.url" target="_blank">{{ selected.url
+                                    }}</a></p>
                             </b-col>
                             <b-col sm="4">
                                 <label for="boncomExemplaire">Bon de commande</label>
@@ -183,7 +195,8 @@
                                 <label for="siteWebFournisseur">Site Web</label>
                             </b-col>
                             <b-col sm="7">
-                                <p id="siteWebFournisseur"><a v-bind:href="selectedFournisseur.site_web" target="_blank">{{ selectedFournisseur.site_web }}</a></p>
+                                <p id="siteWebFournisseur"><a v-bind:href="selectedFournisseur.site_web"
+                                                              target="_blank">{{ selectedFournisseur.site_web }}</a></p>
                             </b-col>
                             <b-col sm="4">
                                 <label for="mailFournisseur">Mail</label>
@@ -201,14 +214,16 @@
                         </b-row>
                     </b-card>
 
-                    <b-card class="mt-4" v-if="selectedFournisseur.commercial_nom || selectedFournisseur.commercial_prenom || selectedFournisseur.commercial_tel || selectedFournisseur.commercial_mail">
+                    <b-card class="mt-4"
+                            v-if="selectedFournisseur.commercial_nom || selectedFournisseur.commercial_prenom || selectedFournisseur.commercial_tel || selectedFournisseur.commercial_mail">
                         <b-card-title>Commercial</b-card-title>
                         <b-row align-h="between" class="mt-2">
                             <b-col sm="4">
                                 <label for="comNomFournisseur">Commercial</label>
                             </b-col>
                             <b-col sm="7">
-                                <p id="comNomFournisseur">{{ selectedFournisseur.commercial_nom }} {{ selectedFournisseur.commercial_prenom }}</p>
+                                <p id="comNomFournisseur">{{ selectedFournisseur.commercial_nom }} {{
+                                    selectedFournisseur.commercial_prenom }}</p>
                             </b-col>
                             <b-col sm="4">
                                 <label for="comTelFournisseur">Tel Commercial</label>
@@ -230,11 +245,7 @@
             </div>
 
 
-
         </div>
-
-
-
 
 
     </div>
@@ -244,7 +255,7 @@
 
 <script>
 
-    import { eventBus } from '../main';
+    import {eventBus} from '../main';
 
     export default {
         name: 'ExemplairePart',
@@ -252,12 +263,12 @@
             return {
 
                 mode: 'single',
-                sortBy : 'id',
+                sortBy: 'id',
                 sortDesc: false,
                 fieldsRow: [
-                    { key: 'reference', sortable:true },
-                    { key: 'num_ex', sortable:true },
-                    { key: 'etat', sortable:true },
+                    {key: 'reference', sortable: true},
+                    {key: 'num_ex', sortable: true},
+                    {key: 'etat', sortable: true},
                 ],
                 currentPage: 1,
                 perPage: 10,
@@ -291,7 +302,7 @@
 
             eventBus.$on('addedExemplaire', data => {
                 this.exemplaires = [];
-                this.fournisseurs= [];
+                this.fournisseurs = [];
                 this.getExemplaires();
                 this.getFournisseurs();
             });
@@ -302,7 +313,7 @@
             eventBus.$on('deleteSuccessExemplaire', data => {
                 this.backExemplaires();
                 this.exemplaires = [];
-                this.fournisseurs= [];
+                this.fournisseurs = [];
                 this.getExemplaires();
                 this.getFournisseurs();
             });
@@ -312,14 +323,14 @@
         methods: {
 
             getExemplaires() {
-                this.loading=true;
-                axios.get('/materiels/'+this.materielId+'/exemplaires')
-                    .then( response => {
-                        for(let data of response.data.materiels.exemplaire) {
+                this.loading = true;
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/materiels/' + this.materielId + '/exemplaires')
+                    .then(response => {
+                        for (let data of response.data.materiels.exemplaire) {
                             this.exemplaires.push(data)
                         }
                     })
-                    .catch( error => {
+                    .catch(error => {
                         eventBus.$emit('error', {
                             'error': error.response.statusText,
                             'status': error.response.status,
@@ -328,14 +339,14 @@
                     })
             },
             getFournisseurs() {
-                axios.get('/fournisseurs')
-                    .then( response => {
-                        for(let data of response.data.fournisseurs) {
-                            this.fournisseurs.push({'value':data.id, 'text': data.nom});
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/fournisseurs/')
+                    .then(response => {
+                        for (let data of response.data.fournisseurs) {
+                            this.fournisseurs.push({'value': data.id, 'text': data.nom});
                         }
-                        this.loading=false;
+                        this.loading = false;
                     })
-                    .catch( error => {
+                    .catch(error => {
                         eventBus.$emit('error', {
                             'error': error.response.statusText,
                             'status': error.response.status,
@@ -346,20 +357,23 @@
 
             rowSelected(items) {
                 this.getExemplaireId(items[0]);
-                eventBus.$emit('selectRow', {'selected': this.selected, 'selectedFournisseur':this.selectedFournisseur});
+                eventBus.$emit('selectRow', {
+                    'selected': this.selected,
+                    'selectedFournisseur': this.selectedFournisseur
+                });
                 this.showEx = true;
             },
 
 
             getExemplaireId(data) {
-                this.loadingRow=true;
-                axios.get('/exemplaires/'+ data.id)
-                    .then( response => {
+                this.loadingRow = true;
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/exemplaires/' + data.id)
+                    .then(response => {
                         this.selected = response.data.exemplaire;
                         this.selectedFournisseur = response.data.exemplaire.fournisseur;
-                        this.loadingRow=false;
+                        this.loadingRow = false;
                     })
-                    .catch( error => {
+                    .catch(error => {
                         eventBus.$emit('error', {
                             'error': error.response.statusText,
                             'status': error.response.status,
@@ -372,27 +386,30 @@
             modalAddExemplaire() {
                 eventBus.$emit('addExemplaire',
                     {
-                        'fournisseurs':this.fournisseurs,
-                        'materielId':this.materielId
+                        'fournisseurs': this.fournisseurs,
+                        'materielId': this.materielId
                     })
             },
 
             backExemplaires() {
                 this.selected = [];
-                this.showEx= false;
+                this.showEx = false;
             },
 
             modalEditExemplaire() {
                 eventBus.$emit('editExemplaire',
                     {
-                       'fournisseurs': this.fournisseurs,
-                       'exemplaire': this.selected,
-                       'fournisseurExemplaire': {'text':this.selectedFournisseur.nom, 'value': this.selectedFournisseur.id},
+                        'fournisseurs': this.fournisseurs,
+                        'exemplaire': this.selected,
+                        'fournisseurExemplaire': {
+                            'text': this.selectedFournisseur.nom,
+                            'value': this.selectedFournisseur.id
+                        },
                     });
             },
 
             modalDeleteExemplaire() {
-                eventBus.$emit('delExemplaire', {'exemplaire':this.selected});
+                eventBus.$emit('delExemplaire', {'exemplaire': this.selected});
             }
         }
     }

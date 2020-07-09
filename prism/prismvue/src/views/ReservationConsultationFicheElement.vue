@@ -23,7 +23,7 @@
 
 
                 <b-col cols="2">
-                    <NavigationReservation />
+                    <NavigationReservation/>
                 </b-col>
 
                 <b-col cols="10">
@@ -43,7 +43,9 @@
                             <b-col cols="6" class="mt-4">
                                 <b-row>
                                     <h3>Informations réservation</h3>
-                                    <b-button @click="addFicheResa()" class="ml-5" variant="success">Ajouter une feuille</b-button>
+                                    <b-button @click="addFicheResa()" class="ml-5" variant="success">Ajouter une
+                                        feuille
+                                    </b-button>
                                 </b-row>
                                 <b-card class="mt-4">
                                     <b-card-title>Professeur Référent</b-card-title>
@@ -124,7 +126,9 @@
                             <b-col cols="6" class="mt-4" v-if="fiches!=null">
                                 <div>
                                     <b-nav tabs align="center">
-                                        <b-nav-item v-for="values in fiches" @click="selectFiche(values)">{{values.id}}</b-nav-item>
+                                        <b-nav-item v-for="values in fiches" @click="selectFiche(values)">
+                                            {{values.id}}
+                                        </b-nav-item>
                                     </b-nav>
                                 </div>
 
@@ -153,8 +157,14 @@
                                             :filter="filter">
 
                                         <template slot="detail" slot-scope="row">
-                                            <b-button variant="info" @click="row.toggleDetails" v-if="row.detailsShowing"><font-awesome-icon :icon="['fas','sort-down']" /></b-button>
-                                            <b-button variant="info" @click="row.toggleDetails" v-if="!row.detailsShowing"><font-awesome-icon :icon="['fas','caret-right']" /></b-button>
+                                            <b-button variant="info" @click="row.toggleDetails"
+                                                      v-if="row.detailsShowing">
+                                                <font-awesome-icon :icon="['fas','sort-down']"/>
+                                            </b-button>
+                                            <b-button variant="info" @click="row.toggleDetails"
+                                                      v-if="!row.detailsShowing">
+                                                <font-awesome-icon :icon="['fas','caret-right']"/>
+                                            </b-button>
                                         </template>
                                         <template slot="empty" slot-scope="scope">
                                             <h6 class="text-center">Pas de réservation d'exemplaire.</h6>
@@ -171,11 +181,17 @@
                                                         <h6 class="text-center">Pas d'exemplaires choisis.</h6>
                                                     </template>
                                                     <template slot="disponibilite" slot-scope="row">
-                                                        <b-badge variant="secondary" v-if="row.value != 'disponible'">{{row.value}}</b-badge>
-                                                        <b-badge variant="success" v-if="row.value == 'disponible'">{{row.value}}</b-badge>
+                                                        <b-badge variant="secondary" v-if="row.value != 'disponible'">
+                                                            {{row.value}}
+                                                        </b-badge>
+                                                        <b-badge variant="success" v-if="row.value == 'disponible'">
+                                                            {{row.value}}
+                                                        </b-badge>
                                                     </template>
                                                     <template slot="actions" slot-scope="row" class="text-center">
-                                                        <b-button variant="warning" class="mr-1"><font-awesome-icon :icon="['fas','info-circle']" /></b-button>
+                                                        <b-button variant="warning" class="mr-1">
+                                                            <font-awesome-icon :icon="['fas','info-circle']"/>
+                                                        </b-button>
                                                     </template>
                                                 </b-table>
                                             </b-card>
@@ -183,7 +199,10 @@
                                         </template>
 
                                         <template slot="actions" slot-scope="row">
-                                            <b-button size="sm" class="mr-1" variant="outline-danger" @click="deleteRow(row.item)"><font-awesome-icon :icon="['fas','trash-alt']" /></b-button>
+                                            <b-button size="sm" class="mr-1" variant="outline-danger"
+                                                      @click="deleteRow(row.item)">
+                                                <font-awesome-icon :icon="['fas','trash-alt']"/>
+                                            </b-button>
                                         </template>
 
                                     </b-table>
@@ -212,51 +231,51 @@
     import NavigationReservation from "../components/navigation/NavigationReservation";
 
     export default {
-        name:"ReservationConsultationElement",
-        components:{
+        name: "ReservationConsultationElement",
+        components: {
             NavigationReservation,
         },
-        data(){
+        data() {
             return {
-                loading:true,
+                loading: true,
                 reservationId: this.$route.params.idresa,
                 ficheId: this.$route.params.idfeuille,
                 reservation: [],
-                fiche_resa:[],
-                fiches:[],
-                departement:[],
-                groupe:[],
-                professeur:[],
-                fillMateriels:[],
+                fiche_resa: [],
+                fiches: [],
+                departement: [],
+                groupe: [],
+                professeur: [],
+                fillMateriels: [],
 
                 filter: null,
                 fieldsMateriel: [
-                    {key:'detail',sortable:false},
-                    {key:'constructeur', sortable:true},
-                    {key:'modele', sortable:true},
-                    {key:'agenda', sortable:false},
+                    {key: 'detail', sortable: false},
+                    {key: 'constructeur', sortable: true},
+                    {key: 'modele', sortable: true},
+                    {key: 'agenda', sortable: false},
                 ],
 
                 fieldsRow: [
-                    { key: 'nom', sortable:true },
-                    { key: 'prenom', sortable:true },
-                    { key: 'telephone', sortable:true },
-                    { key: 'mail', sortable:false },
+                    {key: 'nom', sortable: true},
+                    {key: 'prenom', sortable: true},
+                    {key: 'telephone', sortable: true},
+                    {key: 'mail', sortable: false},
                 ],
 
                 fieldsExemplaire: [
-                    {key:'reference', sortable:true},
-                    {key:'num_ex', sortable:true},
-                    {key:'disponibilite', sortable:true},
-                    {key:'actions', sortable:true},
+                    {key: 'reference', sortable: true},
+                    {key: 'num_ex', sortable: true},
+                    {key: 'disponibilite', sortable: true},
+                    {key: 'actions', sortable: true},
                 ],
 
-                dismissCountDown:0,
-                dismissSecs:10,
-                alert: {'show':false,'showMateriel':false},
+                dismissCountDown: 0,
+                dismissSecs: 10,
+                alert: {'show': false, 'showMateriel': false},
             }
         },
-        mounted(){
+        mounted() {
             this.getReservation();
         },
         methods: {
@@ -276,81 +295,78 @@
                 this.$router.push({path: '/reservation'});
             },
 
-            getReservation(){
-                this.loading=true;
-                axios.get('/reservations/'+this.reservationId)
+            getReservation() {
+                this.loading = true;
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/reservations/' + this.reservationId)
                     .then(response => {
                         this.reservation = response.data.reservation;
                         this.professeur = response.data.reservation.professeur;
-                        if(response.data.reservation.fiche_resa.length != 0 )
-                        {
-                            let existe=false;
+                        if (response.data.reservation.fiche_resa.length != 0) {
+                            let existe = false;
                             response.data.reservation.fiche_resa.forEach(element => {
-                                    if(element.id===this.ficheId){
-                                        existe=true;
-                                        this.fiches.push(element);
-                                    }
-                                });
-                            if(existe==false){
-                                this.$router.push({path:'/notfound'});
+                                if (element.id === this.ficheId) {
+                                    existe = true;
+                                    this.fiches.push(element);
+                                }
+                            });
+                            if (existe == false) {
+                                this.$router.push({path: '/notfound'});
                             }
                             this.selectFiche(this.fiches[0]);
                             this.fiche_resa = this.fiches[0];
-                        }
-                        else {
-                            this.fiches=null;
+                        } else {
+                            this.fiches = null;
 
                         }
                         response.data.reservation.groupe.forEach(element => {
-                           if(element.groupe.referent){
-                               element._rowVariant='success';
-                           }
+                            if (element.groupe.referent) {
+                                element._rowVariant = 'success';
+                            }
                         });
                         this.groupe = response.data.reservation.groupe;
                         this.departement = response.data.reservation.departement;
-                        this.loading=false;
+                        this.loading = false;
                     })
                     .catch(error => {
-                        this.$router.push({path:'/notfound'});
+                        this.$router.push({path: '/notfound'});
                     })
             },
 
-            selectFiche(values){
-                this.fillMateriels=[];
-                this.fiche_resa=values;
-                let present=false;
+            selectFiche(values) {
+                this.fillMateriels = [];
+                this.fiche_resa = values;
+                let present = false;
 
                 //remplissement du tableau de materiel
                 values.exemplaire.forEach(element => {
-                    if(this.fillMateriels.length === 0) {
-                        element.materiel.exemplaire=[];
+                    if (this.fillMateriels.length === 0) {
+                        element.materiel.exemplaire = [];
                         this.fillMateriels.push(element.materiel);
-                    }
-                    else{
-                        present=false;
+                    } else {
+                        present = false;
                         this.fillMateriels.forEach(test => {
-                            if(test.id===element.materiel.id){
-                                present=true;
+                            if (test.id === element.materiel.id) {
+                                present = true;
                             }
                         });
-                        if(!present){
-                            element.materiel.exemplaire=[];
+                        if (!present) {
+                            element.materiel.exemplaire = [];
                             this.fillMateriels.push(element.materiel);
                         }
                     }
                 });
                 //remplissement des materiels avec les exemplaires
                 values.exemplaire.forEach(element => {
-                   this.fillMateriels.forEach(materiel => {
-                        if(element.materiel.id === materiel.id ){
+                    this.fillMateriels.forEach(materiel => {
+                        if (element.materiel.id === materiel.id) {
                             materiel.exemplaire.push(element);
                         }
-                   });
+                    });
                 });
 
             },
-            addFicheResa(){
-                this.$router.push({name:'fiche_reservation', params:{id:this.reservationId}})
+            addFicheResa() {
+                this.$router.push({name: 'fiche_reservation', params: {id: this.reservationId}})
             }
         }
     }

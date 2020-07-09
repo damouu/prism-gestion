@@ -20,7 +20,7 @@
                 <b-row class="mr-5 ml-5">
 
                     <b-col cols="2">
-                        <NavigationInventaire />
+                        <NavigationInventaire/>
                     </b-col>
 
                     <b-col cols="10">
@@ -29,8 +29,12 @@
                                 <h1 class="ml-5">Inventaire - En service</h1>
                             </b-col>
                             <b-col cols="7">
-                                <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddCategorie>Ajouter une catégorie</b-button>
-                                <b-button variant="success" class="ml-2" v-b-modal.modal-AddMateriel @click="ModalAddMateriel">Ajouter un matériel</b-button>
+                                <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddCategorie>Ajouter une
+                                    catégorie
+                                </b-button>
+                                <b-button variant="success" class="ml-2" v-b-modal.modal-AddMateriel
+                                          @click="ModalAddMateriel">Ajouter un matériel
+                                </b-button>
                             </b-col>
                         </b-row>
 
@@ -45,10 +49,10 @@
                                 </b-tab>
                                 <b-tab @click="setCurrentType('Tous')" v-else title="Tous">
                                 </b-tab>
-                                <template v-for="type in types" >
-                                    <b-tab v-if='currentType == type.id'  :title="type.nom" active>
+                                <template v-for="type in types">
+                                    <b-tab v-if='currentType == type.id' :title="type.nom" active>
                                     </b-tab>
-                                    <b-tab v-else @click="setCurrentType(type.id)"  :title="type.nom">
+                                    <b-tab v-else @click="setCurrentType(type.id)" :title="type.nom">
                                     </b-tab>
                                 </template>
                             </b-tabs>
@@ -110,23 +114,22 @@
                 </b-row>
             </b-container>
 
-            <ModalAddMateriel />
-            <ModalAddCategorie />
+            <ModalAddMateriel/>
+            <ModalAddCategorie/>
 
         </div>
     </div>
 </template>
 
 
-
 <script>
-    import { eventBus } from "../main";
+    import {eventBus} from "../main";
 
     import NavigationInventaire from "../components/navigation/NavigationInventaire";
     import ModalAddMateriel from '../components/modals/ModalAddMateriel';
     import ModalAddCategorie from '../components/modals/ModalAddCategorie';
 
-    export default {
+    export default {
         name: 'InventaireVue',
         components: {
             NavigationInventaire,
@@ -138,26 +141,26 @@
                 materiels: [],
                 types: [],
                 fillMateriels: [],
-                currentType : 'Tous',
+                currentType: 'Tous',
                 mode: 'single',
                 selected: [],
-                sortBy : 'id',
+                sortBy: 'id',
                 sortDesc: false,
                 fieldsRow: [
-                    { key: 'constructeur', sortable:true },
-                    { key: 'modele', sortable:true },
-                    { key: 'nb_ex', sortable:true },
-                    { key: 'type', sortable:false },
-                    { key: 'date_creation', sortable:true }
+                    {key: 'constructeur', sortable: true},
+                    {key: 'modele', sortable: true},
+                    {key: 'nb_ex', sortable: true},
+                    {key: 'type', sortable: false},
+                    {key: 'date_creation', sortable: true}
                 ],
                 currentPage: 1,
                 perPage: 10,
                 pageOptions: [10, 20, 30],
                 filter: null,
 
-                alert: {'show':false,'showMateriel':false},
-                dismissCountDown:0,
-                dismissSecs:10,
+                alert: {'show': false, 'showMateriel': false},
+                dismissCountDown: 0,
+                dismissSecs: 10,
                 loading: false,
             }
         },
@@ -185,41 +188,41 @@
                 this.getTypes();
             });
         },
-        methods : {
+        methods: {
             getAll() {
-                this.loading=true;
-                axios.get('/materiels')
+                this.loading = true;
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/materiels/')
                     .then(response => {
                         this.materiels = response.data.materiels;
                         this.fillTable();
-                        this.loading=false;
+                        this.loading = false;
                     })
                     .catch(error => {
-                        this.loading=false;
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        this.loading = false;
+                        this.showAlert(error.response.statusText, error.response.status, error.response.data.message);
                     });
             },
 
             getTypes() {
-                axios.get('/types')
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/types/')
                     .then(response => {
                         this.types = response.data.types;
                     })
                     .catch(function (error) {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        this.showAlert(error.response.statusText, error.response.status, error.response.data.message);
                     });
             },
 
-            setCurrentType(type){
+            setCurrentType(type) {
                 this.currentType = type;
                 this.fillTable();
             },
 
-            fillTable(){
+            fillTable() {
                 this.fillMateriels = [];
                 let listeMateriels = JSON.parse(JSON.stringify(this.materiels));
                 listeMateriels.forEach(materiel => {
-                    if(this.currentType == materiel.type.id || this.currentType == 'Tous'){
+                    if (this.currentType == materiel.type.id || this.currentType == 'Tous') {
                         materiel.type = materiel.type.nom;
                         this.fillMateriels.push(materiel);
                     }
@@ -229,9 +232,8 @@
             rowSelected(items) {
                 this.selected = items;
                 let idSelected = items[0];
-                this.$router.push({name: 'materiel', params: { id: idSelected.id }});
+                this.$router.push({name: 'materiel', params: {id: idSelected.id}});
             },
-
 
 
             ModalAddMateriel() {

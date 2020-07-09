@@ -22,10 +22,12 @@
                             placeholder="Nom du fournisseur"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidNom">Veuillez écrire un nom de fournisseur</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidNom">Veuillez écrire un nom de fournisseur
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Adresse *" label-cols-sm="4" label-align-sm="left" label-for="addFournisseurAdresse">
+                <b-form-group label="Adresse *" label-cols-sm="4" label-align-sm="left"
+                              label-for="addFournisseurAdresse">
                     <b-form-input
                             id="addFournisseurAdresse"
                             data-vv-name="editFourAdresse"
@@ -53,7 +55,8 @@
                     <b-form-invalid-feedback id="invalidVille">Veuillez écrire une ville</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Code postal *" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurCodePostal">
+                <b-form-group label="Code postal *" label-cols-sm="4" label-align-sm="left"
+                              label-for="editFournisseurCodePostal">
                     <b-form-input
                             id="editFournisseurCodePostal"
                             data-vv-name="editFourCodePostal"
@@ -64,7 +67,8 @@
                             placeholder="Code postal Fournisseur"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidCodePostal">Veuillez écrire un code postal</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidCodePostal">Veuillez écrire un code postal
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <b-form-group label="Mail *" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurMail">
@@ -78,10 +82,12 @@
                             placeholder="adresse mail du fournisseur"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidMail">Veuillez écrire une adresse mail correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidMail">Veuillez écrire une adresse mail correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Telephone *" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurTel">
+                <b-form-group label="Telephone *" label-cols-sm="4" label-align-sm="left"
+                              label-for="editFournisseurTel">
                     <b-form-input
                             id="editFournisseurTel"
                             data-vv-name="editFourTel"
@@ -92,10 +98,12 @@
                             placeholder="Numéro de téléphone du fournisseur"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidTel">Veuillez écrire un numéro de téléphone correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidTel">Veuillez écrire un numéro de téléphone correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Site Web" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurSiteWeb">
+                <b-form-group label="Site Web" label-cols-sm="4" label-align-sm="left"
+                              label-for="editFournisseurSiteWeb">
                     <b-form-input
                             id="editFournisseurSiteWeb"
                             data-vv-name="editFourSiteWeb"
@@ -106,11 +114,13 @@
                             placeholder="site web du fournisseur"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidSiteWeb">Veuillez écrire un site web correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidSiteWeb">Veuillez écrire un site web correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
 
-                <b-form-group label="Nom Commercial" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurNomCom">
+                <b-form-group label="Nom Commercial" label-cols-sm="4" label-align-sm="left"
+                              label-for="editFournisseurNomCom">
                     <b-form-input
                             id="editFournisseurNomCom"
                             data-vv-name="editFourNomCom"
@@ -124,7 +134,8 @@
                     <b-form-invalid-feedback id="invalidNomCom">Veuillez écrire un nom correct</b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Prénom Commercial" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurPrenomCom">
+                <b-form-group label="Prénom Commercial" label-cols-sm="4" label-align-sm="left"
+                              label-for="editFournisseurPrenomCom">
                     <b-form-input
                             id="editFournisseurPrenomCom"
                             data-vv-name="editFourPrenomCom"
@@ -135,10 +146,12 @@
                             placeholder="Prénom du commercial"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidPrenomCom">Veuillez écrire un prénom correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidPrenomCom">Veuillez écrire un prénom correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Mail Commercial" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurMailCom">
+                <b-form-group label="Mail Commercial" label-cols-sm="4" label-align-sm="left"
+                              label-for="editFournisseurMailCom">
                     <b-form-input
                             id="editFournisseurMailCom"
                             data-vv-name="editFourMailCom"
@@ -149,10 +162,12 @@
                             placeholder="adresse mail du Commercial"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidMailCom">Veuillez écrire une adresse mail correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidMailCom">Veuillez écrire une adresse mail correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Telephone Commercial" label-cols-sm="4" label-align-sm="left" label-for="editFournisseurTelCom">
+                <b-form-group label="Telephone Commercial" label-cols-sm="4" label-align-sm="left"
+                              label-for="editFournisseurTelCom">
                     <b-form-input
                             id="editFournisseurTelCom"
                             data-vv-name="editFourTelCom"
@@ -163,7 +178,8 @@
                             placeholder="Numéro de téléphone du Commercial"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidTelCom">Veuillez écrire un numéro de téléphone correct</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidTelCom">Veuillez écrire un numéro de téléphone correct
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
             </form>
@@ -174,7 +190,7 @@
 </template>
 
 <script>
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
 
@@ -187,13 +203,13 @@
         mounted() {
 
             eventBus.$on('editFournisseur', data => {
-               this.fournisseur = JSON.parse(JSON.stringify(data.fournisseur));
+                this.fournisseur = JSON.parse(JSON.stringify(data.fournisseur));
             });
 
         },
         methods: {
             validateState(ref) {
-                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
@@ -203,13 +219,11 @@
                 this.editFournisseur();
             },
             editFournisseur() {
-                this.$validator.validateAll().then( result => {
-                    if (!result)
-                    {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
                         return;
-                    }
-                    else {
-                        axios.put('/fournisseurs/'+this.fournisseur.id, {
+                    } else {
+                        axios.put('https://iutnc-resamat.univ-lorraine.fr/api/fournisseurs/' + this.fournisseur.id, {
                             'nom': this.fournisseur.nom,
                             'adresse': this.fournisseur.adresse,
                             'ville': this.fournisseur.ville,

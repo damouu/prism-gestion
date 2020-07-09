@@ -11,7 +11,9 @@
                 size="lg"
                 @ok="handleOkDel">
             <b-form ref="delCategorie" @submit.stop.prevent="deleteCategorie">
-                <h3>Vous êtes sur le point de supprimer la catégorie: <br> {{type.nom}} <b-badge v-bind:style="{ 'background-color':type.couleur}">{{type.couleur}}</b-badge></h3>
+                <h3>Vous êtes sur le point de supprimer la catégorie: <br> {{type.nom}}
+                    <b-badge v-bind:style="{ 'background-color':type.couleur}">{{type.couleur}}</b-badge>
+                </h3>
                 <p class="text-danger">Vous n'aurez plus aucun accès à cette catégorie par la suite.</p>
             </b-form>
 
@@ -22,16 +24,16 @@
 
 <script>
 
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
         name: 'ModalDeleteCategorie',
         data() {
             return {
-                type:[],
+                type: [],
             }
         },
-        mounted(){
+        mounted() {
 
             eventBus.$on('deleteCategorie', data => {
                 this.type = data;
@@ -46,7 +48,7 @@
             },
 
             deleteCategorie() {
-                axios.delete('/types/' + this.type.id)
+                axios.delete('https://iutnc-resamat.univ-lorraine.fr/api/types/' + this.type.id)
                     .then(response => {
                         this.$nextTick(() => {
                             this.$refs.modal8.hide();
