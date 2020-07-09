@@ -1,0 +1,15 @@
+{
+  "require": {
+    "slim/slim": "^3.12",
+    "illuminate/database": "^5.5",
+    "respect/validation": "^1.1",
+    "jasig/phpcas": "^1.3.8",
+    "firebase/php-jwt": "^5.0.0",
+    "twig/twig": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "PrismGestion\\": "app"
+    }
+  }
+}
