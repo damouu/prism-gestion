@@ -21,10 +21,12 @@
                             placeholder="Utilisez la douchette ou écrivez"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidModReference">Veuillez écrire une référence ou scannez-la</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidModReference">Veuillez écrire une référence ou scannez-la
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Prix Achat HT *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireHt">
+                <b-form-group label="Prix Achat HT *" label-cols-sm="4" label-align-sm="left"
+                              label-for="modExemplaireHt">
                     <b-form-input
                             id="modExemplaireHt"
                             data-vv-name="modExHt"
@@ -35,10 +37,12 @@
                             placeholder="Prix d'achat HT de l'exemplaire (en euros)"
                             type="number" step="any" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidHt">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidHt">Vous devez entrer une valeur numérique avec 2 décimales
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Prix Achat TTC *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireTtc">
+                <b-form-group label="Prix Achat TTC *" label-cols-sm="4" label-align-sm="left"
+                              label-for="modExemplaireTtc">
                     <b-form-input
                             id="modExemplaireTtc"
                             data-vv-name="modExTtc"
@@ -49,9 +53,11 @@
                             placeholder="Prix d'achat TTC de l'exemplaire (en euros)"
                             type="number" step="any" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidTtc">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidTtc">Vous devez entrer une valeur numérique avec 2 décimales
+                    </b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Numéro de Série *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireNumSerie">
+                <b-form-group label="Numéro de Série *" label-cols-sm="4" label-align-sm="left"
+                              label-for="modExemplaireNumSerie">
                     <b-form-input
                             id="modExemplaireNumSerie"
                             name="modExemplaire.num_serie"
@@ -62,9 +68,11 @@
                             placeholder="Numéro de série de l'exemplaire"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidModNumSerie">Vous devez entrer un numéro de série</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidModNumSerie">Vous devez entrer un numéro de série
+                    </b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Lieu de stockage *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireStockage">
+                <b-form-group label="Lieu de stockage *" label-cols-sm="4" label-align-sm="left"
+                              label-for="modExemplaireStockage">
                     <b-form-input
                             id="modExemplaireStockage"
                             name="modExemplaire.stockage"
@@ -75,7 +83,8 @@
                             placeholder="Lieu de stockage de l'exemplaire"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidModStockage">Vous devez entrer un lieu de stockage</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidModStockage">Vous devez entrer un lieu de stockage
+                    </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group label="URL Source" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireUrl">
                     <b-form-input
@@ -88,9 +97,11 @@
                             placeholder="url source"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidModUrl">Vous devez entrer un URL valide</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidModUrl">Vous devez entrer un URL valide
+                    </b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Date d'achat *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireDateAchat">
+                <b-form-group label="Date d'achat *" label-cols-sm="4" label-align-sm="left"
+                              label-for="modExemplaireDateAchat">
                     <b-form-input
                             id="modExemplaireDateAchat"
                             name="modExemplaire.date_achat"
@@ -100,7 +111,9 @@
                             aria-describedby="invalidModDateAchat"
                             type="date" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidModDateAchat">Vous devez entrer une date au format DD/MM/AAAA valide.</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidModDateAchat">Vous devez entrer une date au format DD/MM/AAAA
+                        valide.
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <b-form-group label="Etat *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireEtat">
@@ -117,9 +130,11 @@
                         <option>emprunté</option>
                         <option>non empruntable</option>
                     </b-form-select>
-                    <b-form-invalid-feedback id="invalidModEtat">Vous devez choisir une option d'état.</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidModEtat">Vous devez choisir une option d'état.
+                    </b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Fournisseur *" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireFournisseur">
+                <b-form-group label="Fournisseur *" label-cols-sm="4" label-align-sm="left"
+                              label-for="modExemplaireFournisseur">
                     <b-form-select
                             id="modExemplaireFournisseur"
                             name="modExemplaire.fournisseur"
@@ -132,10 +147,12 @@
                             {{ option.text }}
                         </option>
                     </b-form-select>
-                    <b-form-invalid-feedback id="invalidModFournisseur">Vous devez choisir un fournisseur.</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidModFournisseur">Vous devez choisir un fournisseur.
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Financement" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireFinancement">
+                <b-form-group label="Financement" label-cols-sm="4" label-align-sm="left"
+                              label-for="modExemplaireFinancement">
                     <b-form-input
                             id="modExemplaireFinancement"
                             data-vv-name="modExFinancement"
@@ -146,9 +163,11 @@
                             placeholder="Nom du financeur"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidFinancement">Vous devez entrer un nom de financement</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidFinancement">Vous devez entrer un nom de financement
+                    </b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Bon de commande" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireCommande">
+                <b-form-group label="Bon de commande" label-cols-sm="4" label-align-sm="left"
+                              label-for="modExemplaireCommande">
                     <b-form-input
                             id="modExemplaireCommande"
                             data-vv-name="modExCommande"
@@ -159,10 +178,12 @@
                             placeholder="Numéro de commande"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidCommande">Vous devez entrer un numéro de commande</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidCommande">Vous devez entrer un numéro de commande
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Immobilisation" label-cols-sm="4" label-align-sm="left" label-for="modExemplaireImmobilisation">
+                <b-form-group label="Immobilisation" label-cols-sm="4" label-align-sm="left"
+                              label-for="modExemplaireImmobilisation">
                     <b-form-input
                             id="modExemplaireImmobilisation"
                             data-vv-name="modExImmobilisation"
@@ -173,7 +194,8 @@
                             placeholder="Numéro d'immobilisation"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidImmobilisation">Vous devez entrer un numéro d'immobilisation</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidImmobilisation">Vous devez entrer un numéro d'immobilisation
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
 
@@ -188,10 +210,9 @@
 </template>
 
 
-
 <script>
 
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
         name: 'ModalEditExemplaire',
@@ -217,7 +238,7 @@
         methods: {
 
             validateState(ref) {
-                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
@@ -235,7 +256,7 @@
                     if (!result)
                         return;
                     else {
-                        axios.put('/exemplaires/'+this.modExemplaire.id,{
+                        axios.put('https://iutnc-resamat.univ-lorraine.fr/api/exemplaires/' + this.modExemplaire.id, {
                             materiel: this.modExemplaire.materiel,
                             reference: this.modExemplaire.reference,
                             prix_ht: this.modExemplaire.prix_ht,
@@ -250,34 +271,37 @@
                             etat: this.modExemplaire.etat,
                             fournisseur: this.modExemplaireFournisseur,
                         })
-                        .then( response => {
+                            .then(response => {
 
-                            this.$nextTick(() => {
-                                this.$refs.modal3.hide();
+                                this.$nextTick(() => {
+                                    this.$refs.modal3.hide();
+                                });
+                                this.$bvToast.toast(`Exemplaire modifié avec succès !`, {
+                                    title: `Modification réussie`,
+                                    toaster: 'b-toaster-bottom-right',
+                                    solid: true,
+                                    variant: 'success',
+                                    appendToast: false
+                                });
+
+                                eventBus.$emit('editedExemplaire', {
+                                    'exemplaire': this.modExemplaire,
+                                    'fournisseurExemplaire': this.modExemplaireFournisseur
+                                });
+
+                                this.fournisseurs = [];
+                                this.modExemplaire = [];
+                                this.modExemplaireFournisseur = [];
+                            })
+                            .catch(error => {
+
+                                console.log(error);
+                                eventBus.$emit('error', {
+                                    'error': error.response.statusText,
+                                    'status': error.response.status,
+                                    'message': error.response.data.message
+                                });
                             });
-                            this.$bvToast.toast(`Exemplaire modifié avec succès !`, {
-                                title: `Modification réussie`,
-                                toaster: 'b-toaster-bottom-right',
-                                solid:true,
-                                variant:'success',
-                                appendToast: false
-                            });
-
-                            eventBus.$emit('editedExemplaire', {'exemplaire':this.modExemplaire,'fournisseurExemplaire':this.modExemplaireFournisseur});
-
-                            this.fournisseurs = [];
-                            this.modExemplaire = [];
-                            this.modExemplaireFournisseur = [];
-                        })
-                        .catch( error => {
-
-                            console.log(error);
-                            eventBus.$emit('error', {
-                                'error': error.response.statusText,
-                                'status': error.response.status,
-                                'message': error.response.data.message
-                            });
-                        });
                     }
                 });
             },

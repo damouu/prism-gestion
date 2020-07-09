@@ -21,10 +21,12 @@
                             placeholder="Utilisez la douchette ou écrivez"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidReference">Veuillez écrire une référence ou scannez-la</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidReference">Veuillez écrire une référence ou scannez-la
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Prix Achat HT *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireHt">
+                <b-form-group label="Prix Achat HT *" label-cols-sm="4" label-align-sm="left"
+                              label-for="addExemplaireHt">
                     <b-form-input
                             id="addExemplaireHt"
                             data-vv-name="addExHt"
@@ -35,10 +37,12 @@
                             placeholder="Prix d'achat HT de l'exemplaire (en euros)"
                             type="number" step="any" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidHt">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidHt">Vous devez entrer une valeur numérique avec 2 décimales
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Prix Achat TTC *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireTtc">
+                <b-form-group label="Prix Achat TTC *" label-cols-sm="4" label-align-sm="left"
+                              label-for="addExemplaireTtc">
                     <b-form-input
                             id="addExemplaireTtc"
                             data-vv-name="addExTtc"
@@ -49,10 +53,12 @@
                             placeholder="Prix d'achat TTC de l'exemplaire (en euros)"
                             type="number" step="any" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidTtc">Vous devez entrer une valeur numérique avec 2 décimales</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidTtc">Vous devez entrer une valeur numérique avec 2 décimales
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Numéro de Série *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireNumSerie">
+                <b-form-group label="Numéro de Série *" label-cols-sm="4" label-align-sm="left"
+                              label-for="addExemplaireNumSerie">
                     <b-form-input
                             id="addExemplaireNumSerie"
                             data-vv-name="addExNumSerie"
@@ -63,9 +69,11 @@
                             placeholder="Numéro de série de l'exemplaire"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidNumSerie">Vous devez entrer un numéro de série</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidNumSerie">Vous devez entrer un numéro de série
+                    </b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Lieu de stockage *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireStockage">
+                <b-form-group label="Lieu de stockage *" label-cols-sm="4" label-align-sm="left"
+                              label-for="addExemplaireStockage">
                     <b-form-input
                             id="addExemplaireStockage"
                             data-vv-name="addExStockage"
@@ -76,7 +84,8 @@
                             placeholder="Lieu de stockage de l'exemplaire"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidStockage">Vous devez entrer un lieu de stockage</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidStockage">Vous devez entrer un lieu de stockage
+                    </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group label="URL Source" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireUrl">
                     <b-form-input
@@ -91,7 +100,8 @@
                     </b-form-input>
                     <b-form-invalid-feedback id="invalidUrl">Vous devez entrer un URL valide</b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Date d'achat *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireDateAchat">
+                <b-form-group label="Date d'achat *" label-cols-sm="4" label-align-sm="left"
+                              label-for="addExemplaireDateAchat">
                     <b-row v-show="date_achat!=='9999-12-31 11:59 pm'">
                         <b-col cols="6">
                             <VueCtkDateTimePicker
@@ -117,9 +127,10 @@
                         </b-col>
                     </b-row>
 
-                    <b-form-invalid-feedback id="invalidDateAchat">Vous devez entrer une date au format DD/MM/AAAA valide.</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidDateAchat">Vous devez entrer une date au format DD/MM/AAAA
+                        valide.
+                    </b-form-invalid-feedback>
                 </b-form-group>
-
 
 
                 <b-form-group label="Etat *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireEtat">
@@ -136,9 +147,11 @@
                         <option>emprunté</option>
                         <option>non empruntable</option>
                     </b-form-select>
-                    <b-form-invalid-feedback id="invalidEtat">Vous devez choisir une option d'état.</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidEtat">Vous devez choisir une option d'état.
+                    </b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Fournisseur *" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireFournisseur">
+                <b-form-group label="Fournisseur *" label-cols-sm="4" label-align-sm="left"
+                              label-for="addExemplaireFournisseur">
                     <b-form-select
                             id="addExemplaireFournisseur"
                             data-vv-name="addExFournisseur"
@@ -151,10 +164,12 @@
                             {{ option.text }}
                         </option>
                     </b-form-select>
-                    <b-form-invalid-feedback id="invalidFournisseur">Vous devez choisir un fournisseur.</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidFournisseur">Vous devez choisir un fournisseur.
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group label="Financement" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireFinancement">
+                <b-form-group label="Financement" label-cols-sm="4" label-align-sm="left"
+                              label-for="addExemplaireFinancement">
                     <b-form-input
                             id="addExemplaireFinancement"
                             data-vv-name="addExFinancement"
@@ -165,9 +180,11 @@
                             placeholder="Nom du financeur"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidFinancement">Vous devez entrer un nom de financement</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidFinancement">Vous devez entrer un nom de financement
+                    </b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Bon de commande" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireCommande">
+                <b-form-group label="Bon de commande" label-cols-sm="4" label-align-sm="left"
+                              label-for="addExemplaireCommande">
                     <b-form-input
                             id="addExemplaireCommande"
                             data-vv-name="addExCommande"
@@ -178,9 +195,11 @@
                             placeholder="Numéro de commande"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidCommande">Vous devez entrer un numéro de commande</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidCommande">Vous devez entrer un numéro de commande
+                    </b-form-invalid-feedback>
                 </b-form-group>
-                <b-form-group label="Immobilisation" label-cols-sm="4" label-align-sm="left" label-for="addExemplaireImmobilisation">
+                <b-form-group label="Immobilisation" label-cols-sm="4" label-align-sm="left"
+                              label-for="addExemplaireImmobilisation">
                     <b-form-input
                             id="addExemplaireImmobilisation"
                             data-vv-name="addExImmobilisation"
@@ -191,7 +210,8 @@
                             placeholder="Numéro d'immobilisation"
                             type="text" required>
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidImmobilisation">Vous devez entrer un numéro d'immobilisation</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidImmobilisation">Vous devez entrer un numéro d'immobilisation
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <span class="text-danger">* champs obligatoires</span>
@@ -204,10 +224,9 @@
 </template>
 
 
-
 <script>
 
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
         name: 'ModalAddExemplaire',
@@ -217,7 +236,7 @@
                 materielId: false,
                 postExemplaire: [],
                 fournisseurs: [],
-                date_achat:null,
+                date_achat: null,
             }
         },
         mounted() {
@@ -233,7 +252,7 @@
 
             //validation client
             validateState(ref) {
-                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
@@ -244,30 +263,28 @@
                 bvModalEvt.preventDefault();
                 this.addExemplaire();
             },
-            inconnue(){
-                this.date_achat= "9999-12-31 11:59 pm";
-                this.$nextTick(()=>{
-                    this.date_achat= "9999-12-31 11:59 pm";
+            inconnue() {
+                this.date_achat = "9999-12-31 11:59 pm";
+                this.$nextTick(() => {
+                    this.date_achat = "9999-12-31 11:59 pm";
                 });
             },
-            connue(){
-                this.date_achat= null;
-                this.$nextTick(()=>{
-                    this.date_achat= null;
+            connue() {
+                this.date_achat = null;
+                this.$nextTick(() => {
+                    this.date_achat = null;
                 });
             },
 
             // Ajout exemplaire
             addExemplaire() {
-                this.$validator.validateAll().then( result => {
-                    if (!result && (this.date_achat===null || this.date_achat===undefined))
-                    {
+                this.$validator.validateAll().then(result => {
+                    if (!result && (this.date_achat === null || this.date_achat === undefined)) {
                         return;
-                    }
-                    else {
+                    } else {
                         let date = this.date_achat.split(' ');
                         console.log(date['0']);
-                        axios.post('/exemplaires',
+                        axios.post('https://iutnc-resamat.univ-lorraine.fr/api/exemplaires/',
                             {
                                 "materiel": this.materielId,
                                 "reference": this.postExemplaire.reference,
@@ -293,8 +310,8 @@
                                 this.$bvToast.toast(`Exemplaire ajouté avec succès !`, {
                                     title: `Ajout réussi`,
                                     toaster: 'b-toaster-bottom-right',
-                                    variant:'success',
-                                    solid:true,
+                                    variant: 'success',
+                                    solid: true,
                                     appendToast: false
                                 });
                                 this.postExemplaire = [];

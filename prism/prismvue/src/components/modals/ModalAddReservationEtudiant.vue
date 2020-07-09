@@ -23,7 +23,8 @@
                             placeholder="Entrez le nom du etudiant"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidEtuNom">Veuillez écrire un nom de Etudiant</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidEtuNom">Veuillez écrire un nom de Etudiant
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <b-form-group label="Prenom *" label-for="addEtuPrenom" label-cols-sm="4" label-align-sm="left">
@@ -37,7 +38,8 @@
                             placeholder="Entrez le prénom du etudiant"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidEtuPrenom">Veuillez écrire un prénom de Etudiant</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidEtuPrenom">Veuillez écrire un prénom de Etudiant
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <b-form-group label="Téléphone *" label-for="addEtuTel" label-cols-sm="4" label-align-sm="left">
@@ -51,7 +53,8 @@
                             placeholder="Entrez le numéro de téléphone du etudiant"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidEtuTel">Veuillez écrire le numéro de téléphone du Etudiant</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidEtuTel">Veuillez écrire le numéro de téléphone du Etudiant
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <b-form-group label="Mail *" label-for="addEtuMail" label-cols-sm="4" label-align-sm="left">
@@ -65,7 +68,8 @@
                             placeholder="Entrez le mail du etudiant"
                             type="text">
                     </b-form-input>
-                    <b-form-invalid-feedback id="invalidEtuMail">Veuillez écrire le mail du Etudiant</b-form-invalid-feedback>
+                    <b-form-invalid-feedback id="invalidEtuMail">Veuillez écrire le mail du Etudiant
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <span class="text-danger">* champs obligatoires</span>
@@ -80,10 +84,10 @@
 
 <script>
 
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
-        name:'ModalAddReservationEtudiant',
+        name: 'ModalAddReservationEtudiant',
         data() {
             return {
                 etudiant: [],
@@ -92,7 +96,7 @@
         methods: {
 
             validateState(ref) {
-                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
@@ -105,13 +109,11 @@
             },
 
             addEtudiant() {
-                this.$validator.validateAll().then( result => {
-                    if (!result)
-                    {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
                         return;
-                    }
-                    else {
-                        axios.post('/etudiants',
+                    } else {
+                        axios.post('https://iutnc-resamat.univ-lorraine.fr/api/etudiants/',
                             {
                                 'nom': this.etudiant.nom,
                                 'prenom': this.etudiant.prenom,
@@ -132,7 +134,7 @@
                                     appendToast: false
                                 });
 
-                                eventBus.$emit('addedEtu',response.data.etudiant);
+                                eventBus.$emit('addedEtu', response.data.etudiant);
                             })
                             .catch(error => {
                                 this.$nextTick(() => {

@@ -12,7 +12,8 @@
                 @ok="handleOkDel">
             <b-form ref="delExemplaire" @submit.stop.prevent="deleteExemplaire">
                 <div>
-                    <h3>Etes vous sûrs de vouloir supprimer l'exemplaire avec la référence " {{ exemplaire.reference }} " ?</h3>
+                    <h3>Etes vous sûrs de vouloir supprimer l'exemplaire avec la référence " {{ exemplaire.reference }}
+                        " ?</h3>
                     <p class="text-dark">Vous n'aurez plus aucun accès à cet exemplaire par la suite.</p>
                 </div>
             </b-form>
@@ -24,7 +25,7 @@
 
 <script>
 
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
         name: 'ModalDeleteExemplaire',
@@ -33,7 +34,7 @@
                 exemplaire: [],
             }
         },
-        mounted() {
+        mounted() {
             eventBus.$on('delExemplaire', data => {
                 this.exemplaire = data.exemplaire;
             });
@@ -47,21 +48,21 @@
 
             deleteExemplaire() {
 
-                axios.delete('/exemplaires/'+this.exemplaire.id)
-                    .then( response => {
+                axios.delete('https://iutnc-resamat.univ-lorraine.fr/api/exemplaires/' + this.exemplaire.id)
+                    .then(response => {
                         this.$nextTick(() => {
                             this.$refs.modal4.hide();
                         });
                         this.$bvToast.toast(`Exemplaire supprimé avec succès !`, {
                             title: `Suppression réussie`,
                             toaster: 'b-toaster-bottom-right',
-                            variant:'success',
-                            solid:true,
+                            variant: 'success',
+                            solid: true,
                             appendToast: false
                         });
                         eventBus.$emit('deleteSuccessExemplaire');
                     })
-                    .catch( error => {
+                    .catch(error => {
                         this.$nextTick(() => {
                             this.$refs.modal4.hide();
                         });

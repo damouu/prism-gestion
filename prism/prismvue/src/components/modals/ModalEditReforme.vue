@@ -8,7 +8,7 @@
                 centered
                 size="lg"
                 @ok="handleOkEditReforme">
-            <form ref="editReforme" @submit.stop.prevent="editReforme" >
+            <form ref="editReforme" @submit.stop.prevent="editReforme">
                 <h4>Voulez vous remettre en service cet exemplaire réformé ?</h4>
             </form>
         </b-modal>
@@ -18,7 +18,7 @@
 
 <script>
 
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
         name: 'ModalEditReforme',
@@ -40,33 +40,32 @@
                 this.editReforme();
             },
 
-            editReforme (){
-                axios.patch('/exemplaires/'+this.reforme.id+'?select=reforme')
-                .then( response => {
+            editReforme() {
+                axios.patch('https://iutnc-resamat.univ-lorraine.fr/api/exemplaires/' + this.reforme.id + '?select=reforme')
+                    .then(response => {
 
-                    this.$nextTick( () =>  {
-                        this.$refs.modal11.hide();
-                    });
+                        this.$nextTick(() => {
+                            this.$refs.modal11.hide();
+                        });
 
-                    this.$bvToast.toast(`Exemplaire rétabli avec succès !`, {
-                        title: `Retour en service réussi`,
-                        toaster: 'b-toaster-bottom-right',
-                        solid:true,
-                        variant:'success',
-                        appendToast: false
-                    });
+                        this.$bvToast.toast(`Exemplaire rétabli avec succès !`, {
+                            title: `Retour en service réussi`,
+                            toaster: 'b-toaster-bottom-right',
+                            solid: true,
+                            variant: 'success',
+                            appendToast: false
+                        });
 
-                    eventBus.$emit('editedReforme');
-                })
-                .catch( error => {
-                    eventBus.$emit('error', {
-                        'error': error.response.statusText,
-                        'status': error.response.status,
-                        'message': error.response.data.message
-                    });
-                })
+                        eventBus.$emit('editedReforme');
+                    })
+                    .catch(error => {
+                        eventBus.$emit('error', {
+                            'error': error.response.statusText,
+                            'status': error.response.status,
+                            'message': error.response.data.message
+                        });
+                    })
             }
-
 
 
         }

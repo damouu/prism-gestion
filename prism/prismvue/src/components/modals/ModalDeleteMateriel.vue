@@ -22,7 +22,7 @@
 
 
 <script>
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
         name: "ModalDeleteMateriel",
@@ -31,7 +31,7 @@
                 materiel: [],
             }
         },
-        mounted(){
+        mounted() {
             eventBus.$on('deleteMateriel', data => {
                 this.materiel.id = data.id;
             })
@@ -43,7 +43,7 @@
             },
 
             deleteMateriel() {
-                axios.delete('/materiels/'+this.materiel.id)
+                axios.delete('https://iutnc-resamat.univ-lorraine.fr/api/materiels/' + this.materiel.id)
                     .then(response => {
 
                         this.$nextTick(() => {
@@ -52,16 +52,16 @@
                         this.$bvToast.toast(`Materiel supprimé avec succès !`, {
                             title: `Suppression réussie`,
                             toaster: 'b-toaster-bottom-right',
-                            variant:'success',
-                            solid:true,
+                            variant: 'success',
+                            solid: true,
                             appendToast: false
                         });
                         eventBus.$emit('deletedMateriel');
                     })
                     .catch(error => {
-                            this.$nextTick(() => {
-                                this.$refs.modal7.hide();
-                            });
+                        this.$nextTick(() => {
+                            this.$refs.modal7.hide();
+                        });
                         eventBus.$emit('error', {
                             'error': error.response.statusText,
                             'status': error.response.status,

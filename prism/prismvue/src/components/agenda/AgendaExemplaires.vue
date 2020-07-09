@@ -3,7 +3,9 @@
 
         <b-row align-h="between" class="mb-4">
             <b-col>
-                <h1 class="ml-5">Agenda - Exemplaires <b-spinner v-if="loading" class="loading" label="loading"></b-spinner></h1>
+                <h1 class="ml-5">Agenda - Exemplaires
+                    <b-spinner v-if="loading" class="loading" label="loading"></b-spinner>
+                </h1>
             </b-col>
         </b-row>
 
@@ -12,10 +14,10 @@
             </b-tab>
             <b-tab @click="setCurrentType('Tous')" v-else title="Tous">
             </b-tab>
-            <template v-for="type in types" >
-                <b-tab v-if='currentType == type.id'  :title="type.nom" active>
+            <template v-for="type in types">
+                <b-tab v-if='currentType == type.id' :title="type.nom" active>
                 </b-tab>
-                <b-tab v-else @click="setCurrentType(type.id)"  :title="type.nom">
+                <b-tab v-else @click="setCurrentType(type.id)" :title="type.nom">
                 </b-tab>
             </template>
         </b-tabs>
@@ -55,13 +57,13 @@
     import timeline from '@fullcalendar/timeline';
 
     export default {
-        name:"AgendaExemplaires",
+        name: "AgendaExemplaires",
         components: {
             FullCalendar,
         },
         data() {
             return {
-                types:[],
+                types: [],
                 currentType: 'Tous',
                 calendarEvents: [],
                 plugins: [
@@ -78,31 +80,50 @@
                         next: 'suivant',
                     },
                 views: {
-                    customWeek:{ type: 'timeline', duration:{weeks:1}, slotDuration:{days:1}, buttonText:'customWeek'},
-                    customDay:{type:'timeGridDay', titleFormat:{ day:'numeric', weekday:'long', month:'short', year:'numeric'}, columnHeaderHtml:{weekday:'long'} , duration:{days:1}, slotDuration:{days:1}, buttonText:'customDay'},
+                    customWeek: {
+                        type: 'timeline',
+                        duration: {weeks: 1},
+                        slotDuration: {days: 1},
+                        buttonText: 'customWeek'
+                    },
+                    customDay: {
+                        type: 'timeGridDay',
+                        titleFormat: {day: 'numeric', weekday: 'long', month: 'short', year: 'numeric'},
+                        columnHeaderHtml: {weekday: 'long'},
+                        duration: {days: 1},
+                        slotDuration: {days: 1},
+                        buttonText: 'customDay'
+                    },
                 },
-                loading:false,
+                loading: false,
             }
         },
-        mounted(){
+        mounted() {
 
             this.getEventsEx();
 
         },
         methods: {
-            getEventsEx(){
-                this.loading=true;
+            getEventsEx() {
+                this.loading = true;
                 this.getTypes();
-                axios.get('/exemplaires?select=reservation&?query='+this.currentType)
-                    .then( response => {
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/exemplaires?select=reservation&?query=' + this.currentType)
+                    .then(response => {
                         response.data.reservations.forEach(element => {
-                            element.exemplaires.forEach( q => {
-                                this.calendarEvents.push({title: q.reference, start: element.date_depart, end:element.date_retour, id: q.id, type:q.materiel.type.nom, color:q.materiel.type.couleur})
+                            element.exemplaires.forEach(q => {
+                                this.calendarEvents.push({
+                                    title: q.reference,
+                                    start: element.date_depart,
+                                    end: element.date_retour,
+                                    id: q.id,
+                                    type: q.materiel.type.nom,
+                                    color: q.materiel.type.couleur
+                                })
                             })
                         });
-                        this.loading=false;
+                        this.loading = false;
                     })
-                    .catch( error => {
+                    .catch(error => {
                         console.log(error);
                     })
             },
@@ -114,15 +135,15 @@
             },
 
             getTypes() {
-                axios.get('/types')
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/types/')
                     .then(response => {
                         this.types = response.data.types;
                     })
                     .catch(function (error) {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        this.showAlert(error.response.statusText, error.response.status, error.response.data.message);
                     });
             },
-            setCurrentType(type){
+            setCurrentType(type) {
                 this.currentType = type;
                 this.calendarEvents = [];
                 this.getEventsEx();

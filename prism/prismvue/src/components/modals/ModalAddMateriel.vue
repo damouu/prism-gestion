@@ -74,10 +74,9 @@
 </template>
 
 
-
 <script>
 
-    import { eventBus } from '../../main';
+    import {eventBus} from '../../main';
 
     export default {
         name: 'ModalAddMateriel',
@@ -98,20 +97,20 @@
         methods: {
 
             validateState(ref) {
-                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+                if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
                     return !this.errors.has(ref);
                 }
                 return null;
             },
 
             getTypes() {
-                axios.get('/types/' )
-                    .then( response => {
-                        for(let data of response.data.types) {
-                            this.types.push({'value':data.id, 'text':data.nom});
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/types/')
+                    .then(response => {
+                        for (let data of response.data.types) {
+                            this.types.push({'value': data.id, 'text': data.nom});
                         }
                     })
-                    .catch( error => {
+                    .catch(error => {
                         eventBus.$emit('error', {
                             'error': error.response.statusText,
                             'status': error.response.status,
@@ -129,13 +128,11 @@
 
             // Ajout materiel
             addMateriel() {
-                this.$validator.validateAll().then( result => {
-                    if (!result)
-                    {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
                         return;
-                    }
-                    else {
-                        axios.post('/materiels',
+                    } else {
+                        axios.post('https://iutnc-resamat.univ-lorraine.fr/api/materiels/',
                             {
                                 'constructeur': this.materiel.constructeur,
                                 'modele': this.materiel.modele,
@@ -151,8 +148,8 @@
                                 this.$bvToast.toast(`Matériel ajouté avec succès !`, {
                                     title: `Ajout réussi`,
                                     toaster: 'b-toaster-bottom-right',
-                                    variant:'success',
-                                    solid:true,
+                                    variant: 'success',
+                                    solid: true,
                                     appendToast: false
                                 });
                                 this.materiel = [];

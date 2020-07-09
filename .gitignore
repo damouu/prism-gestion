@@ -95,7 +95,7 @@ local.properties
 #nbproject/private/
 #build/
 #nbbuild/
-#dist/
+#app/
 #nbdist/
 #.nb-gradle/
 ### Composer template

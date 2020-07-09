@@ -20,7 +20,7 @@
                 <b-row class="mr-5 ml-5">
 
                     <b-col cols="2">
-                        <NavigationInventaire />
+                        <NavigationInventaire/>
                     </b-col>
 
                     <b-col cols="10">
@@ -29,7 +29,9 @@
                                 <h1 class="ml-5">Catégories</h1>
                             </b-col>
                             <b-col cols="7">
-                                <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddCategorie>Ajouter une catégorie</b-button>
+                                <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddCategorie>Ajouter une
+                                    catégorie
+                                </b-button>
                             </b-col>
                         </b-row>
 
@@ -77,11 +79,20 @@
                                         <h6 class="text-center">Pas de catégories à afficher.</h6>
                                     </template>
                                     <template slot="couleur" slot-scope="row">
-                                        <h5><b-badge v-bind:style="{ 'background-color':row.value}">{{row.value}}</b-badge></h5>
+                                        <h5>
+                                            <b-badge v-bind:style="{ 'background-color':row.value}">{{row.value}}
+                                            </b-badge>
+                                        </h5>
                                     </template>
                                     <template slot="actions" slot-scope="row">
-                                        <b-button size="sm" class="mr-1" variant="outline-danger" v-b-modal.modal-DelCategorie @click="modalDeleteCategorie(row.item)"><font-awesome-icon :icon="['fas','trash-alt']" /></b-button>
-                                        <b-button size="sm" class="mr-1" variant="outline-success" v-b-modal.modal-EditCategorie @click="modalEditCategorie(row.item)"><font-awesome-icon :icon="['fas','edit']" /></b-button>
+                                        <b-button size="sm" class="mr-1" variant="outline-danger"
+                                                  v-b-modal.modal-DelCategorie @click="modalDeleteCategorie(row.item)">
+                                            <font-awesome-icon :icon="['fas','trash-alt']"/>
+                                        </b-button>
+                                        <b-button size="sm" class="mr-1" variant="outline-success"
+                                                  v-b-modal.modal-EditCategorie @click="modalEditCategorie(row.item)">
+                                            <font-awesome-icon :icon="['fas','edit']"/>
+                                        </b-button>
                                     </template>
                                 </b-table>
                                 <b-pagination
@@ -97,9 +108,9 @@
                 </b-row>
             </b-container>
 
-            <ModalAddCategorie />
-            <ModalDeleteCategorie />
-            <ModalEditCategorie />
+            <ModalAddCategorie/>
+            <ModalDeleteCategorie/>
+            <ModalEditCategorie/>
 
         </div>
 
@@ -108,7 +119,7 @@
 
 <script>
 
-    import { eventBus } from "../main";
+    import {eventBus} from "../main";
 
     import NavigationInventaire from "../components/navigation/NavigationInventaire";
     import ModalAddCategorie from '../components/modals/ModalAddCategorie';
@@ -117,22 +128,22 @@
 
     export default {
         name: "categories",
-        components:{
+        components: {
             ModalEditCategorie,
             NavigationInventaire,
             ModalAddCategorie,
             ModalDeleteCategorie,
         },
-        data(){
+        data() {
             return {
                 categories: [],
 
-                sortBy : 'id',
+                sortBy: 'id',
                 sortDesc: false,
                 fieldsRow: [
-                    { key: 'nom', sortable:true },
-                    { key: 'couleur', sortable:true },
-                    { key: 'actions', sortable:true },
+                    {key: 'nom', sortable: true},
+                    {key: 'couleur', sortable: true},
+                    {key: 'actions', sortable: true},
                 ],
                 currentPage: 1,
                 perPage: 10,
@@ -140,9 +151,9 @@
                 filter: null,
 
                 alert: [],
-                dismissCountDown:0,
-                dismissSecs:10,
-                loading:false,
+                dismissCountDown: 0,
+                dismissSecs: 10,
+                loading: false,
             }
         },
         computed: {
@@ -150,7 +161,7 @@
                 return this.categories.length
             }
         },
-        mounted(){
+        mounted() {
 
             this.getTypes();
             eventBus.$on('error', data => {
@@ -175,15 +186,15 @@
         methods: {
 
             getTypes() {
-                this.loading=true;
-                axios.get('/types')
+                this.loading = true;
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/types/')
                     .then(response => {
                         this.categories = [];
                         this.categories = response.data.types;
-                        this.loading=false;
+                        this.loading = false;
                     })
                     .catch(function (error) {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                        this.showAlert(error.response.statusText, error.response.status, error.response.data.message);
                     });
             },
 
@@ -197,10 +208,10 @@
                 this.dismissCountDown = this.dismissSecs;
             },
             modalDeleteCategorie(item) {
-                eventBus.$emit('deleteCategorie',item);
+                eventBus.$emit('deleteCategorie', item);
             },
             modalEditCategorie(item) {
-                eventBus.$emit('editCategorie',item);
+                eventBus.$emit('editCategorie', item);
             }
         }
     }

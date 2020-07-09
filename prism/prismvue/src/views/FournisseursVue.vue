@@ -21,7 +21,7 @@
                 <b-row class="mr-5 ml-5">
 
                     <b-col cols="2">
-                        <NavigationInventaire />
+                        <NavigationInventaire/>
                     </b-col>
 
                     <b-col cols="10">
@@ -31,7 +31,9 @@
                                 <h1 class="ml-5">Fournisseurs</h1>
                             </b-col>
                             <b-col cols="3">
-                                <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddFournisseur>Ajouter un Fournisseur</b-button>
+                                <b-button variant="success" class="mr-2 ml-2" v-b-modal.modal-AddFournisseur>Ajouter un
+                                    Fournisseur
+                                </b-button>
                             </b-col>
                         </b-row>
 
@@ -93,12 +95,11 @@
                         </div>
 
 
-
                     </b-col>
                 </b-row>
             </b-container>
 
-            <ModalAddFournisseur />
+            <ModalAddFournisseur/>
 
         </div>
     </div>
@@ -106,7 +107,7 @@
 
 <script>
 
-    import { eventBus } from "../main";
+    import {eventBus} from "../main";
 
     import NavigationInventaire from '../components/navigation/NavigationInventaire'
     import ModalAddFournisseur from "../components/modals/ModalAddFournisseur";
@@ -117,7 +118,7 @@
             ModalAddFournisseur,
             NavigationInventaire,
         },
-        data () {
+        data() {
             return {
 
                 fournisseurs: [],
@@ -128,13 +129,13 @@
                 sortBy: 'id',
                 sortDesc: false,
                 fieldsRow: [
-                    { key: 'nom', sortable:true },
-                    { key: 'adresse', sortable:true },
-                    { key: 'ville', sortable:true },
-                    { key: 'code_postal', sortable:true },
-                    { key: 'site_web', sortable:true },
-                    { key: 'mail', sortable:true },
-                    { key: 'tel', sortable:true },
+                    {key: 'nom', sortable: true},
+                    {key: 'adresse', sortable: true},
+                    {key: 'ville', sortable: true},
+                    {key: 'code_postal', sortable: true},
+                    {key: 'site_web', sortable: true},
+                    {key: 'mail', sortable: true},
+                    {key: 'tel', sortable: true},
                 ],
 
                 currentPage: 1,
@@ -142,11 +143,11 @@
                 pageOptions: [10, 20, 30],
                 filter: null,
 
-                alert: {'show':false,'showMateriel':false},
-                dismissCountDown:0,
-                dismissSecs:10,
+                alert: {'show': false, 'showMateriel': false},
+                dismissCountDown: 0,
+                dismissSecs: 10,
 
-                loading:false,
+                loading: false,
 
             }
         },
@@ -155,7 +156,7 @@
                 return this.fillFournisseurs.length
             }
         },
-        mounted () {
+        mounted() {
             this.getFournisseurs();
 
             eventBus.$on('addedFournisseur', data => {
@@ -167,24 +168,24 @@
                 this.showAlert(data.error, data.status, data.message);
             });
         },
-        methods : {
+        methods: {
 
             rowSelected(items) {
                 this.selected = items;
                 let idSelected = items[0];
-                this.$router.push({name: 'fournisseur', params: { id: idSelected.id }});
+                this.$router.push({name: 'fournisseur', params: {id: idSelected.id}});
             },
 
             getFournisseurs() {
-                this.loading=true;
-                axios.get('/fournisseurs')
+                this.loading = true;
+                axios.get('https://iutnc-resamat.univ-lorraine.fr/api/fournisseurs/')
                     .then(response => {
                         this.fournisseurs = response.data.fournisseurs;
                         this.fillTable();
-                        this.loading=false;
+                        this.loading = false;
                     })
-                    .catch( error => {
-                        this.showAlert(error.response.statusText,error.response.status,error.response.data.message);
+                    .catch(error => {
+                        this.showAlert(error.response.statusText, error.response.status, error.response.data.message);
                     })
             },
 
@@ -192,7 +193,7 @@
                 this.fillFournisseurs = [];
                 let listeFournisseurs = JSON.parse(JSON.stringify(this.fournisseurs));
                 listeFournisseurs.forEach(fournisseur => {
-                   this.fillFournisseurs.push(fournisseur);
+                    this.fillFournisseurs.push(fournisseur);
                 });
             },
 

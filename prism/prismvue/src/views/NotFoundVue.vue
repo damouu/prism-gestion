@@ -8,7 +8,6 @@
         </b-container>
 
 
-
     </div>
 
 </template>
@@ -17,17 +16,13 @@
 
     export default {
         name: 'notfound',
-        data(){
-            return {
-
-            }
+        data() {
+            return {}
         },
-        mounted(){
+        mounted() {
 
         },
-        methods:{
-
-        },
+        methods: {},
     }
 
 </script>
