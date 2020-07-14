@@ -1,5 +1,11 @@
 <?php
 
-require __DIR__ . '/../../src/bootstrap/app.php';
+require __DIR__ . '/../../src/vendor/autoload.php';
 
-$app->run();
+$loader = new \Twig\Loader\FilesystemLoader('../../src/templates');
+
+$twig = new Twig\Environment($loader, [
+    'cache' => false
+]);
+
+echo $twig->render('index.twig', ["userName" => "sehbaoui1u"]);
