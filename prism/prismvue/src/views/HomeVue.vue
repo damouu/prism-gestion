@@ -58,16 +58,18 @@
 
 <script>
     export default {
-        name:"reservation",
+        name: "reservation",
         data() {
             return {
-                alert: {'show':false,'showMateriel':false},
-                dismissCountDown:0,
-                dismissSecs:10,
+                alert: {'show': false, 'showMateriel': false},
+                dismissCountDown: 0,
+                dismissSecs: 10,
             }
         },
         mounted() {
 
+        },
+        beforeMount() {
         },
         methods: {
             countDownChanged(dismissCountDown) {
