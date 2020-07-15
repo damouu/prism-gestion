@@ -20,7 +20,7 @@ class AccessJWTLevel2
                 $data = [
                     'type' => "error",
                     'code' => 401,
-                    'message' => "you do not the access to this ressource."
+                    'message' => "you do not have the access to this ressource.",
                 ];
                 return ResponseWriter::ResponseWriter($response, $data);
             }
