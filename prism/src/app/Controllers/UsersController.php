@@ -50,6 +50,19 @@ class UsersController extends Controller
             ];
             return ResponseWriter::ResponseWriter($response, $data);
         }
+
+
+    }
+
+    public function printJWT(Request $request, Response $response, $args)
+    {
+        $token = $request->getAttribute("token");
+        $data = [
+            'type' => "success",
+            'code' => 200,
+            'JWT' => $token
+        ];
+        return ResponseWriter::ResponseWriter($response, $data);
     }
 
 }
