@@ -14,12 +14,12 @@ class AccessJWTLevel2
     {
         try {
             $token = $request->getAttribute("token");
-            if ($token->lvl == 2) {
+            if ($token->lvl >= 2) {
                 return $next($request, $response);
             } else {
                 $data = [
                     'type' => "error",
-                    'code' => 401,
+                    'code' => 200,
                     'message' => "you do not have the access to this ressource."
                 ];
                 return ResponseWriter::ResponseWriter($response, $data);
