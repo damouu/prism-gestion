@@ -8,197 +8,48 @@ use PrismGestion\Models\Users as users;
 use PrismGestion\Utils\ResponseWriter;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Respect\Validation\Exceptions\NestedValidationException;
-use Respect\Validation\Validator as v;
-use stdClass;
+use Firebase\JWT\JWT;
 
 
 class UsersController extends Controller
 {
 
-
-    public function allUsers(Request $request, Response $response, $args)
+    public function userSignIn(Request $request, Response $response, $args)
     {
-        $users = users::limit(2)->get();
-        $data = [
-            'type' => "success",
-            'code' => 200,
-            'etudiant' => $users
-        ];
-        return ResponseWriter::ResponseWriter($response, $data);
-    }
-
-
-    public function getOne(Request $request, Response $response, $args)
-    {
-        $id = intval($args['id']);
-        if (is_int($id)) {
-            try {
-                $etudiant = Etudiant::find($id);
-                if (empty($etudiant)) {
-                    $data = ApiErrors::NotFound($request->getUri());
-                } else {
-                    $data = [
-                        'type' => "success",
-                        'code' => 200,
-                        'etudiant' => $etudiant
-                    ];
-                }
-            } catch (\Exception $e) {
-                $data = ApiErrors::InternalError();
-            }
+        $user = users::where("NetID", '=', $request->getQueryParams("NetID"))->first();
+        if (!empty($user)) {
+            $token = JWT::encode(
+                ['iss' => 'https://iutnc-resamat.univ-lorraine.fr',
+                    'aud' => 'https://iutnc-resamat.univ-lorraine.fr',
+                    'iat' => time(),
+                    'exp' => time() + 3600,
+                    'uNetID' => $user->NetID,
+                    'lvl' => $user->NetID_Access_level
+                ],
+                "secret", 'HS512');
+            $data = [
+                'type' => "success",
+                'code' => 200,
+                'JWT' => $token
+            ];
+            return ResponseWriter::ResponseWriter($response, $data);
         } else {
-            $data = ApiErrors::BadRequest();
+            $token = JWT::encode(
+                ['iss' => 'https://iutnc-resamat.univ-lorraine.fr',
+                    'aud' => 'https://iutnc-resamat.univ-lorraine.fr',
+                    'iat' => time(),
+                    'exp' => time() + 3600,
+                    'uNetID' => $request->getQueryParams("NetID"),
+                    'lvl' => 1
+                ],
+                "secret", 'HS512');
+            $data = [
+                'type' => "success",
+                'code' => 200,
+                'JWT' => $token
+            ];
+            return ResponseWriter::ResponseWriter($response, $data);
         }
-        return ResponseWriter::ResponseWriter($response, $data);
     }
 
-
-    public function post(Request $request, Response $response, $args)
-    {
-        $content = $request->getParsedBody();
-
-        $postValidateNomPrenom = v::notOptional()->StringType()->length(1, 128);
-        $postValidateMail = v::Optional(v::email());
-        $postValidateTel = v::notOptional()->phone();
-
-        if (!isset($content['nom'])
-            || !isset($content['prenom'])
-            || !isset($content['telephone'])) {
-            $data = ApiErrors::BadRequest();
-        } else {
-            try {
-                $content['nom'] = trim($content['nom']);
-                $content['prenom'] = trim($content['prenom']);
-                if (isset($content['mail'])) {
-                    $content['mail'] = trim($content['mail']);
-                } else {
-                    $content['mail'] = null;
-                }
-                $content['telephone'] = trim($content['telephone']);
-                $postValidateNomPrenom->assert($content['nom']);
-                $postValidateNomPrenom->assert($content['prenom']);
-                $postValidateMail->assert($content['mail']);
-                $postValidateTel->assert($content['telephone']);
-
-                $etudiant = new Etudiant();
-                $etudiant->nom = $content['nom'];
-                $etudiant->prenom = $content['prenom'];
-                $etudiant->mail = $content['mail'];
-                $etudiant->telephone = $content['telephone'];
-                $etudiant->save();
-                $data = [
-                    'type' => "success",
-                    'code' => 200,
-                    'etudiant' => $etudiant
-                ];
-            } catch (NestedValidationException $e) {
-                $data = ApiErrors::ValidationError($e->getMessages());
-            } catch (\Exception $e) {
-                $data = ApiErrors::InternalError();
-            }
-        }
-        return ResponseWriter::ResponseWriter($response, $data);
-    }
-
-    public function delete(Request $request, Response $response, $args)
-    {
-        $id = intval($args['id']);
-        if (!is_int($id)) {
-            $data = ApiErrors::BadRequest();
-        } else {
-            $etudiant = Etudiant::find($id);
-            if (!empty($etudiant)) {
-                try {
-                    $etudiant->delete();
-                    $data = [
-                        'type' => "success",
-                        'code' => 200,
-                        'etudiant' => 'reussi'
-                    ];
-                } catch (\Exception $e) {
-                    $data = ApiErrors::InternalError();
-                }
-            } else {
-                $data = ApiErrors::NotFound($request->getUri());
-            }
-        }
-        return ResponseWriter::ResponseWriter($response, $data);
-    }
-
-    public function put(Request $request, Response $response, $args)
-    {
-        $id = intval($args['id']);
-        $content = $request->getParsedBody();
-
-        $postValidateNomPrenom = v::notOptional()->StringType()->length(1, 128);
-        $postValidateMail = v::optional(v::email());
-        $postValidateTel = v::notOptional()->phone();
-
-        if (is_int($id)) {
-            $etudiant = Etudiant::find($id);
-            if (isset($content['nom']) && isset($content['prenom']) && isset($content['telephone'])) {
-                $content['nom'] = trim($content['nom']);
-                $content['prenom'] = trim($content['prenom']);
-                if (isset($content['mail'])) {
-                    $content['mail'] = trim($content['mail']);
-                } else {
-                    $content['mail'] = null;
-                }
-                $content['telephone'] = trim($content['telephone']);
-
-                if (empty($etudiant)) {
-                    try {
-                        $postValidateNomPrenom->assert($content['nom']);
-                        $postValidateNomPrenom->assert($content['prenom']);
-                        $postValidateMail->assert($content['mail']);
-                        $postValidateTel->assert($content['telephone']);
-
-                        $etudiant = new Etudiant();
-                        $etudiant->nom = $content['nom'];
-                        $etudiant->prenom = $content['prenom'];
-                        $etudiant->mail = $content['mail'];
-                        $etudiant->telephone = $content['telephone'];
-                        $etudiant->save();
-                        $data = [
-                            'type' => "success",
-                            'code' => 200,
-                            'etudiant' => 'reussi'
-                        ];
-                    } catch (NestedValidationException $e) {
-                        $data = ApiErrors::ValidationError($e->getMessages());
-                    } catch (\Exception $e) {
-                        $data = ApiErrors::InternalError();
-                    }
-                } else {
-                    try {
-                        $postValidateNomPrenom->assert($content['nom']);
-                        $postValidateNomPrenom->assert($content['prenom']);
-                        $postValidateMail->assert($content['mail']);
-                        $postValidateTel->assert($content['telephone']);
-
-                        $etudiant->nom = $content['nom'];
-                        $etudiant->prenom = $content['prenom'];
-                        $etudiant->mail = $content['mail'];
-                        $etudiant->telephone = $content['telephone'];
-                        $etudiant->save();
-                        $data = [
-                            'type' => "success",
-                            'code' => 200,
-                            'etudiant' => 'reussi'
-                        ];
-                    } catch (NestedValidationException $e) {
-                        $data = ApiErrors::ValidationError($e->getMessages());
-                    } catch (\Exception $e) {
-                        $data = ApiErrors::InternalError();
-                    }
-                }
-            } else {
-                $data = ApiErrors::BadRequest();
-            }
-        } else {
-            $data = ApiErrors::BadRequest();
-        }
-        return ResponseWriter::ResponseWriter($response, $data);
-    }
 }
