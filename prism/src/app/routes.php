@@ -13,9 +13,17 @@ $app->add(function ($req, $res, $next) {
 });
 /* ----------------------------------*/
 
-$app->get('/users[/]', function ($rq, $rs, $args) {
-    return (new \PrismGestion\Controllers\UsersController($this))->allUsers($rq, $rs, $args);
-});
+$app->get('/user/signIn[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\UsersController($this))->userSignIn($rq, $rs, $args);
+})->add(\PrismGestion\Middlewares\QueryParamNetID::class . ':checkQueryParamNetID');
+
+$app->get('/JWT[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\UsersController($this))->userSignIn($rq, $rs, $args);
+})->add(\PrismGestion\Middlewares\AccessJWTLevel2::class . ':AccessJWTLevel2')
+    ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
+    ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
+
+
 $app->get('/types[/]', 'TypeController:getAll');
 $app->post('/types[/]', 'TypeController:post');
 $app->get('/materiels[/]', 'MaterielController:getAll');
