@@ -21,7 +21,7 @@ $app->get('/user/signIn[/]', function ($rq, $rs, $args) {
 //TODO route de test pour les JWT , ligne a supprimer.
 $app->get('/JWT[/]', function ($rq, $rs, $args) {
     return (new \PrismGestion\Controllers\UsersController($this))->printJWT($rq, $rs, $args);
-})->add(\PrismGestion\Middlewares\AccessJWTLevel2::class . ':AccessJWTLevel2')
+})->add(\PrismGestion\Middlewares\infoJWT::class . ':infoJWT')
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 

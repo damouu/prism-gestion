@@ -16,19 +16,6 @@
             <b-container fluid class="mt-5 ">
 
                 <b-row class="mr-5 ml-5">
-
-                    <ul>TO DO LIST PRISM APP
-                        <li>Modifier API: RESTFUL</li>
-                        <li>Agenda: click -> info modal</li>
-                        <li>Reservation: agenda + infos items</li>
-                        <li>Page Emprunt</li>
-                        <li>Page Home</li>
-                        <li>loading screen everywhere</li>
-                        <li>position erreur showAlert</li>
-                        <li>Agenda select type: not working</li>
-
-                    </ul>
-
                     <b-col cols="10">
                         <b-row align-h="between" class="mb-4">
                             <b-col>
@@ -40,7 +27,6 @@
                     <b-col cols="6">
                         <h1>Reservations à venir</h1>
                         <b-table>
-
                         </b-table>
                     </b-col>
 
@@ -64,10 +50,17 @@
                 alert: {'show': false, 'showMateriel': false},
                 dismissCountDown: 0,
                 dismissSecs: 10,
+                uNetID: 'teacher1'
             }
         },
         mounted() {
-
+            this.$store.commit('uNetID', this.$data.uNetID);
+            axios.get("https://prism.app.local:10443/api/user/signIn?NetID=" + this.$store.getters.uNetID).then(response => this.$store.commit('JWT', response.data.JWT));
+            const config = {
+                headers: {Authorization: `Bearer ${this.$store.getters.JWT}`}
+            };
+            axios.get('https://prism.app.local:10443/api/JWT/', config).then(response => this.$store.commit('uNetLvl', response.data.data.lvl))
+            console.log(this.$store.getters.uNetID, this.$store.getters.uNetLvl)
         },
         beforeMount() {
         },
