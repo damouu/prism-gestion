@@ -25,7 +25,9 @@
                     </b-col>
 
                     <b-col cols="6">
+
                         <h1>Reservations à venir</h1>
+
                         <b-table>
                         </b-table>
                     </b-col>
@@ -50,19 +52,14 @@
                 alert: {'show': false, 'showMateriel': false},
                 dismissCountDown: 0,
                 dismissSecs: 10,
-                uNetID: 'teacher1'
+                uNetID: ''
             }
         },
         mounted() {
-            this.$store.commit('uNetID', this.$data.uNetID);
-            axios.get("https://prism.app.local:10443/api/user/signIn?NetID=" + this.$store.getters.uNetID).then(response => this.$store.commit('JWT', response.data.JWT));
-            const config = {
-                headers: {Authorization: `Bearer ${this.$store.getters.JWT}`}
-            };
-            axios.get('https://prism.app.local:10443/api/JWT/', config).then(response => this.$store.commit('uNetLvl', response.data.data.lvl))
-            console.log(this.$store.getters.uNetID, this.$store.getters.uNetLvl)
+            window.axios.get("user/signIn?NetID=" + this.uNetID).then(response => window.console.log(response.data));
         },
         beforeMount() {
+            window.console.log(this.uNetID = document.getElementById("uNetID").innerHTML);
         },
         methods: {
             countDownChanged(dismissCountDown) {
@@ -74,6 +71,6 @@
                 this.alert.message = message;
                 this.dismissCountDown = this.dismissSecs;
             },
-        }
+        },
     }
 </script>

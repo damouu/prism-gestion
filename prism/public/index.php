@@ -8,4 +8,4 @@ $twig = new Twig\Environment($loader, [
     'cache' => false
 ]);
 
-echo $twig->render('index.twig', ["userName" => "sehbaoui1"]);
+echo $twig->render('index.twig', ["uNetID" => "sehbaoui1"]);

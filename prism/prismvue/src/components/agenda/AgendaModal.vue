@@ -1,6 +1,5 @@
-
 <style type="text/css">
-    .modal-xl{
+    .modal-xl {
         min-height: 1000px;
     }
 </style>
@@ -38,8 +37,6 @@
 </template>
 
 
-
-
 <script>
     import {eventBus} from "../../main";
     import FullCalendar from '@fullcalendar/vue';
@@ -49,13 +46,13 @@
     import timeline from '@fullcalendar/timeline';
 
     export default {
-        name:"AgendaModal",
+        name: "AgendaModal",
         components: {
             FullCalendar,
         },
-        data(){
+        data() {
             return {
-                fillAgenda:[],
+                fillAgenda: [],
 
                 calendarEvents: [],
                 plugins: [
@@ -72,15 +69,26 @@
                         next: 'suivant',
                     },
                 views: {
-                    customWeek:{ type: 'timeline', duration:{weeks:1}, slotDuration:{days:1}, buttonText:'customWeek'},
-                    customDay:{type:'timeGridDay', titleFormat:{ day:'numeric', weekday:'long', month:'short', year:'numeric'}, columnHeaderHtml:{weekday:'long'} , duration:{days:1}, slotDuration:{days:1}, buttonText:'customDay'},
+                    customWeek: {
+                        type: 'timeline',
+                        duration: {weeks: 1},
+                        slotDuration: {days: 1},
+                        buttonText: 'customWeek'
+                    },
+                    customDay: {
+                        type: 'timeGridDay',
+                        titleFormat: {day: 'numeric', weekday: 'long', month: 'short', year: 'numeric'},
+                        columnHeaderHtml: {weekday: 'long'},
+                        duration: {days: 1},
+                        slotDuration: {days: 1},
+                        buttonText: 'customDay'
+                    },
                 },
-                loading:false,
+                loading: false,
             }
         },
-        mounted(){
+        mounted() {
             eventBus.$on('agenda', data => {
-                console.log(data.item);
                 if (typeof data.item.constructeur !== 'undefined') {
                     data.item.exemplaire.forEach(elements => {
                         elements.fiche_resa.forEach(q => {
@@ -110,8 +118,6 @@
             });
 
         },
-        methods:{
-
-        }
+        methods: {}
     }
 </script>
