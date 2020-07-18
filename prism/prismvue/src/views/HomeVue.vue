@@ -23,19 +23,14 @@
                             </b-col>
                         </b-row>
                     </b-col>
-
                     <b-col cols="6">
-
                         <h1>Reservations à venir</h1>
-
                         <b-table>
                         </b-table>
                     </b-col>
-
                     <b-col cols="6">
                         <h1>Emprunts en cours</h1>
                         <b-table>
-
                         </b-table>
                     </b-col>
                 </b-row>
@@ -56,14 +51,16 @@
             }
         },
         mounted() {
-            window.axios.get("user/signIn?NetID=" + this.uNetID).then(response => window.console.log(response.data));
+            this.userSignIn();
+            this.userJWT();
         },
         beforeMount() {
-            window.console.log(this.uNetID = document.getElementById("uNetID").innerHTML);
+            this.uNetID = document.getElementById("uNetID").innerHTML;
         },
         methods: {
             countDownChanged(dismissCountDown) {
                 this.dismissCountDown = dismissCountDown;
+
             },
             showAlert(error, status, message) {
                 this.alert.error = error;
@@ -71,6 +68,18 @@
                 this.alert.message = message;
                 this.dismissCountDown = this.dismissSecs;
             },
+            userSignIn() {
+                window.axios.post("user/signIn?NetID=" + this.uNetID).then(response => this.$store.commit("JWT", response.data.JWT));
+            },
+            userJWT() {
+                //todo une erreure apparait dans la requete, celle-ci ne contient pas le Bearer Token
+                window.axios.post("JWT/", {
+                    headers:
+                        {
+                            Authorization: 'Bearer ' + this.$store.getters.JWT,
+                        },
+                }).then(response => (window.console.log(response.data)))
+            }
         },
     }
 </script>
