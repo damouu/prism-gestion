@@ -47,7 +47,6 @@
                 alert: {'show': false, 'showMateriel': false},
                 dismissCountDown: 0,
                 dismissSecs: 10,
-                uNetID: ''
             }
         },
         mounted() {
@@ -55,7 +54,7 @@
             this.userJWT();
         },
         beforeMount() {
-            this.uNetID = document.getElementById("uNetID").innerHTML;
+            this.$store.commit('uNetID', document.getElementById("uNetID").innerHTML);
         },
         methods: {
             countDownChanged(dismissCountDown) {
@@ -69,7 +68,7 @@
                 this.dismissCountDown = this.dismissSecs;
             },
             userSignIn() {
-                window.axios.post("user/signIn?NetID=" + this.uNetID).then(response => this.$store.commit("JWT", response.data.JWT));
+                window.axios.post("user/signIn?NetID=" + this.$store.getters.uNetID).then(response => this.$store.commit("JWT", response.data.JWT));
             },
             userJWT() {
                 //todo une erreure apparait dans la requete, celle-ci ne contient pas le Bearer Token
