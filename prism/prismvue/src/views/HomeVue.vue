@@ -68,16 +68,11 @@
                 this.dismissCountDown = this.dismissSecs;
             },
             userSignIn() {
-                window.axios.post("user/signIn?NetID=" + this.$store.getters.uNetID).then(response => this.$store.commit("JWT", response.data.JWT));
+                window.axios.post("user/signIn?NetID=sehbaoui1u").then(response => this.$store.commit("JWT", response.data.JWT));
             },
             userJWT() {
-                //todo une erreure apparait dans la requete, celle-ci ne contient pas le Bearer Token
-                window.axios.post("JWT/", {
-                    headers:
-                        {
-                            Authorization: 'Bearer ' + this.$store.getters.JWT,
-                        },
-                }).then(response => (window.console.log(response.data)))
+                window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$store.getters.JWT
+                window.axios.post("JWT/").then(response => this.$store.commit('uNetLvl', response.data.data.lvl))
             }
         },
     }

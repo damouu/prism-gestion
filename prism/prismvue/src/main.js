@@ -42,10 +42,10 @@ Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
 
 export const eventBus = new Vue();
 
-window.axios = axios.create({
-    baseURL: 'https://iutnc-resamat.univ-lorraine.fr/api/',
-    params: {},
-});
+window.axios = axios.create(
+    {
+        baseURL: 'https://iutnc-resamat.univ-lorraine.fr/api/',
+    });
 
 store.subscribe((mutation, state) => {
     localStorage.setItem('store', JSON.stringify(state));
