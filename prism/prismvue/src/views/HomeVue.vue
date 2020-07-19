@@ -55,6 +55,7 @@
         },
         beforeMount() {
             this.$store.commit('uNetID', document.getElementById("uNetID").innerHTML);
+            document.getElementById('uNetID').remove();
         },
         methods: {
             countDownChanged(dismissCountDown) {
@@ -68,7 +69,7 @@
                 this.dismissCountDown = this.dismissSecs;
             },
             userSignIn() {
-                window.axios.post("user/signIn?NetID=sehbaoui1u").then(response => this.$store.commit("JWT", response.data.JWT));
+                window.axios.post("user/signIn?NetID=" + this.$store.getters.uNetID).then(response => this.$store.commit("JWT", response.data.JWT));
             },
             userJWT() {
                 window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$store.getters.JWT
