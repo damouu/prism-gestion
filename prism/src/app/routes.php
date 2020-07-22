@@ -13,10 +13,6 @@ $app->add(function ($req, $res, $next) {
 });
 /* ----------------------------------*/
 
-$app->post('/user/signIn[/]', function ($rq, $rs, $args) {
-    return (new \PrismGestion\Controllers\UsersController($this))->userSignIn($rq, $rs, $args);
-})->add(\PrismGestion\Middlewares\QueryParamNetID::class . ':checkQueryParamNetID');
-
 
 //TODO route de test pour les JWT , ligne a supprimer.
 $app->post('/JWT[/]', function ($rq, $rs, $args) {
