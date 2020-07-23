@@ -26,4 +26,15 @@ class UsersController extends Controller
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
+    public function getAllUsers(Request $request, Response $response, $args)
+    {
+        $users = users::all();
+        $data = [
+            'type' => "success",
+            'code' => 200,
+            'users' => $users
+        ];
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
+
 }
