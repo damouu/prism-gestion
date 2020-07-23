@@ -37,4 +37,29 @@ class UsersController extends Controller
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
+    public function deleteUser(Request $request, Response $response, $args)
+    {
+        $id = intval($args['id']);
+        if (!is_int($id)) {
+            $data = ApiErrors::BadRequest();
+        } else {
+            $user = users::findOrFail($args['id']);
+            if (!empty($user)) {
+                try {
+                    $user->delete();
+                    $data = [
+                        'type' => "success",
+                        'code' => 200,
+                        'suppression' => 'reussi' . " " . $user->NetID
+                    ];
+                } catch (\Exception $e) {
+                    $data = ApiErrors::InternalError();
+                }
+            } else {
+                $data = ApiErrors::NotFound($request->getUri());
+            }
+        }
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
+
 }

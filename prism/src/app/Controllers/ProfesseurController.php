@@ -13,47 +13,45 @@ use Respect\Validation\Validator as v;
 use stdClass;
 
 
-class ProfesseurController extends Controller {
+class ProfesseurController extends Controller
+{
 
 
-    public function getAll(Request $request, Response $response, $args) {
+    public function getAll(Request $request, Response $response, $args)
+    {
 
         $params = [
-            'query' => $request->getQueryParam('query',null),
+            'query' => $request->getQueryParam('query', null),
         ];
 
-        if($params['query'] === null)
-        {
+        if ($params['query'] === null) {
             $professeur = Professeur::get();
             $data = [
                 'type' => "success",
                 'code' => 200,
                 'professeurs' => $professeur
             ];
-        }
-        else if ($params['query'] != null)
-        {
-            $exploded = explode(" ",$params['query']);
+        } else if ($params['query'] != null) {
+            $exploded = explode(" ", $params['query']);
             $counted = count($exploded);
-            if($counted>2) {
+            if ($counted > 2) {
                 $data = ApiErrors::BadRequest();
-            }
-            else {
-                if($counted === 1){
-                    $professeur = Professeur::where('nom','like','%'.$exploded[0].'%')
-                        ->orWhere('prenom', 'like','%'.$exploded[0].'%')
+            } else {
+                if ($counted === 1) {
+                    $professeur = Professeur::where('nom', 'like', '%' . $exploded[0] . '%')
+                        ->orWhere('prenom', 'like', '%' . $exploded[0] . '%')
                         ->get();
-                }
-                else
-                {
-                    $professeur = Professeur::where('nom','like','%'.$exploded[0].'%')
-                        ->orWhere('prenom', 'like','%'.$exploded[0].'%')
+                } else {
+                    $professeur = Professeur::where('nom', 'like', '%' . $exploded[0] . '%')
+                        ->orWhere('prenom', 'like', '%' . $exploded[0] . '%')
                         ->orWhere(function ($q) use ($exploded) {
-                            $q->where('nom','like', '%'.$exploded[0].'%')
-                                ->where('prenom','like','%'.$exploded[1].'%');})
+                            $q->where('nom', 'like', '%' . $exploded[0] . '%')
+                                ->where('prenom', 'like', '%' . $exploded[1] . '%');
+                        })
                         ->orWhere(function ($q) use ($exploded) {
-                            $q->where('nom','like', '%'.$exploded[1].'%')
-                                ->where('prenom','like','%'.$exploded[0].'%');})
+                            $q->where('nom', 'like', '%' . $exploded[1] . '%')
+                                ->where('prenom', 'like', '%' . $exploded[0] . '%');
+                        })
                         ->get();
                 }
                 $data = [
@@ -68,32 +66,25 @@ class ProfesseurController extends Controller {
     }
 
 
-    public function getOne(Request $request, Response $response, $args) {
+    public function getOne(Request $request, Response $response, $args)
+    {
         $id = intval($args['id']);
-        if(is_int($id))
-        {
+        if (is_int($id)) {
             try {
                 $professeur = Professeur::find($id);
-                if(empty($professeur))
-                {
+                if (empty($professeur)) {
                     $data = ApiErrors::NotFound($request->getUri());
-                }
-                else
-                {
+                } else {
                     $data = [
                         'type' => "success",
                         'code' => 200,
                         'professeur' => $professeur
                     ];
                 }
-            }
-            catch (\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::InternalError();
             }
-        }
-        else
-        {
+        } else {
             $data = ApiErrors::BadRequest();
         }
         return ResponseWriter::ResponseWriter($response, $data);
@@ -104,20 +95,17 @@ class ProfesseurController extends Controller {
     {
         $content = $request->getParsedBody();
 
-        $postValidateNomPrenom = v::notOptional()->StringType()->length(1,128);
+        $postValidateNomPrenom = v::notOptional()->StringType()->length(1, 128);
         $postValidateMail = v::notOptional()->email();
         $postValidateTel = v::notOptional()->phone();
 
-        if(!isset($content['nom'])
-            ||!isset($content['prenom'])
-            ||!isset($content['mail'])
-            ||!isset($content['telephone']))
-        {
+        if (!isset($content['nom'])
+            || !isset($content['prenom'])
+            || !isset($content['mail'])
+            || !isset($content['telephone'])) {
             $data = ApiErrors::BadRequest();
-        }
-        else
-        {
-            try{
+        } else {
+            try {
                 $content['nom'] = trim($content['nom']);
                 $content['prenom'] = trim($content['prenom']);
                 $content['mail'] = trim($content['mail']);
@@ -139,13 +127,9 @@ class ProfesseurController extends Controller {
                     'code' => 200,
                     'professeur' => $professeur
                 ];
-            }
-            catch(NestedValidationException $e)
-            {
+            } catch (NestedValidationException $e) {
                 $data = ApiErrors::ValidationError($e->getMessages());
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::InternalError();
             }
         }
@@ -155,31 +139,22 @@ class ProfesseurController extends Controller {
     public function delete(Request $request, Response $response, $args)
     {
         $id = intval($args['id']);
-        if(!is_int($id))
-        {
+        if (!is_int($id)) {
             $data = ApiErrors::BadRequest();
-        }
-        else
-        {
+        } else {
             $professeur = Professeur::find($id);
-            if(!empty($professeur))
-            {
-                try
-                {
+            if (!empty($professeur)) {
+                try {
                     $professeur->delete();
                     $data = [
                         'type' => "success",
                         'code' => 200,
                         'professeur' => 'reussi'
                     ];
-                }
-                catch (\Exception $e)
-                {
+                } catch (\Exception $e) {
                     $data = ApiErrors::InternalError();
                 }
-            }
-            else
-            {
+            } else {
                 $data = ApiErrors::NotFound($request->getUri());
             }
         }
@@ -191,23 +166,19 @@ class ProfesseurController extends Controller {
         $id = intval($args['id']);
         $content = $request->getParsedBody();
 
-        $postValidateNomPrenom = v::notOptional()->StringType()->length(1,128);
+        $postValidateNomPrenom = v::notOptional()->StringType()->length(1, 128);
         $postValidateMail = v::notOptional()->email();
         $postValidateTel = v::notOptional()->phone();
 
-        if(is_int($id))
-        {
+        if (is_int($id)) {
             $professeur = Professeur::find($id);
-            if(isset($content['nom'])&&isset($content['prenom'])&&isset($content['mail'])&&isset($content['telephone']))
-            {
+            if (isset($content['nom']) && isset($content['prenom']) && isset($content['mail']) && isset($content['telephone'])) {
                 $content['nom'] = trim($content['nom']);
                 $content['prenom'] = trim($content['prenom']);
                 $content['mail'] = trim($content['mail']);
                 $content['telephone'] = trim($content['telephone']);
-                if(empty($professeur))
-                {
-                    try
-                    {
+                if (empty($professeur)) {
+                    try {
                         $postValidateNomPrenom->assert($content['nom']);
                         $postValidateNomPrenom->assert($content['prenom']);
                         $postValidateMail->assert($content['mail']);
@@ -224,20 +195,13 @@ class ProfesseurController extends Controller {
                             'code' => 200,
                             'professeur' => $professeur
                         ];
-                    }
-                    catch(NestedValidationException $e)
-                    {
+                    } catch (NestedValidationException $e) {
                         $data = ApiErrors::ValidationError($e->getMessages());
-                    }
-                    catch(\Exception $e)
-                    {
+                    } catch (\Exception $e) {
                         $data = ApiErrors::InternalError();
                     }
-                }
-                else
-                {
-                    try
-                    {
+                } else {
+                    try {
                         $postValidateNomPrenom->assert($content['nom']);
                         $postValidateNomPrenom->assert($content['prenom']);
                         $postValidateMail->assert($content['mail']);
@@ -253,24 +217,16 @@ class ProfesseurController extends Controller {
                             'code' => 200,
                             'professeur' => $professeur
                         ];
-                    }
-                    catch(NestedValidationException $e)
-                    {
+                    } catch (NestedValidationException $e) {
                         $data = ApiErrors::ValidationError($e->getMessages());
-                    }
-                    catch(\Exception $e)
-                    {
+                    } catch (\Exception $e) {
                         $data = ApiErrors::InternalError();
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $data = ApiErrors::BadRequest();
             }
-        }
-        else
-        {
+        } else {
             $data = ApiErrors::BadRequest();
         }
         return ResponseWriter::ResponseWriter($response, $data);
