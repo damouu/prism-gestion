@@ -89,7 +89,7 @@ class UsersController extends Controller
                     $data = [
                         'type' => "success",
                         'code' => 200,
-                        'suppression' => 'reussi' . " " . $user->NetID
+                        'user' => $user
                     ];
                 } catch (\Exception $e) {
                     $data = ApiErrors::InternalError();
@@ -122,7 +122,7 @@ class UsersController extends Controller
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'professeur' => $user
+                    'user' => $user
                 ];
             } catch (NestedValidationException $e) {
                 $data = ApiErrors::ValidationError($e->getMessages());
