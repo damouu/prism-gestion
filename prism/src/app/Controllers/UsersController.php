@@ -43,9 +43,9 @@ class UsersController extends Controller
     {
         $id = intval($args['id']);
         $content = $request->getParsedBody();
-        $postValidateNetID_Access_level = v::notOptional()->intType();
+        $postValidateNetID_Access_level = v::notOptional()->intType()->between(1, 3);
         if (is_int($id)) {
-            if (isset($content['NetID_Access_level']) and (in_array($content['NetID_Access_level'], range(1, 3)))) {
+            if (isset($content['NetID_Access_level'])) {
                 try {
                     $user = users::findOrFail($args['id']);
                     $postValidateNetID_Access_level->assert($content['NetID_Access_level']);
