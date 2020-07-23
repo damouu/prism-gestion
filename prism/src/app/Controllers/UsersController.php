@@ -101,4 +101,36 @@ class UsersController extends Controller
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
+
+    public function postUser(Request $request, Response $response, $args)
+    {
+        $content = $request->getParsedBody();
+        $postValidateNetID = v::notOptional()->StringType()->length(1, 128);
+        $postValidateNetID_Access_level = v::notOptional()->intType()->between(1, 3);
+        if (!isset($content['NetID_Access_level']) || !isset($content['NetID'])) {
+            $data = ApiErrors::BadRequest();
+        } else {
+            try {
+                $postValidateNetID->assert($content['NetID']);
+                $postValidateNetID_Access_level->assert($content['NetID_Access_level']);
+
+                $user = new users();
+                $user->NetID = filter_var($content['NetID'], FILTER_SANITIZE_STRING);
+                $user->NetID_Access_level = filter_var($content['NetID_Access_level'], FILTER_VALIDATE_INT);
+                $user->save();
+
+                $data = [
+                    'type' => "success",
+                    'code' => 200,
+                    'professeur' => $user
+                ];
+            } catch (NestedValidationException $e) {
+                $data = ApiErrors::ValidationError($e->getMessages());
+            } catch (\Exception $e) {
+                $data = ApiErrors::InternalError();
+            }
+        }
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
+
 }
