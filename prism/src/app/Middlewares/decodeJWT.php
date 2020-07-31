@@ -15,7 +15,10 @@ class decodeJWT
     function decodeJWT(Request $rq, Response $rs, callable $next)
     {
         try {
-            $token = JWT::decode($rq->getAttribute("token"), "secret", ['HS512']);
+            $h = $rq->getHeader('Authorization')[0];
+            $tokenString = sscanf($h, "Bearer %s")[0];
+            $secret = file_get_contents('../../src/conf/jwt-secret', true);
+            $token = JWT::decode($tokenString, $secret, ['HS512']);
             $rq = $rq->withAttribute("token", $token);
             return $next($rq, $rs);
         } catch (ExpiredException $e) {

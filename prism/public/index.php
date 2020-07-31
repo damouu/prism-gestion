@@ -39,6 +39,12 @@ $capsule->bootEloquent();
 
 $user = users::where("NetID", '=', phpCAS::getUser())->first();
 
+try {
+    $secret = bin2hex(random_bytes(32));
+    file_put_contents('../src/conf/jwt-secret', $secret);
+} catch (Exception $e) {
+}
+
 
 if (!empty($user)) {
     $token = JWT::encode(
@@ -49,7 +55,7 @@ if (!empty($user)) {
             'uNetID' => $user->NetID,
             'lvl' => $user->NetID_Access_level
         ],
-        "secret", 'HS512');
+        $secret, 'HS512');
 } else {
     $token = JWT::encode(
         ['iss' => 'https://iutnc-resamat.univ-lorraine.fr',
@@ -59,7 +65,7 @@ if (!empty($user)) {
             'uNetID' => phpCAS::getUser(),
             'lvl' => 1
         ],
-        "secret", 'HS512');
+        $secret, 'HS512');
 }
 try {
     echo $twig->render('index.twig', ["JWT" => $token]);
