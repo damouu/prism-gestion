@@ -13,6 +13,7 @@ $app->add(function ($req, $res, $next) {
 });
 /* ----------------------------------*/
 
+//TODO ajouter pour chaque route les middlewares nécessaire.
 
 //TODO route de test pour les JWT , ligne a supprimer.
 $app->post('/JWT[/]', function ($rq, $rs, $args) {
