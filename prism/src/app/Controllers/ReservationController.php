@@ -5,10 +5,14 @@ namespace PrismGestion\Controllers;
 use Illuminate\Database\Capsule\Manager as DB;
 use DateTime;
 use PrismGestion\Errors\ApiErrors;
+use PrismGestion\Models\Departement;
 use PrismGestion\Models\Etudiant;
 use PrismGestion\Models\Exemplaire;
 use PrismGestion\Models\FicheReservation;
+use PrismGestion\Models\ficheReservationscheReservation;
+use PrismGestion\Models\Materiel;
 use PrismGestion\Models\Reservation;
+use PrismGestion\Models\Type;
 use PrismGestion\Utils\ResponseWriter;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -23,74 +27,63 @@ class ReservationController extends Controller
     {
 
         $params = [
-            'select' => $request->getQueryParam('select','all')
+            'select' => $request->getQueryParam('select', 'all')
         ];
 
-        if($params['select'] === 'all')
-        {
-            try{
+        if ($params['select'] === 'all') {
+            try {
                 $reservation = Reservation::with('departement')
                     ->with('professeur')
-                    ->orderBy('created_at','desc')->get();
+                    ->orderBy('created_at', 'desc')->get();
                 $data = [
                     'type' => "success",
                     'code' => 200,
                     'reservations' => $reservation
                 ];
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::InternalError();
             }
 
-        }
-        else if($params['select']==='fiches'){
-            try{
-                $reservation = Reservation::with('fiche_resa')->get();
+        } else if ($params['select'] === 'ficheReservationsches') {
+            try {
+                $reservation = Reservation::with('ficheReservationsche_resa')->get();
                 $data = [
                     'type' => "success",
                     'code' => 200,
                     'reservations' => $reservation
                 ];
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::InternalError();
             }
-        }
-        else {
+        } else {
             $data = ApiErrors::NotFound($request->getUri());
         }
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
-    public function getOne(Request $request, Response $response, $args) {
+    public function getOne(Request $request, Response $response, $args)
+    {
         $id = $args['id'];
         try {
             $reservation = Reservation::with('departement')
                 ->with('professeur')
                 ->with('groupe')
-                ->with(['fiche_resa' => function ($q) {
-                    $q->with(['exemplaire' => function ($w){
+                ->with(['ficheReservationsche_resa' => function ($q) {
+                    $q->with(['exemplaire' => function ($w) {
                         $w->with('materiel');
                     }]);
                 }])
-                ->find($id);
-            if(empty($reservation))
-            {
+                ->ficheReservationsnd($id);
+            if (empty($reservation)) {
                 $data = ApiErrors::NotFound($request->getUri());
-            }
-            else
-            {
+            } else {
                 $data = [
                     'type' => "success",
                     'code' => 200,
                     'reservation' => $reservation
                 ];
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $data = ApiErrors::InternalError();
         }
         return ResponseWriter::ResponseWriter($response, $data);
@@ -100,37 +93,30 @@ class ReservationController extends Controller
     {
         $content = $request->getParsedBody();
 
-        if(isset($content['groupes']))
-        {
+        if (isset($content['groupes'])) {
             $etudiants = $content['groupes'];
-        }
-        else{
+        } else {
             $etudiants = null;
         };
 
 
-        if(!isset($content['responsable_projet'])
+        if (!isset($content['responsable_projet'])
             || !isset($content['departement'])
             || !isset($content['matiere'])
             || !isset($content['annee'])
-            || !isset($content['dep_groupe']))
-        {
+            || !isset($content['dep_groupe'])) {
             $data = ApiErrors::BadRequest();
-        }
-        else
-        {
-            try{
+        } else {
+            try {
                 $content['responsable_projet'] = trim($content['responsable_projet']);
                 $content['departement'] = trim($content['departement']);
                 $content['matiere'] = trim($content['matiere']);
                 $content['annee'] = trim($content['annee']);
                 $content['dep_groupe'] = trim($content['dep_groupe']);
 
-                if(isset($content['observation']))
-                {
+                if (isset($content['observation'])) {
                     $content['observation'] = trim($content['observation']);
-                }
-                else {
+                } else {
                     $content['observation'] = null;
                 }
 
@@ -142,25 +128,18 @@ class ReservationController extends Controller
                 $reservation->dep_groupe = $content['dep_groupe'];
                 $reservation->observation = $content['observation'];
 
-                if(is_null($etudiants))
-                {
+                if (is_null($etudiants)) {
                     $reservation->save();
-                }
-                else
-                {
+                } else {
                     DB::transaction(function () use ($content, $etudiants, $reservation) {
 
-                        foreach($etudiants as $key => $row)
-                        {
-                            if($key===0)
-                            {
-                                $etudiant = Etudiant::find($row);
-                                $etudiant->groupe()->save($reservation, ['referent'=>1]);
-                            }
-                            else
-                            {
-                                $etudiant = Etudiant::find($row);
-                                $etudiant->groupe()->save($reservation, ['referent'=>0]);
+                        foreach ($etudiants as $key => $row) {
+                            if ($key === 0) {
+                                $etudiant = Etudiant::ficheReservationsnd($row);
+                                $etudiant->groupe()->save($reservation, ['referent' => 1]);
+                            } else {
+                                $etudiant = Etudiant::ficheReservationsnd($row);
+                                $etudiant->groupe()->save($reservation, ['referent' => 0]);
                             }
                         }
                     });
@@ -172,9 +151,7 @@ class ReservationController extends Controller
                     'reservation' => $reservation,
                 ];
 
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::InternalError();
             }
         }
@@ -183,56 +160,53 @@ class ReservationController extends Controller
     }
 
 
-    public function getOneFeuille(Request $request, Response $response, $args){
+    public function getOneFeuille(Request $request, Response $response, $args)
+    {
 
     }
 
 
-    public function postOneFeuille(Request $request, Response $response, $args){
+    public function postOneFeuille(Request $request, Response $response, $args)
+    {
 
         $id = (int)trim($args['id']);
         $content = $request->getParsedBody();
 
-        try{
+        try {
 
-            if(!isset($content['date_depart']) || !isset($content['date_retour']) || !isset($content['rendu']) || !isset($content['observation']) || !isset($content['exemplaires'])){
+            if (!isset($content['date_depart']) || !isset($content['date_retour']) || !isset($content['rendu']) || !isset($content['observation']) || !isset($content['exemplaires'])) {
                 $data = ApiErrors::BadRequest();
-            }
-            else {
-                $reservation = Reservation::with('fiche_resa')->find($id);
-                $test = $reservation->fiche_resa()->count();
+            } else {
+                $reservation = Reservation::with('ficheReservationsche_resa')->ficheReservationsnd($id);
+                $test = $reservation->ficheReservationsche_resa()->count();
                 $date = date('ym');
-                $idfeuille = $date.'-'.$id.($test+1);
+                $idfeuille = $date . '-' . $id . ($test + 1);
 
-                $fiche_resa = new FicheReservation();
-                $fiche_resa->id = $idfeuille;
-                $fiche_resa->reservation = $id;
-                $fiche_resa->date_depart = trim($content['date_depart']).':00';
-                $fiche_resa->date_retour = trim($content['date_retour']).':00';
-                $fiche_resa->observation = trim($content['observation']);
-                $fiche_resa->rendu = $content['rendu'];
-
-
+                $ficheReservationsche_resa = new ficheReservationscheReservation();
+                $ficheReservationsche_resa->id = $idfeuille;
+                $ficheReservationsche_resa->reservation = $id;
+                $ficheReservationsche_resa->date_depart = trim($content['date_depart']) . ':00';
+                $ficheReservationsche_resa->date_retour = trim($content['date_retour']) . ':00';
+                $ficheReservationsche_resa->observation = trim($content['observation']);
+                $ficheReservationsche_resa->rendu = $content['rendu'];
 
 
+                foreach ($content['exemplaires'] as $row) {
 
-                foreach($content['exemplaires'] as $row){
-
-                    $exemplaire = Exemplaire::find($row['id']);
-                    $exemplaire->fiche_resa()->save($fiche_resa, ['emprunt'=>0, 'rendu'=>0]);
+                    $exemplaire = Exemplaire::ficheReservationsnd($row['id']);
+                    $exemplaire->ficheReservationsche_resa()->save($ficheReservationsche_resa, ['emprunt' => 0, 'rendu' => 0]);
                 }
 
                 $data = [
                     'type' => "success",
                     'code' => 200,
-                    'fiche_reservation' => $fiche_resa,
+                    'ficheReservationsche_reservation' => $ficheReservationsche_resa,
                 ];
 
             }
 
 
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             $data = [
                 'type' => "error",
                 'code' => 500,
@@ -246,6 +220,47 @@ class ReservationController extends Controller
 
     }
 
-
+    public function getEmprunts(Request $request, Response $response, $args)
+    {
+        $emprunt = array();
+        $ficheReservations = FicheReservation::whereHas('exemplaire', function ($q) {
+            $q->where('emprunt', '=', 1);
+        })->get();
+        $nbEmprunts = count($ficheReservations);
+        foreach ($ficheReservations as $ficheReservation) {
+            $informationsFicheResa = array();
+            $informationsFicheResa["informationsFicheResa"]["id"] = $ficheReservation->id;
+            $informationsFicheResa["informationsFicheResa"]["date_depart"] = $ficheReservation->date_depart;
+            $informationsFicheResa["informationsFicheResa"]["date_retour"] = $ficheReservation->retour;
+            $informationsFicheResa["informationsFicheResa"]['rendu'] = $ficheReservation->rendu;
+            $informationsFicheResa["informationsFicheResa"]["rendu"] = $ficheReservation->observation;
+            $utilisateur = Reservation::find($ficheReservation->reservation);
+            $departement = Departement::find($utilisateur->departement);
+            $informationsUtilisateur = array();
+            $informationsUtilisateur["nom"] = $utilisateur->professeur->nom;
+            $informationsUtilisateur["departement"] = $departement->nom;
+            $informationsFicheResa["utilisateur"][] = $informationsUtilisateur;
+            $exemplaires = $ficheReservation->exemplaire;
+            foreach ($exemplaires as $exemplaire) {
+                $informationsMateriel = array();
+                $materiel = Materiel::find($exemplaire->materiel);
+                $informationsMateriel["id_exemplaire"] = $exemplaire->id;
+                $informationsMateriel["id_nateriel"] = $exemplaire->materiel;
+                $informationsMateriel["exemplaire"] = $exemplaire->reference;
+                $informationsMateriel["constructeur"] = $materiel->constructeur;
+                $informationsMateriel["modele"] = $materiel->modele;
+                $informationsMateriel["description"] = $materiel->description;
+                $informationsFicheResa["materiels"][] = $informationsMateriel;
+            }
+            $emprunt[] = $informationsFicheResa;
+        }
+        $data = [
+            'type' => "collection",
+            'code' => 200,
+            'nombre fiche d_emprunts ' => $nbEmprunts,
+            'emprunts' => $emprunt,
+        ];
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
 
 }

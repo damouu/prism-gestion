@@ -1,7 +1,7 @@
 <?php
 
 
-Namespace PrismGestion\Models;
+namespace PrismGestion\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +10,7 @@ class FicheReservation extends Model
 {
 
     use SoftDeletes;
+
     protected $table = 'fiche_resa';
     public $timestamps = true;
     protected $dateFormat = 'Y-m-d';
@@ -24,7 +25,7 @@ class FicheReservation extends Model
             'reservation_exemplaire',
             'fiche_reservation',
             'id_exemplaire')
-            ->withPivot(['emprunt','rendu','incident'])->as('reservation_exemplaire');
+            ->withPivot(['emprunt', 'rendu', 'incident'])->as('reservation_exemplaire');
     }
 
 

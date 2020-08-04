@@ -9,6 +9,7 @@ class Materiel extends Model
 {
 
     use SoftDeletes;
+
     protected $table = 'materiel';
     protected $primaryKey = 'id';
     public $timestamps = true;
@@ -16,8 +17,7 @@ class Materiel extends Model
     const CREATED_AT = 'date_creation';
     const UPDATED_AT = 'date_modification';
     const DELETED_AT = 'date_suppression';
-    protected $dates = ['date_modification','date_creation','date_suppression'];
-
+    protected $dates = ['date_modification', 'date_creation', 'date_suppression'];
 
 
     public function type()
@@ -27,7 +27,7 @@ class Materiel extends Model
 
     public function exemplaire()
     {
-        return $this->hasMany('PrismGestion\Models\Exemplaire','materiel');
+        return $this->hasMany('PrismGestion\Models\Exemplaire', 'materiel');
     }
 
 }
