@@ -57,6 +57,13 @@ $app->get('/emprunts[/]', function ($rq, $rs, $args) {
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 
 
+$app->post('/emprunts/{id}[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\ReservationController($this))->postEmprunts($rq, $rs, $args);
+})->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
+    ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
+    ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
+
+
 $app->get('/types[/]', 'TypeController:getAll');
 $app->post('/types[/]', 'TypeController:post');
 $app->get('/materiels[/]', 'MaterielController:getAll');

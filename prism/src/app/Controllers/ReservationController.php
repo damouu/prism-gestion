@@ -262,5 +262,39 @@ class ReservationController extends Controller
         ];
         return ResponseWriter::ResponseWriter($response, $data);
     }
+    
 
+    public function postEmprunts(Request $request, Response $response, $args)
+    {
+        $ficheReservation = FicheReservation::findOrFail($args['id']);
+        $dejaEmprunte = array();
+        $insertionEmprunt = array();
+        $getBody = $request->getBody();
+        $body = json_decode($getBody, true);
+        foreach ($body['id_exemplaire'] as $value) {
+            $exemplaires = Exemplaire::findOrFail($value);
+            if ($exemplaires->fiche_resa->isEmpty() == true) {
+                $insertionEmprunt [][] = $value;
+                $ficheReservation->exemplaire()->attach($ficheReservation, ['id_exemplaire' => $value,
+                    'emprunt' => 1,
+                    'rendu' => 0,
+                ]);
+                $data = [
+                    'type' => "collection",
+                    'code' => 200,
+                    'text' => "cet exemplaire est emprunté avec succès",
+                    'array' => $insertionEmprunt
+                ];
+            } else {
+                $dejaEmprunte[][] = $value;
+                $data = [
+                    'type' => "error",
+                    'code' => 400,
+                    'text' => "cet exemplaire est deja emprunte.",
+                    'array' => $dejaEmprunte
+                ];
+            }
+        }
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
 }
