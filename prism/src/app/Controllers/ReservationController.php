@@ -220,6 +220,54 @@ class ReservationController extends Controller
 
     }
 
+    public function getEmprunt(Request $request, Response $response, $args)
+    {
+        try {
+            $ficheReservation = FicheReservation::findOrFail($args['id']);
+            $empruntsFicheReservation = $ficheReservation->exemplaire->where('reservation_exemplaire.emprunt', '=', 1);
+            if ($empruntsFicheReservation->isEmpty() == true) {
+                $data = [
+                    'type' => "message",
+                    'code' => 200,
+                    'emprunts' => "cette fiche reservation ne contient pas d'emprunt",
+                ];
+            } else {
+                $emprunt = array();
+                $utilisateur = Reservation::find($ficheReservation->reservation);
+                $departement = Departement::find($utilisateur->departement);
+                $informationsFicheResa["informationsFicheResa"]["id"] = $ficheReservation->id;
+                $informationsFicheResa["informationsFicheResa"]["date_depart"] = $ficheReservation->date_depart;
+                $informationsFicheResa["informationsFicheResa"]["date_retour"] = $ficheReservation->retour;
+                $informationsFicheResa["informationsFicheResa"]['rendu'] = $ficheReservation->rendu;
+                $informationsFicheResa["informationsFicheResa"]["rendu"] = $ficheReservation->observation;
+                $informationsUtilisateur = array();
+                $informationsUtilisateur["nom"] = $utilisateur->professeur->nom;
+                $informationsUtilisateur["departement"] = $departement->nom;
+                $informationsFicheResa["utilisateur"][] = $informationsUtilisateur;
+                foreach ($empruntsFicheReservation as $empruntFicheReservation) {
+                    $informationsMateriel = array();
+                    $materiel = Materiel::find($empruntFicheReservation->id);
+                    $informationsMateriel["id_exemplaire"] = $empruntFicheReservation->id;
+                    $informationsMateriel["id_nateriel"] = $empruntFicheReservation->materiel;
+                    $informationsMateriel["exemplaire"] = $empruntFicheReservation->reference;
+                    $informationsMateriel["constructeur"] = $materiel->constructeur;
+                    $informationsMateriel["modele"] = $materiel->modele;
+                    $informationsMateriel["description"] = $materiel->description;
+                    $informationsFicheResa["materiels"][] = $informationsMateriel;
+                }
+                $emprunt[] = $informationsFicheResa;
+                $data = [
+                    'type' => "collection",
+                    'code' => 200,
+                    'emprunts' => $emprunt,
+                ];
+            }
+            return ResponseWriter::ResponseWriter($response, $data);
+        } catch (\Exception $exception) {
+            $data = ApiErrors::InternalError();
+        }
+    }
+
     public function getEmprunts(Request $request, Response $response, $args)
     {
         $emprunt = array();
@@ -231,15 +279,7 @@ class ReservationController extends Controller
             $informationsFicheResa = array();
             $informationsFicheResa["informationsFicheResa"]["id"] = $ficheReservation->id;
             $informationsFicheResa["informationsFicheResa"]["date_depart"] = $ficheReservation->date_depart;
-            $informationsFicheResa["informationsFicheResa"]["date_retour"] = $ficheReservation->retour;
-            $informationsFicheResa["informationsFicheResa"]['rendu'] = $ficheReservation->rendu;
-            $informationsFicheResa["informationsFicheResa"]["rendu"] = $ficheReservation->observation;
-            $utilisateur = Reservation::find($ficheReservation->reservation);
-            $departement = Departement::find($utilisateur->departement);
-            $informationsUtilisateur = array();
-            $informationsUtilisateur["nom"] = $utilisateur->professeur->nom;
-            $informationsUtilisateur["departement"] = $departement->nom;
-            $informationsFicheResa["utilisateur"][] = $informationsUtilisateur;
+            $informationsFicheResa["informationsFicheResa"]["date_retour"] = $ficheReservation->date_retour;
             $exemplaires = $ficheReservation->exemplaire;
             foreach ($exemplaires as $exemplaire) {
                 $informationsMateriel = array();
@@ -262,39 +302,5 @@ class ReservationController extends Controller
         ];
         return ResponseWriter::ResponseWriter($response, $data);
     }
-    
 
-    public function postEmprunts(Request $request, Response $response, $args)
-    {
-        $ficheReservation = FicheReservation::findOrFail($args['id']);
-        $dejaEmprunte = array();
-        $insertionEmprunt = array();
-        $getBody = $request->getBody();
-        $body = json_decode($getBody, true);
-        foreach ($body['id_exemplaire'] as $value) {
-            $exemplaires = Exemplaire::findOrFail($value);
-            if ($exemplaires->fiche_resa->isEmpty() == true) {
-                $insertionEmprunt [][] = $value;
-                $ficheReservation->exemplaire()->attach($ficheReservation, ['id_exemplaire' => $value,
-                    'emprunt' => 1,
-                    'rendu' => 0,
-                ]);
-                $data = [
-                    'type' => "collection",
-                    'code' => 200,
-                    'text' => "cet exemplaire est emprunté avec succès",
-                    'array' => $insertionEmprunt
-                ];
-            } else {
-                $dejaEmprunte[][] = $value;
-                $data = [
-                    'type' => "error",
-                    'code' => 400,
-                    'text' => "cet exemplaire est deja emprunte.",
-                    'array' => $dejaEmprunte
-                ];
-            }
-        }
-        return ResponseWriter::ResponseWriter($response, $data);
-    }
 }

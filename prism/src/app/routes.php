@@ -49,16 +49,16 @@ $app->post('/users[/]', function ($rq, $rs, $args) {
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 
-
+// retourne les informations de tous les emprunts.
 $app->get('/emprunts[/]', function ($rq, $rs, $args) {
     return (new \PrismGestion\Controllers\ReservationController($this))->getEmprunts($rq, $rs, $args);
 })->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 
-
-$app->post('/emprunts/{id}[/]', function ($rq, $rs, $args) {
-    return (new \PrismGestion\Controllers\ReservationController($this))->postEmprunts($rq, $rs, $args);
+//  retourne les informations d'emprunts de l'id d'une fiche resa.
+$app->get('/emprunt/{id}[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\ReservationController($this))->getEmprunt($rq, $rs, $args);
 })->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
