@@ -68,12 +68,12 @@ class ReservationController extends Controller
             $reservation = Reservation::with('departement')
                 ->with('professeur')
                 ->with('groupe')
-                ->with(['ficheReservationsche_resa' => function ($q) {
+                ->with(['fiche_resa' => function ($q) {
                     $q->with(['exemplaire' => function ($w) {
                         $w->with('materiel');
                     }]);
                 }])
-                ->ficheReservationsnd($id);
+                ->find($id);
             if (empty($reservation)) {
                 $data = ApiErrors::NotFound($request->getUri());
             } else {
@@ -88,6 +88,7 @@ class ReservationController extends Controller
         }
         return ResponseWriter::ResponseWriter($response, $data);
     }
+
 
     public function post(Request $request, Response $response, $args)
     {
