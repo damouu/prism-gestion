@@ -304,4 +304,20 @@ class ReservationController extends Controller
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
+
+    public function updateRetourExemplaire(Request $request, Response $response, $args)
+    {
+        $exemplaire = Exemplaire::findOrFail($args['id']);
+        $ficheReservations = $exemplaire->fiche_resa;
+        foreach ($ficheReservations as $ficheReservation) {
+            $exemplaire->fiche_resa()->updateExistingPivot($ficheReservation->id, ['emprunt' => 0, 'rendu' => 1]);
+        }
+        $data = [
+            'type' => "collection",
+            'code' => 200,
+            'text' => "cet exemplaire de matériel a bien été retourné.",
+        ];
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
+    
 }

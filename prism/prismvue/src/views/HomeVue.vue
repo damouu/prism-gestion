@@ -40,6 +40,7 @@
 </template>
 
 <script>
+<<<<<<< Updated upstream
     export default {
         name: "reservation",
         data() {
@@ -60,6 +61,53 @@
         methods: {
             countDownChanged(dismissCountDown) {
                 this.dismissCountDown = dismissCountDown;
+=======
+export default {
+  name: "reservation",
+  data() {
+    return {
+      reservations: [],
+      emprunts: [],
+      informationsFicheResa: [],
+      materiels: [],
+      mode: 'single',
+      sortByReservation: 'created_at',
+      sortByEmprunts: 'date_depart',
+      sortDesc: true,
+      fieldsRowReservation: [
+        {key: 'responsable_projet', sortable: true},
+        {key: 'departement', sortable: true},
+        {key: 'matiere', sortable: true},
+        {key: 'annee', sortable: true},
+        {key: 'dep_groupe', sortable: true},
+        {key: 'created_at', sortable: true, label: 'Date Creation'}
+      ],
+      fieldsRowEmprunts: [
+        {key: 'constructeur', sortable: true},
+        {key: 'modele', sortable: true},
+        {key: 'exemplaire', sortable: true},
+        {key: 'date_depart', sortable: true},
+        {key: 'date_retour', sortable: true},
+      ],
+      perPage: 5,
+      alert: {'show': false, 'showMateriel': false},
+      dismissCountDown: 0,
+      dismissSecs: 10,
+    }
+  },
+  mounted() {
+    this.userJWT();
+    this.getReservations();
+    this.getEmprunts();
+  },
+  beforeMount() {
+    window.axios.defaults.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJodHRwczpcL1wvaXV0bmMtcmVzYW1hdC51bml2LWxvcnJhaW5lLmZyIiwiYXVkIjoiaHR0cHM6XC9cL2l1dG5jLXJlc2FtYXQudW5pdi1sb3JyYWluZS5mciIsImlhdCI6MTU5Njc0NTgwMiwiZXhwIjoxNTk2NzQ5NDAyLCJ1TmV0SUQiOiJzZWhiYW91aTF1IiwibHZsIjozfQ.CTY9uj0u1NLZEAgnMduxkQvE34bDl8raIoRvnA5_clHS5tTOgUYrlyL_LuXOAbgv_VgJsE_Z6FedAOhjPzBMEQ' /*+ document.getElementById("JWT").innerHTML*/
+    document.getElementById("JWT").remove();
+  },
+  methods: {
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+>>>>>>> Stashed changes
 
             },
             showAlert(error, status, message) {
