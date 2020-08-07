@@ -281,18 +281,8 @@ class ReservationController extends Controller
             $informationsFicheResa["informationsFicheResa"]["id"] = $ficheReservation->id;
             $informationsFicheResa["informationsFicheResa"]["date_depart"] = $ficheReservation->date_depart;
             $informationsFicheResa["informationsFicheResa"]["date_retour"] = $ficheReservation->date_retour;
-            $exemplaires = $ficheReservation->exemplaire()->wherePivot('emprunt', '=', 1)->get();
-            foreach ($exemplaires as $exemplaire) {
-                $informationsMateriel = array();
-                $materiel = Materiel::find($exemplaire->materiel);
-                $informationsMateriel["id_exemplaire"] = $exemplaire->id;
-                $informationsMateriel["id_nateriel"] = $exemplaire->materiel;
-                $informationsMateriel["exemplaire"] = $exemplaire->reference;
-                $informationsMateriel["constructeur"] = $materiel->constructeur;
-                $informationsMateriel["modele"] = $materiel->modele;
-                $informationsMateriel["description"] = $materiel->description;
-                $informationsFicheResa["materiels"][] = $informationsMateriel;
-            }
+            $informationsFicheResa["informationsFicheResa"]["rendu"] = $ficheReservation->rendu;
+            $informationsFicheResa["informationsFicheResa"]["observation"] = $ficheReservation->observation;
             $emprunt[] = $informationsFicheResa;
         }
         $data = [
@@ -305,7 +295,32 @@ class ReservationController extends Controller
     }
 
 
-    public function updateRetourExemplaire(Request $request, Response $response, $args)
+    public function getExemplaireFicheResa(Request $request, Response $response, $args)
+    {
+        $emprunt = array();
+        $ficheReservation = FicheReservation::findOrFail($args['id']);
+        $exemplaires = $ficheReservation->exemplaire()->wherePivot('emprunt', '=', 1)->get();
+        foreach ($exemplaires as $exemplaire) {
+            $informationsMateriel = array();
+            $materiel = Materiel::find($exemplaire->materiel);
+            $informationsMateriel["id_exemplaire"] = $exemplaire->id;
+            $informationsMateriel["id_materiel"] = $exemplaire->materiel;
+            $informationsMateriel["exemplaire"] = $exemplaire->reference;
+            $informationsMateriel["constructeur"] = $materiel->constructeur;
+            $informationsMateriel["modele"] = $materiel->modele;
+            $informationsMateriel["description"] = $materiel->description;
+            $informationsFicheResa["materiels"][] = $informationsMateriel;
+        }
+        $emprunt[] = $informationsFicheResa;
+        $data = ['type' => "collection",
+            'code' => 200,
+            'emprunts' => $emprunt,];
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
+
+
+    public
+    function updateRetourExemplaire(Request $request, Response $response, $args)
     {
         $exemplaire = Exemplaire::findOrFail($args['id']);
         $ficheReservations = $exemplaire->fiche_resa;

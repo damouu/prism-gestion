@@ -56,6 +56,12 @@ $app->get('/ficheReservations[/]', function ($rq, $rs, $args) {
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 
+$app->get('/ficheReservations/{id}/exemplaires[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\ReservationController($this))->getExemplaireFicheResa($rq, $rs, $args);
+})->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
+    ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
+    ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
+
 //  retourne les informations d'emprunts de l'id d'une fiche resa.
 $app->get('/emprunt/{id}[/]', function ($rq, $rs, $args) {
     return (new \PrismGestion\Controllers\ReservationController($this))->getEmprunt($rq, $rs, $args);
