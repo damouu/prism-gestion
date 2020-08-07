@@ -269,7 +269,7 @@ class ReservationController extends Controller
         }
     }
 
-    public function getEmprunts(Request $request, Response $response, $args)
+    public function getFicheReservations(Request $request, Response $response, $args)
     {
         $emprunt = array();
         $ficheReservations = FicheReservation::whereHas('exemplaire', function ($q) {
@@ -281,7 +281,7 @@ class ReservationController extends Controller
             $informationsFicheResa["informationsFicheResa"]["id"] = $ficheReservation->id;
             $informationsFicheResa["informationsFicheResa"]["date_depart"] = $ficheReservation->date_depart;
             $informationsFicheResa["informationsFicheResa"]["date_retour"] = $ficheReservation->date_retour;
-            $exemplaires = $ficheReservation->exemplaire;
+            $exemplaires = $ficheReservation->exemplaire()->wherePivot('emprunt', '=', 1)->get();
             foreach ($exemplaires as $exemplaire) {
                 $informationsMateriel = array();
                 $materiel = Materiel::find($exemplaire->materiel);
@@ -319,5 +319,5 @@ class ReservationController extends Controller
         ];
         return ResponseWriter::ResponseWriter($response, $data);
     }
-    
+
 }

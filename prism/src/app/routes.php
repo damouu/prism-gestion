@@ -49,9 +49,9 @@ $app->post('/users[/]', function ($rq, $rs, $args) {
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 
-// retourne les informations de tous les emprunts.
-$app->get('/emprunts[/]', function ($rq, $rs, $args) {
-    return (new \PrismGestion\Controllers\ReservationController($this))->getEmprunts($rq, $rs, $args);
+
+$app->get('/ficheReservations[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\ReservationController($this))->getFicheReservations($rq, $rs, $args);
 })->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
