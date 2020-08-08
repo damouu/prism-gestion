@@ -120,14 +120,12 @@ class ExemplaireController extends Controller
     {
 
         $params = [
-            'select' => $request->getQueryParam('select','service'),
-            'query' => $request->getQueryParam('query','Tous')
+            'select' => $request->getQueryParam('select', 'service'),
+            'query' => $request->getQueryParam('query', 'Tous')
         ];
 
-        try
-        {
-            if($params['select'] === 'service')
-            {
+        try {
+            if ($params['select'] === 'service') {
                 $exemplaire = Exemplaire::get();
 
                 $data = [
@@ -135,11 +133,9 @@ class ExemplaireController extends Controller
                     'code' => 200,
                     'exemplaires' => $exemplaire
                 ];
-            }
-            else if ($params['select'] === 'reforme')
-            {
+            } else if ($params['select'] === 'reforme') {
                 $exemplaire = Exemplaire::onlyTrashed()->get();
-                foreach($exemplaire as $row) {
+                foreach ($exemplaire as $row) {
                     $row->materiel = Materiel::withTrashed()->find($row->materiel);
                     $row->materiel['type'] = Type::withTrashed()->find($row->materiel['type']);
                 };
@@ -149,16 +145,13 @@ class ExemplaireController extends Controller
                     'code' => 200,
                     'reformes' => $exemplaire
                 ];
-            }
-            else if($params['select'] === 'reservation')
-            {
+            } else if ($params['select'] === 'reservation') {
                 $agenda = FicheReservation::with('exemplaire')->get();
 
-                foreach($agenda as $agen)
-                {
+                foreach ($agenda as $agen) {
                     $listeExemplaires = [];
-                    foreach($agen->exemplaire as $exemplaire) {
-                        if($params['query'] == 'Tous'){
+                    foreach ($agen->exemplaire as $exemplaire) {
+                        if ($params['query'] == 'Tous') {
                             $enabled = true;
                         } else {
                             $enabled = false;
@@ -166,11 +159,11 @@ class ExemplaireController extends Controller
 
                         $materiel = $exemplaire->materiel()->first();
                         $materiel->type = $materiel->type()->first();
-                        if($materiel->type->id == $params['query']) {
+                        if ($materiel->type->id == $params['query']) {
                             $enabled = true;
                         }
                         $exemplaire->materiel = $materiel;
-                        if($enabled){
+                        if ($enabled) {
                             $listeExemplaires[] = $exemplaire;
                         }
                     }
@@ -183,14 +176,11 @@ class ExemplaireController extends Controller
                     'code' => 200,
                     'reservations' => $agenda
                 ];
-            }
-            else {
+            } else {
                 $data = ApiErrors::BadRequest();
             }
 
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             $data = ApiErrors::NotFound($request->getUri());
         }
 
@@ -279,15 +269,13 @@ class ExemplaireController extends Controller
     public function getOne(Request $request, Response $response, $args)
     {
         $params = [
-            'select' => $request->getQueryParam('select','service')
+            'select' => $request->getQueryParam('select', 'service')
         ];
         $id = intval($args['id']);
 
-        if(!is_null($id) )
-        {
+        if (!is_null($id)) {
             try {
-                if($params['select'] === 'service')
-                {
+                if ($params['select'] === 'service') {
                     $exemplaire = Exemplaire::with('fournisseur')->with('materiel')->find($id);
 
                     if (empty($exemplaire)) {
@@ -300,9 +288,7 @@ class ExemplaireController extends Controller
                         ];
                     }
 
-                }
-                else if ($params['select'] === 'reforme')
-                {
+                } else if ($params['select'] === 'reforme') {
 
                     $exemplaire = Exemplaire::onlyTrashed()->with('fournisseur')->find($id);
                     $exemplaire->materiel = Materiel::withTrashed()->find($exemplaire->materiel);
@@ -317,18 +303,14 @@ class ExemplaireController extends Controller
                             'exemplaire' => $exemplaire
                         ];
                     }
-                }
-                else
-                {
+                } else {
                     $data = ApiErrors::BadRequest();
                 }
             } catch (\Exception $e) {
                 $data = ApiErrors::NotFound($request->getUri());
             }
 
-        }
-        else
-        {
+        } else {
             $data = ApiErrors::BadRequest();
         }
 
@@ -434,9 +416,8 @@ class ExemplaireController extends Controller
     {
         $id = $args['id'];
 
-        try
-        {
-            $exemplaire = Exemplaire::where('id','=',$id)
+        try {
+            $exemplaire = Exemplaire::where('id', '=', $id)
                 ->with('materiel')
                 ->first();
 
@@ -445,16 +426,12 @@ class ExemplaireController extends Controller
                 'code' => 200,
                 'exemplaires' => $exemplaire
             ];
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             $data = ApiErrors::NotFound($request->getUri());
         }
 
         return ResponseWriter::ResponseWriter($response, $data);
     }
-
-
 
 
     /**
@@ -502,21 +479,19 @@ class ExemplaireController extends Controller
 
         $id = intval($args['id']);
 
-        $exemplaire = FicheReservation::whereHas('exemplaire',function($q) use ($id) {
-            $q->where('id','=',$id);
+        $exemplaire = FicheReservation::whereHas('exemplaire', function ($q) use ($id) {
+            $q->where('id', '=', $id);
         })->get();
         $ex = Exemplaire::find($id);
 
-        if(!$exemplaire->isEmpty() || $ex){
-            try
-            {
-                foreach($exemplaire as $verif)
-                {
-                    if(!$verif->emprunt)
-                    {
+        if (!$exemplaire->isEmpty() || $ex) {
+            try {
+                foreach ($exemplaire as $verif) {
+                    if (!$verif->emprunt) {
                         throw new \Exception('existant');
                     }
-                    var_dump(json_encode($verif));die;
+                    var_dump(json_encode($verif));
+                    die;
                 }
 
                 $ex->delete();
@@ -526,14 +501,10 @@ class ExemplaireController extends Controller
                     'code' => 200,
                     'exemplaire' => 'l\exemplaire a bien été supprimé'
                 ];
-            }
-            catch(\Exception $e)
-            {
-                if($e->getMessage()==='existant'){
+            } catch (\Exception $e) {
+                if ($e->getMessage() === 'existant') {
                     $data = ApiErrors::deletedError();
-                }
-                else
-                {
+                } else {
                     $data = [
                         'type' => "success",
                         'code' => 200,
@@ -541,16 +512,13 @@ class ExemplaireController extends Controller
                     ];
                 }
             }
-        }
-        else
-        {
+        } else {
             $data = ApiErrors::NotFound($request->getUri());
         }
 
 
         return ResponseWriter::ResponseWriter($response, $data);
     }
-
 
 
     /**
@@ -629,23 +597,23 @@ class ExemplaireController extends Controller
 
         $content = $request->getParsedBody();
 
-        $materiel = Materiel::where('id','=',$content['materiel'])->first();
+        $materiel = Materiel::where('id', '=', $content['materiel'])->first();
 
-        $postValidateMateriel = v::notOptional()->intType()->length(1,11);
-        $postValidateReference = v::notOptional()->StringType()->length(1,20);
+        $postValidateMateriel = v::notOptional()->intType()->length(1, 11);
+        $postValidateReference = v::notOptional()->StringType()->length(1, 20);
         $postValidateEtat = v::notOptional()->stringType();
-        $postValidateFournisseur = v::notOptional()->intType()->length(1,11);
+        $postValidateFournisseur = v::notOptional()->intType()->length(1, 11);
         $postValidatePrixHt = v::notOptional()->floatType();
         $postValidatePrixTtc = v::notOptional()->floatType();
-        $postValidateNumSerie = v::notOptional()->StringType()->length(1,128);
-        $postValidateFinancement = v::Optional(v::StringType()->length(1,128));
-        $postValidateBonCommande = v::Optional(v::StringType()->length(1,128));
-        $postValidateImmobilisation = v::Optional(v::StringType()->length(1,128));
+        $postValidateNumSerie = v::notOptional()->StringType()->length(1, 128);
+        $postValidateFinancement = v::Optional(v::StringType()->length(1, 128));
+        $postValidateBonCommande = v::Optional(v::StringType()->length(1, 128));
+        $postValidateImmobilisation = v::Optional(v::StringType()->length(1, 128));
         $postValidateUrl = v::Optional(v::url());
         $postValidateDateAchat = v::date('Y-m-d');
-        $postValidateStockage = v::notOptional()->StringType()->length(1,128);
+        $postValidateStockage = v::notOptional()->StringType()->length(1, 128);
 
-        if(
+        if (
             !isset($content['materiel'])
             || !isset($content['reference'])
             || !isset($content['etat'])
@@ -655,14 +623,11 @@ class ExemplaireController extends Controller
             || !isset($content['num_serie'])
             || !isset($content['date_achat'])
             || !isset($content['stockage'])
-        )
-        {
+        ) {
             $data = ApiErrors::BadRequest();
-        }
-        else if(empty($materiel))
-        {
+        } else if (empty($materiel)) {
             $data = ApiErrors::NotFound($request->getUri());
-        }else{
+        } else {
 
             $postValeur = new stdClass;
             $postValeur->materiel = (int)$content['materiel'];
@@ -672,39 +637,30 @@ class ExemplaireController extends Controller
             $postValeur->prix_ht = (float)$content['prix_ht'];
             $postValeur->prix_ttc = (float)$content['prix_ttc'];
             $postValeur->num_serie = trim($content['num_serie']);
-            if(isset($content["financement"])){
+            if (isset($content["financement"])) {
                 $postValeur->financement = trim($content['financement']);
-            }
-            else
-            {
+            } else {
                 $postValeur->financement = null;
             }
-            if(isset($content["bon_commande"])){
+            if (isset($content["bon_commande"])) {
                 $postValeur->bon_commande = trim($content['bon_commande']);
-            }
-            else
-            {
+            } else {
                 $postValeur->bon_commande = null;
             }
-            if(isset($content["immobilisation"])){
+            if (isset($content["immobilisation"])) {
                 $postValeur->immobilisation = trim($content['immobilisation']);
-            }
-            else
-            {
+            } else {
                 $postValeur->immobilisation = null;
             }
-            if(isset($content["url"])){
+            if (isset($content["url"])) {
                 $postValeur->url = trim($content['url']);
-            }
-            else
-            {
+            } else {
                 $postValeur->url = null;
             }
             $postValeur->date_achat = trim($content['date_achat']);
             $postValeur->stockage = trim($content['stockage']);
 
-            try
-            {
+            try {
 
                 $postValidateMateriel->assert($postValeur->materiel);
                 $postValidateReference->assert($postValeur->reference);
@@ -722,7 +678,7 @@ class ExemplaireController extends Controller
 
                 DB::transaction(function () use ($postValeur) {
 
-                    $count = Exemplaire::where('materiel','=',$postValeur->materiel)->withTrashed()->count();
+                    $count = Exemplaire::where('materiel', '=', $postValeur->materiel)->withTrashed()->count();
                     $exemplaire = new Exemplaire();
                     $exemplaire->materiel = $postValeur->materiel;
                     $exemplaire->reference = $postValeur->reference;
@@ -737,7 +693,7 @@ class ExemplaireController extends Controller
                     $exemplaire->immobilisation = $postValeur->immobilisation;
                     $exemplaire->etat = $postValeur->etat;
                     $exemplaire->date_achat = $postValeur->date_achat;
-                    $exemplaire->num_ex = ($count)+1;
+                    $exemplaire->num_ex = ($count) + 1;
                     $exemplaire->save();
                 });
 
@@ -746,13 +702,9 @@ class ExemplaireController extends Controller
                     'code' => 201,
                     'exemplaire' => 'reussi'
                 ];
-            }
-            catch(NestedValidationException $e)
-            {
+            } catch (NestedValidationException $e) {
                 $data = ApiErrors::ValidationError($e->getMessages());
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::InternalError();
             }
 
@@ -853,22 +805,22 @@ class ExemplaireController extends Controller
 
         $exemplaire = Exemplaire::find($id);
 
-        $putValidateMateriel = v::notOptional()->intType()->length(1,11);
-        $putValidateReference = v::notOptional()->StringType()->length(1,20);
+        $putValidateMateriel = v::notOptional()->intType()->length(1, 11);
+        $putValidateReference = v::notOptional()->StringType()->length(1, 20);
         $putValidateEtat = v::notOptional()->stringType();
-        $putValidateFournisseur = v::notOptional()->intType()->length(1,11);
+        $putValidateFournisseur = v::notOptional()->intType()->length(1, 11);
         $putValidatePrixHt = v::notOptional()->floatType();
         $putValidatePrixTtc = v::notOptional()->floatType();
-        $putValidateNumSerie = v::notOptional()->StringType()->length(1,128);
-        $putValidateFinancement = v::Optional(v::StringType()->length(1,128));
-        $putValidateBonCommande = v::Optional(v::StringType()->length(1,128));
-        $putValidateImmobilisation = v::Optional(v::StringType()->length(1,128));
+        $putValidateNumSerie = v::notOptional()->StringType()->length(1, 128);
+        $putValidateFinancement = v::Optional(v::StringType()->length(1, 128));
+        $putValidateBonCommande = v::Optional(v::StringType()->length(1, 128));
+        $putValidateImmobilisation = v::Optional(v::StringType()->length(1, 128));
         $putValidateUrl = v::Optional(v::url());
         $putValidateDateAchat = v::date('Y-m-d');
-        $putValidateStockage = v::notOptional()->StringType()->length(1,128);
+        $putValidateStockage = v::notOptional()->StringType()->length(1, 128);
 
 
-        if(
+        if (
             !isset($content['materiel'])
             || !isset($content['reference'])
             || !isset($content['etat'])
@@ -878,12 +830,9 @@ class ExemplaireController extends Controller
             || !isset($content['num_serie'])
             || !isset($content['stockage'])
             || !isset($content['date_achat'])
-        )
-        {
+        ) {
             $data = ApiErrors::BadRequest();
-        }
-        else if(empty($exemplaire))
-        {
+        } else if (empty($exemplaire)) {
 
             $putValeur = new stdClass;
             $putValeur->materiel = $content['materiel'];
@@ -893,45 +842,35 @@ class ExemplaireController extends Controller
             $putValeur->prix_ht = $content['prix_ht'];
             $putValeur->prix_ttc = $content['prix_ttc'];
             $putValeur->num_serie = trim($content['num_serie']);
-            if(isset($content["bon_commande"])){
+            if (isset($content["bon_commande"])) {
                 $putValeur->bon_commande = trim($content['bon_commande']);
-            }
-            else
-            {
+            } else {
                 $putValeur->bon_commande = null;
             }
-            if(isset($content["financement"])){
+            if (isset($content["financement"])) {
                 $putValeur->financement = trim($content['financement']);
-            }
-            else
-            {
+            } else {
                 $putValeur->financement = null;
             }
-            if(isset($content["immobilisation"])){
+            if (isset($content["immobilisation"])) {
                 $putValeur->immobilisation = trim($content['immobilisation']);
-            }
-            else
-            {
+            } else {
                 $putValeur->immobilisation = null;
             }
-            if(isset($content["url"])){
+            if (isset($content["url"])) {
                 $putValeur->url = trim($content['url']);
-            }
-            else
-            {
+            } else {
                 $putValeur->url = null;
             }
             $putValeur->date_achat = trim($content['date_achat']);
             $putValeur->stockage = trim($content['stockage']);
 
-            $materiel = Materiel::where('id','=',$putValeur->materiel)->first();
+            $materiel = Materiel::where('id', '=', $putValeur->materiel)->first();
 
-            if(empty($materiel))
-            {
+            if (empty($materiel)) {
                 $data = ApiErrors::NotFound($request->getUri());
-            }else{
-                try
-                {
+            } else {
+                try {
                     $putValidateMateriel->assert($putValeur->materiel);
                     $putValidateReference->assert($putValeur->reference);
                     $putValidateEtat->assert($putValeur->etat);
@@ -948,7 +887,7 @@ class ExemplaireController extends Controller
 
                     DB::transaction(function () use ($putValeur) {
 
-                        $count = Exemplaire::where('materiel','=',$putValeur->materiel)->withTrashed()->count();
+                        $count = Exemplaire::where('materiel', '=', $putValeur->materiel)->withTrashed()->count();
                         $exemplaire = new Exemplaire();
                         $exemplaire->materiel = $putValeur->materiel;
                         $exemplaire->reference = $putValeur->reference;
@@ -963,7 +902,7 @@ class ExemplaireController extends Controller
                         $exemplaire->immobilisation = $putValeur->immobilisation;
                         $exemplaire->etat = $putValeur->etat;
                         $exemplaire->date_achat = $putValeur->date_achat;
-                        $exemplaire->num_ex = ($count)+1;
+                        $exemplaire->num_ex = ($count) + 1;
                         $exemplaire->save();
                     });
 
@@ -972,19 +911,13 @@ class ExemplaireController extends Controller
                         'code' => 201,
                         'exemplaire' => 'reussi'
                     ];
-                }
-                catch(NestedValidationException $e)
-                {
+                } catch (NestedValidationException $e) {
                     $data = ApiErrors::ValidationError($e->getMessages());
-                }
-                catch(\Exception $e)
-                {
+                } catch (\Exception $e) {
                     $data = ApiErrors::InternalError();
                 }
             }
-        }
-        else
-        {
+        } else {
             $putValeur = new stdClass;
             $putValeur->materiel = (int)$content['materiel'];
             $putValeur->reference = $content['reference'];
@@ -993,38 +926,30 @@ class ExemplaireController extends Controller
             $putValeur->prix_ht = (float)$content['prix_ht'];
             $putValeur->prix_ttc = (float)$content['prix_ttc'];
             $putValeur->num_serie = trim($content['num_serie']);
-            if(isset($content["bon_commande"])){
+            if (isset($content["bon_commande"])) {
                 $putValeur->bon_commande = trim($content['bon_commande']);
-            }
-            else
-            {
+            } else {
                 $putValeur->bon_commande = null;
             }
-            if(isset($content["financement"])){
+            if (isset($content["financement"])) {
                 $putValeur->financement = trim($content['financement']);
-            }
-            else
-            {
+            } else {
                 $putValeur->financement = null;
             }
-            if(isset($content["immobilisation"])){
+            if (isset($content["immobilisation"])) {
                 $putValeur->immobilisation = trim($content['immobilisation']);
-            }
-            else
-            {
+            } else {
                 $putValeur->immobilisation = null;
             }
-            if(isset($content["url"])){
+            if (isset($content["url"])) {
                 $putValeur->url = trim($content['url']);
-            }
-            else
-            {
+            } else {
                 $putValeur->url = null;
             }
             $putValeur->date_achat = trim($content['date_achat']);
             $putValeur->stockage = trim($content['stockage']);
 
-            try{
+            try {
 
                 $putValidateReference->assert($putValeur->reference);
                 $putValidateEtat->assert($putValeur->etat);
@@ -1058,20 +983,15 @@ class ExemplaireController extends Controller
                     'code' => 200,
                     'exemplaire' => 'reussi'
                 ];
-            }
-            catch(NestedValidationException $e)
-            {
+            } catch (NestedValidationException $e) {
                 $data = ApiErrors::ValidationError($e->getMessages());
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $data = ApiErrors::InternalError();
             }
         }
 
         return ResponseWriter::ResponseWriter($response, $data);
     }
-
 
 
     /**
@@ -1116,16 +1036,14 @@ class ExemplaireController extends Controller
     {
 
         $params = [
-            'select' => $request->getQueryParam('select','service')
+            'select' => $request->getQueryParam('select', 'service')
         ];
         $id = intval($args['id']);
 
-        if(!is_null($id) )
-        {
+        if (!is_null($id)) {
             try {
 
-                if ($params['select'] === 'reforme')
-                {
+                if ($params['select'] === 'reforme') {
                     $exemplaire = Exemplaire::onlyTrashed()->find($id);
                     $materiel = Materiel::withTrashed()->find($exemplaire->materiel);
                     $type = Type::withTrashed()->find($materiel->type);
@@ -1134,36 +1052,32 @@ class ExemplaireController extends Controller
                         $data = ApiErrors::NotFound($request->getUri());
                     } else {
 
-                            DB::transaction(function () use ($exemplaire, $materiel, $type) {
-                                $exemplaire->date_sortie = null;
-                                if(!empty($materiel->date_suppression)){
-                                    $materiel->date_suppression = null;
-                                    $materiel->save();
-                                }
-                                if(!empty($type->date_suppression)){
-                                    $type->date_suppression = null;
-                                    $type->save();
-                                }
-                                $exemplaire->save();
-                            });
+                        DB::transaction(function () use ($exemplaire, $materiel, $type) {
+                            $exemplaire->date_sortie = null;
+                            if (!empty($materiel->date_suppression)) {
+                                $materiel->date_suppression = null;
+                                $materiel->save();
+                            }
+                            if (!empty($type->date_suppression)) {
+                                $type->date_suppression = null;
+                                $type->save();
+                            }
+                            $exemplaire->save();
+                        });
 
-                            $data = [
-                                'type' => "success",
-                                'code' => 200,
-                                'exemplaire' => "reussi"
-                            ];
+                        $data = [
+                            'type' => "success",
+                            'code' => 200,
+                            'exemplaire' => "reussi"
+                        ];
                     }
-                }
-                else
-                {
+                } else {
                     $data = ApiErrors::BadRequest();
                 }
             } catch (\Exception $e) {
                 $data = ApiErrors::NotFound($request->getUri());
             }
-        }
-        else
-        {
+        } else {
             $data = ApiErrors::BadRequest();
         }
 
@@ -1176,19 +1090,16 @@ class ExemplaireController extends Controller
 
         $exemplaire = Exemplaire::find($id);
 
-        if(empty($exemplaire))
-        {
+        if (empty($exemplaire)) {
             $data = ApiErrors::NotFound($request->getUri());
-        }
-        else
-        {
-            $resa = Exemplaire::with('reservation')->where('id','=',$id)->get();
-           /* $reservations = [];
-            foreach($resa as $row)
-            {
-                array_push($reservations, $row->reservation);
-            }
-*/
+        } else {
+            $resa = Exemplaire::with('reservation')->where('id', '=', $id)->get();
+            /* $reservations = [];
+             foreach($resa as $row)
+             {
+                 array_push($reservations, $row->reservation);
+             }
+ */
             $data = [
                 'type' => "success",
                 'code' => 200,
@@ -1196,7 +1107,44 @@ class ExemplaireController extends Controller
             ];
         }
 
-        return ResponseWriter::ResponseWriter($response,$data);
+        return ResponseWriter::ResponseWriter($response, $data);
     }
+
+
+    public function getEmprunts(Request $request, Response $response, $args)
+    {
+        $emprunt = array();
+        $ficheReservations = FicheReservation::whereHas('exemplaire', function ($q) {
+            $q->where('emprunt', '=', 1);
+        })->get();
+        $nbEmprunts = count($ficheReservations);
+        foreach ($ficheReservations as $ficheReservation) {
+            $informationsFicheResa = array();
+            $informationsFicheResa["informationsFicheResa"]["id"] = $ficheReservation->id;
+            $informationsFicheResa["informationsFicheResa"]["date_depart"] = $ficheReservation->date_depart;
+            $informationsFicheResa["informationsFicheResa"]["date_retour"] = $ficheReservation->date_retour;
+            $exemplaires = $ficheReservation->exemplaire;
+            foreach ($exemplaires as $exemplaire) {
+                $informationsMateriel = array();
+                $materiel = Materiel::find($exemplaire->materiel);
+                $informationsMateriel["id_exemplaire"] = $exemplaire->id;
+                $informationsMateriel["id_nateriel"] = $exemplaire->materiel;
+                $informationsMateriel["exemplaire"] = $exemplaire->reference;
+                $informationsMateriel["constructeur"] = $materiel->constructeur;
+                $informationsMateriel["modele"] = $materiel->modele;
+                $informationsMateriel["description"] = $materiel->description;
+                $informationsFicheResa["materiels"][] = $informationsMateriel;
+            }
+            $emprunt[] = $informationsFicheResa;
+        }
+        $data = [
+            'type' => "collection",
+            'code' => 200,
+            'nombre fiche d_emprunts ' => $nbEmprunts,
+            'emprunts' => $emprunt,
+        ];
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
+
 
 }

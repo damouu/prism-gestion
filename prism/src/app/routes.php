@@ -84,6 +84,14 @@ $app->post('/emprunts/{id}[/]', function ($rq, $rs, $args) {
 ;
 
 
+// retourne les informations de tous les exemplaires empruntes.
+$app->get('/emprunts/exemplaires[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\ExemplaireController($this))->getEmprunts($rq, $rs, $args);
+})->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
+    ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
+    ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
+
+
 $app->get('/types[/]', 'TypeController:getAll');
 $app->post('/types[/]', 'TypeController:post');
 $app->get('/materiels[/]', 'MaterielController:getAll');
