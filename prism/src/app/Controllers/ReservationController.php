@@ -161,43 +161,29 @@ class ReservationController extends Controller
     }
 
 
-    public function getOneFeuille(Request $request, Response $response, $args)
-    {
-
-    }
-
-
     public function postOneFeuille(Request $request, Response $response, $args)
     {
-
         $id = (int)trim($args['id']);
         $content = $request->getParsedBody();
-
         try {
-
             if (!isset($content['date_depart']) || !isset($content['date_retour']) || !isset($content['rendu']) || !isset($content['observation']) || !isset($content['exemplaires'])) {
                 $data = ApiErrors::BadRequest();
             } else {
-                $reservation = Reservation::with('ficheReservationsche_resa')->ficheReservationsnd($id);
-                $test = $reservation->ficheReservationsche_resa()->count();
+                $reservation = Reservation::findOrFail($id);
+                $test = $reservation->fiche_resa()->count();
                 $date = date('ym');
                 $idfeuille = $date . '-' . $id . ($test + 1);
-
-                $ficheReservationsche_resa = new ficheReservationscheReservation();
+                $ficheReservationsche_resa = new FicheReservation();
                 $ficheReservationsche_resa->id = $idfeuille;
                 $ficheReservationsche_resa->reservation = $id;
-                $ficheReservationsche_resa->date_depart = trim($content['date_depart']) . ':00';
-                $ficheReservationsche_resa->date_retour = trim($content['date_retour']) . ':00';
+                $ficheReservationsche_resa->date_depart = trim($content['date_depart']);
+                $ficheReservationsche_resa->date_retour = trim($content['date_retour']);
                 $ficheReservationsche_resa->observation = trim($content['observation']);
                 $ficheReservationsche_resa->rendu = $content['rendu'];
-
-
                 foreach ($content['exemplaires'] as $row) {
-
-                    $exemplaire = Exemplaire::ficheReservationsnd($row['id']);
-                    $exemplaire->ficheReservationsche_resa()->save($ficheReservationsche_resa, ['emprunt' => 0, 'rendu' => 0]);
+                    $exemplaire = Exemplaire::findOrFail($row);
+                    $exemplaire->fiche_resa()->save($ficheReservationsche_resa, ['emprunt' => 1, 'rendu' => 0]);
                 }
-
                 $data = [
                     'type' => "success",
                     'code' => 200,
@@ -206,14 +192,13 @@ class ReservationController extends Controller
 
             }
 
-
         } catch (\Exception $e) {
             $data = [
                 'type' => "error",
                 'code' => 500,
                 'reservation' => $e,
             ];
-            //$data = ApiErrors::InternalError();
+            $data = ApiErrors::InternalError();
         }
 
         return ResponseWriter::ResponseWriter($response, $data);
@@ -319,8 +304,7 @@ class ReservationController extends Controller
     }
 
 
-    public
-    function updateRetourExemplaire(Request $request, Response $response, $args)
+    public function updateRetourExemplaire(Request $request, Response $response, $args)
     {
         $exemplaire = Exemplaire::findOrFail($args['id']);
         $ficheReservations = $exemplaire->fiche_resa;

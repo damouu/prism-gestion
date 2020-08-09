@@ -76,8 +76,8 @@ $app->put('/exemplaire/{id}/emprunts[/]', function ($rq, $rs, $args) {
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 
-$app->post('/emprunts/{id}[/]', function ($rq, $rs, $args) {
-    return (new \PrismGestion\Controllers\ReservationController($this))->postEmprunts($rq, $rs, $args);
+$app->post('/reservations/{id}/feuilles[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\ReservationController($this))->postOneFeuille($rq, $rs, $args);
 })/*->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken')*/
@@ -114,7 +114,6 @@ $app->get('/agenda[/]', 'AgendaController:getAll');
 
 $app->group('', function () {
 
-    $this->post('/reservations/{id}/feuilles[/]', 'ReservationController:postOneFeuille');
     $this->get('/reservations/{id}/feuilles[/]', 'ReservationController:getOneFeuille');
 
     $this->get('/reservations/{id}[/]', 'ReservationController:getOne');
