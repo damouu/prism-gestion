@@ -78,15 +78,19 @@ $app->put('/exemplaire/{id}/emprunts[/]', function ($rq, $rs, $args) {
 
 $app->post('/reservations/{id}/feuilles[/]', function ($rq, $rs, $args) {
     return (new \PrismGestion\Controllers\ReservationController($this))->postOneFeuille($rq, $rs, $args);
-})/*->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
+})->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
-    ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken')*/
-;
-
+    ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 
 // retourne les informations de tous les exemplaires empruntes.
 $app->get('/emprunts/exemplaires[/]', function ($rq, $rs, $args) {
     return (new \PrismGestion\Controllers\ExemplaireController($this))->getEmprunts($rq, $rs, $args);
+})->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
+    ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
+    ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
+
+$app->put('/feuilles/{id}/exemplaires[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\ReservationController($this))->retourExemplairesFeuilles($rq, $rs, $args);
 })->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
