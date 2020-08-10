@@ -95,6 +95,12 @@ $app->put('/feuilles/{id}/exemplaires[/]', function ($rq, $rs, $args) {
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 
+$app->get('/exemplaire/{id}/materiel[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\ExemplaireController($this))->getMaterielsExemplaire($rq, $rs, $args);
+})->add(\PrismGestion\Middlewares\AccessJWTLevel3::class . ':AccessJWTLevel3')
+    ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
+    ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
+
 
 $app->get('/types[/]', 'TypeController:getAll');
 $app->post('/types[/]', 'TypeController:post');
@@ -153,7 +159,6 @@ $app->group('', function () {
     $this->put('/exemplaires/{id}[/]', 'ExemplaireController:put');
     $this->delete('/exemplaires/{id}[/]', 'ExemplaireController:delete');
     $this->patch('/exemplaires/{id}[/]', 'ExemplaireController:patch');
-    $this->get('/exemplaires/{id}/materiels[/]', 'ExemplaireController:getExemplairesMateriel');
     $this->get('/exemplaires/{id}/reservations', 'ExemplaireController:getExemplaireReservation');
 })
     ->add(new \PrismGestion\Middlewares\IdCheckerMiddleware());

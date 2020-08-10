@@ -1146,5 +1146,21 @@ class ExemplaireController extends Controller
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
+    public function getMaterielsExemplaire(Request $request, Response $response, $args)
+    {
+        try {
+            $exemplaire = Exemplaire::findOrFail($args['id']);
+            $materiel = Materiel::findOrFail($exemplaire->materiel);
+            $data = [
+                'type' => "collection",
+                'code' => 200,
+                'materiel' => $materiel,
+            ];
+        } catch (\Exception $e) {
+            $data = ApiErrors::NotFound($request->getUri());
+        }
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
+
 
 }
