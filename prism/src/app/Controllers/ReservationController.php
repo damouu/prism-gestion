@@ -341,4 +341,20 @@ class ReservationController extends Controller
         return ResponseWriter::ResponseWriter($response, $data);
     }
 
+
+    public function deleteFicheReservation(Request $request, Response $response, $args)
+    {
+        try {
+            $ficheReservation = FicheReservation::findOrFail($args['id']);
+            $ficheReservation->delete();
+            $data = [
+                'type' => "message",
+                'code' => 200,
+                'text' => "fiche de reservation" . " " . $ficheReservation->id . ' ' . "supprime",
+            ];
+        } catch (\Exception $exception) {
+            $data = ApiErrors::InternalError();
+        }
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
 }
