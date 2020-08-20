@@ -223,7 +223,7 @@ class ReservationController extends Controller
                 $departement = Departement::find($utilisateur->departement);
                 $informationsFicheResa["informationsFicheResa"]["id"] = $ficheReservation->id;
                 $informationsFicheResa["informationsFicheResa"]["date_depart"] = $ficheReservation->date_depart;
-                $informationsFicheResa["informationsFicheResa"]["date_retour"] = $ficheReservation->retour;
+                $informationsFicheResa["informationsFicheResa"]["date_retour"] = $ficheReservation->date_retour;
                 $informationsFicheResa["informationsFicheResa"]['rendu'] = $ficheReservation->rendu;
                 $informationsFicheResa["informationsFicheResa"]["rendu"] = $ficheReservation->observation;
                 $informationsUtilisateur = array();
