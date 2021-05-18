@@ -44,14 +44,14 @@ services:
     volumes :
       - ./sql:/var/sql
 
-  adminer:
-    image: adminer
-    ports:
-      - "8080:8080"
-    networks:
-      - prism_network
-    links:
-      - mysql_prism:db_prism_app
+#  adminer:
+#    image: adminer
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - prism_network
+#    links:
+#      - mysql_prism:db_prism_app
 
 
 ########################################
