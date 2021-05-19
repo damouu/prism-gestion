@@ -3,19 +3,16 @@
 
 namespace PrismGestion\Errors;
 
-use \Psr\http\Message\ServerRequestInterface as Request;
-use \Psr\http\Message\ResponseInterface as Response;
-
 class ApiErrors
 {
-    public static function NotFound($uri)
+    public function NotFound($uri)
     {
         $data = [
             'type' => 'error',
             'code' => 404,
-            'message' => "Ressource ". $uri . " non trouvée."
+            'message' => "Ressource " . $uri . " non trouvée."
         ];
-            return $data;
+        return $data;
     }
 
     public static function BadRequest()
@@ -27,6 +24,7 @@ class ApiErrors
         ];
         return $data;
     }
+
     public static function InternalError()
     {
         $data = [
@@ -36,6 +34,7 @@ class ApiErrors
         ];
         return $data;
     }
+
     public static function ValidationError($error)
     {
         $data = [
@@ -46,6 +45,7 @@ class ApiErrors
         ];
         return $data;
     }
+
     public static function deletedError()
     {
         $data = [
