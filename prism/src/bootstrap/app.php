@@ -2,6 +2,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+
 $app = new \Slim\App([
     'settings' => [
         'displayErrorDetails' => true,
@@ -11,9 +12,9 @@ $app = new \Slim\App([
 ]);
 
 
-
 $container = $app->getContainer();
-
+print_r($container);
+die();
 
 $capsule = new \Illuminate\Database\Capsule\Manager();
 $capsule->addConnection($container['settings']['db']);
@@ -21,8 +22,7 @@ $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
 
-
-$container['db'] = function($container) use ($capsule) {
+$container['db'] = function ($container) use ($capsule) {
     return $capsule;
 };
 
@@ -51,7 +51,6 @@ $container['ProfesseurController'] = function ($container) {
 $container['ReservationController'] = function ($container) {
     return new \PrismGestion\Controllers\ReservationController($container);
 };
-
 
 
 $container['HomeController'] = function ($container) {

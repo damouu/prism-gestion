@@ -107,6 +107,10 @@ $app->delete('/ficheReservations/{id}[/]', function ($rq, $rs, $args) {
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 
+$app->get('/cours[/]', function ($rq, $rs, $args) {
+    return (new \PrismGestion\Controllers\CoursController($this))->getAllCours($rq, $rs, $args);
+});
+
 
 $app->get('/types[/]', 'TypeController:getAll');
 $app->post('/types[/]', 'TypeController:post');
