@@ -8,5 +8,6 @@ class Cours extends Model
 {
     protected $table = 'cours';
     public $timestamps = false;
+    protected $hidden = array('id');
 
 }
