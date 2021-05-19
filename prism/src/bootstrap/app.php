@@ -13,8 +13,6 @@ $app = new \Slim\App([
 
 
 $container = $app->getContainer();
-print_r($container);
-die();
 
 $capsule = new \Illuminate\Database\Capsule\Manager();
 $capsule->addConnection($container['settings']['db']);
@@ -52,12 +50,17 @@ $container['ReservationController'] = function ($container) {
     return new \PrismGestion\Controllers\ReservationController($container);
 };
 
-
 $container['HomeController'] = function ($container) {
     return new \PrismGestion\Controllers\HomeController($container);
 };
+
 $container['AgendaController'] = function ($container) {
     return new \PrismGestion\Controllers\AgendaController($container);
+};
+
+// ici, on inject le CourseController dans le container de Service.
+$container['CourseController'] = function ($container) {
+    return new \PrismGestion\Controllers\CoursController($container);
 };
 
 
