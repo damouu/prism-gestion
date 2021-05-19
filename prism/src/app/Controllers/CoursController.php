@@ -20,4 +20,15 @@ class CoursController extends Controller
         ];
         return ResponseWriter::ResponseWriter($response, $data);
     }
+
+    public function getCoursUUID(Request $request, Response $response, $args): \Slim\Http\Response
+    {
+        $cours = cours::where('uuid', '=', $args['uuid'])->firstOrFail();
+        $data = [
+            'type' => "success",
+            'code' => 200,
+            'cours' => $cours
+        ];
+        return ResponseWriter::ResponseWriter($response, $data);
+    }
 }
