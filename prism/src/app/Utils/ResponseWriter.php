@@ -4,7 +4,7 @@ namespace PrismGestion\Utils;
 
 class ResponseWriter
 {
-    public static function ResponseWriter($response, $data)
+    public function responseWriter($response, $data)
     {
         $resp = $response
             ->withStatus($data['code'])
