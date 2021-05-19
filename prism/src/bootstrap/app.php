@@ -63,5 +63,13 @@ $container['CourseController'] = function ($container) {
     return new \PrismGestion\Controllers\CoursController($container);
 };
 
+$container['ApiErrors'] = function ($container) {
+    return new \PrismGestion\Errors\ApiErrors($container);
+};
+
+$container['ResponseWriter'] = function ($container) {
+    return new \PrismGestion\Utils\ResponseWriter($container);
+};
+
 
 require __DIR__ . '/../app/routes.php';
