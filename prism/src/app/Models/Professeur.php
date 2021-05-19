@@ -9,6 +9,7 @@ class Professeur extends Model
 
     protected $table = 'professeur';
     public $timestamps = false;
+    protected $hidden = array('id');
 
     public function reservationProfesseur()
     {
