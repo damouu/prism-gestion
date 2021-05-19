@@ -107,14 +107,17 @@ $app->delete('/ficheReservations/{id}[/]', function ($rq, $rs, $args) {
     ->add(\PrismGestion\Middlewares\decodeJWT::class . ':decodeJWT')
     ->add(\PrismGestion\Middlewares\checkToken::class . ':checkToken');
 
+
+// recuperer tous les cours , ou recupere les cours en fonction du parametre passer dans l'uri.
 $app->get('/cours[/]', function ($rq, $rs, $args) {
-    return (new \PrismGestion\Controllers\CoursController($this))->getAllCours($rq, $rs, $args);
+    return $this->CourseController->getAllCours($rq, $rs, $args);
 });
 
 // declaration de la nouvelle route pour recuperer un cours via son uuid. utilisation du container de service.
 $app->get('/cours/{uuid}', function ($rq, $rs, $args) {
     return $this->CourseController->getCoursUUID($rq, $rs, $args);
 });
+
 
 $app->get('/types[/]', 'TypeController:getAll');
 $app->post('/types[/]', 'TypeController:post');
