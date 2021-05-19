@@ -24,9 +24,11 @@ class CoursController extends Controller
     public function getCoursUUID(Request $request, Response $response, $args): \Slim\Http\Response
     {
         $cours = cours::where('uuid', '=', $args['uuid'])->firstOrFail();
+        $prof = $cours->professeur;
         $data = [
             'type' => "success",
             'code' => 200,
+            'prof' => $prof,
             'cours' => $cours
         ];
         return ResponseWriter::ResponseWriter($response, $data);
