@@ -111,6 +111,10 @@ $app->get('/cours[/]', function ($rq, $rs, $args) {
     return (new \PrismGestion\Controllers\CoursController($this))->getAllCours($rq, $rs, $args);
 });
 
+// declaration de la nouvelle route pour recuperer un cours via son uuid. utilisation du container de service.
+$app->get('/cours/{uuid}', function ($rq, $rs, $args) {
+    return $this->CourseController->getCoursUUID($rq, $rs, $args);
+});
 
 $app->get('/types[/]', 'TypeController:getAll');
 $app->post('/types[/]', 'TypeController:post');
