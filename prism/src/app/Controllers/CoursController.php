@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use PrismGestion\Models\Cours;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Http\Response as ResponseAlias;
 
 class CoursController extends Controller
 {
+
     public function getAllCours(Request $request, Response $response, $args)
     {
         $queryParams = $request->getQueryParams();
@@ -46,7 +48,7 @@ class CoursController extends Controller
         return $this->ResponseWriter->responseWriter($response, $data);
     }
 
-    public function getCoursUUID(Request $request, Response $response, $args): \Slim\Http\Response
+    public function getCoursUUID(Request $request, Response $response, $args): ResponseAlias
     {
         try {
             $cours = cours::where('uuid', '=', $args['uuid'])->firstOrFail();
@@ -75,5 +77,10 @@ class CoursController extends Controller
             $data = $this->ApiErrors->NotFound($modelNotFoundException->getCode());
         }
         return $this->ResponseWriter->responseWriter($response, $data);
+    }
+
+    public function postCourse(Request $request, Response $response, $args): ResponseAlias
+    {
+        return $this->CourseRepository->postCourse($request, $response, $args);
     }
 }
