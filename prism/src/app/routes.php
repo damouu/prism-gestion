@@ -122,6 +122,10 @@ $app->delete('/cours/{uuid}', function ($rq, $rs, $args) {
     return $this->CourseController->deleteCourse($rq, $rs, $args);
 });
 
+$app->post('/cours/', function ($rq, $rs, $args) {
+    return $this->CourseController->postCourse($rq, $rs, $args);
+});
+
 
 $app->get('/types[/]', 'TypeController:getAll');
 $app->post('/types[/]', 'TypeController:post');
