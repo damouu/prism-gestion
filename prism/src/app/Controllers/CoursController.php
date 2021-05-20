@@ -61,4 +61,19 @@ class CoursController extends Controller
         }
         return $this->ResponseWriter->responseWriter($response, $data);
     }
+
+    public function deleteCourse(Request $request, Response $response, $args)
+    {
+        try {
+            $cours = cours::where('uuid', '=', $args['uuid'])->firstOrFail();
+            $cours->delete();
+            $data = [
+                'type' => "success",
+                'code' => 204
+            ];
+        } catch (ModelNotFoundException $modelNotFoundException) {
+            $data = $this->ApiErrors->NotFound($modelNotFoundException->getCode());
+        }
+        return $this->ResponseWriter->responseWriter($response, $data);
+    }
 }
