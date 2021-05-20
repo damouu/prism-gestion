@@ -118,6 +118,10 @@ $app->get('/cours/{uuid}', function ($rq, $rs, $args) {
     return $this->CourseController->getCoursUUID($rq, $rs, $args);
 });
 
+$app->delete('/cours/{uuid}', function ($rq, $rs, $args) {
+    return $this->CourseController->deleteCourse($rq, $rs, $args);
+});
+
 
 $app->get('/types[/]', 'TypeController:getAll');
 $app->post('/types[/]', 'TypeController:post');
