@@ -71,5 +71,9 @@ $container['ResponseWriter'] = function ($container) {
     return new \PrismGestion\Utils\ResponseWriter($container);
 };
 
+$container['CourseRepository'] = function ($container) {
+    return new \PrismGestion\Repository\CourseRepository($container);
+};
+
 
 require __DIR__ . '/../app/routes.php';
