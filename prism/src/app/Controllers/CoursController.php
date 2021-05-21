@@ -9,9 +9,19 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Http\Response as ResponseAlias;
 
+/**
+ * Class CoursController
+ * @package PrismGestion\Controllers
+ */
 class CoursController extends Controller
 {
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return mixed
+     */
     public function getAllCours(Request $request, Response $response, $args)
     {
         $queryParams = $request->getQueryParams();
@@ -48,6 +58,12 @@ class CoursController extends Controller
         return $this->ResponseWriter->responseWriter($response, $data);
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return ResponseAlias
+     */
     public function getCoursUUID(Request $request, Response $response, $args): ResponseAlias
     {
         try {
@@ -64,6 +80,12 @@ class CoursController extends Controller
         return $this->ResponseWriter->responseWriter($response, $data);
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return mixed
+     */
     public function deleteCourse(Request $request, Response $response, $args)
     {
         try {
@@ -79,6 +101,13 @@ class CoursController extends Controller
         return $this->ResponseWriter->responseWriter($response, $data);
     }
 
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return ResponseAlias
+     */
     public function postCourse(Request $request, Response $response, $args): ResponseAlias
     {
         return $this->CourseRepository->postCourse($request, $response, $args);
