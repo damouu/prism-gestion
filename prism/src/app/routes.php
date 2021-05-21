@@ -1,6 +1,9 @@
 <?php
 
 /*-------------CORS------------------*/
+
+use PrismGestion\Middlewares\CoursValidators;
+
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
@@ -13,9 +16,6 @@ $app->add(function ($req, $res, $next) {
 });
 /* ----------------------------------*/
 
-//TODO ajouter pour chaque route les middlewares nécessaire.
-
-//TODO route de test pour les JWT , ligne a supprimer.
 $app->post('/JWT[/]', function ($rq, $rs, $args) {
     return (new \PrismGestion\Controllers\UsersController($this))->printJWT($rq, $rs, $args);
 })->add(\PrismGestion\Middlewares\infoJWT::class . ':infoJWT')
@@ -124,7 +124,7 @@ $app->delete('/cours/{uuid}', function ($rq, $rs, $args) {
 
 $app->post('/cours/', function ($rq, $rs, $args) {
     return $this->CourseController->postCourse($rq, $rs, $args);
-});
+})->add(new CoursValidators());
 
 
 $app->get('/types[/]', 'TypeController:getAll');
