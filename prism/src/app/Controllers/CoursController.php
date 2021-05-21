@@ -11,6 +11,7 @@ use Slim\Http\Response as ResponseAlias;
 
 /**
  * Class CoursController
+ * @author damou
  * @package PrismGestion\Controllers
  */
 class CoursController extends Controller
@@ -59,10 +60,12 @@ class CoursController extends Controller
     }
 
     /**
+     * Ta daronne s'est un homme wallah.
      * @param Request $request
      * @param Response $response
      * @param $args
      * @return ResponseAlias
+     * @throws ModelNotFoundException si la ressource demande exists pas.
      */
     public function getCoursUUID(Request $request, Response $response, $args): ResponseAlias
     {
@@ -81,10 +84,12 @@ class CoursController extends Controller
     }
 
     /**
+     * Supprime un cours existant.
      * @param Request $request
      * @param Response $response
-     * @param $args
+     * @param $args $exemple cdhckjdhcdhkcd
      * @return mixed
+     * @author damou
      */
     public function deleteCourse(Request $request, Response $response, $args)
     {
@@ -103,6 +108,7 @@ class CoursController extends Controller
 
 
     /**
+     * Cree une nouvelle entite cours.
      * @param Request $request
      * @param Response $response
      * @param $args
