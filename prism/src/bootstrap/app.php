@@ -58,7 +58,6 @@ $container['AgendaController'] = function ($container) {
     return new \PrismGestion\Controllers\AgendaController($container);
 };
 
-// ici, on inject le CourseController dans le container de Service.
 $container['CourseController'] = function ($container) {
     return new \PrismGestion\Controllers\CoursController($container);
 };
