@@ -8,8 +8,15 @@ use Psr\Container\ContainerInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Http\Response;
 
+/**
+ * Class CourseRepository
+ * @package PrismGestion\Repository
+ */
 class CourseRepository
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
     /**
@@ -21,6 +28,13 @@ class CourseRepository
         $this->container = $container;
     }
 
+
+    /**
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return Response
+     */
     public function postCourse($request, $response, $args): Response
     {
         $content = $request->getParsedBody();
